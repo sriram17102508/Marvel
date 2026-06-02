@@ -4098,6 +4098,408 @@
         height: 380px;
       }
     }
+
+    /* ═══ FAN ZONE ═══ */
+    #fanzone {
+      padding: 60px clamp(16px, 5vw, 60px);
+      background: linear-gradient(180deg, var(--black) 0%, var(--dark) 100%);
+    }
+
+    .fanzone-wrapper {
+      max-width: 960px;
+      margin: 40px auto 0;
+      background: rgba(17, 17, 17, 0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8), inset 0 0 0 1px rgba(230, 36, 41, 0.05);
+    }
+
+    .fz-tabs {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 32px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 16px;
+    }
+
+    .fz-tab-btn {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.1em;
+      padding: 8px 24px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: none;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .fz-tab-btn::after {
+      content: '';
+      position: absolute;
+      bottom: -17px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--red);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+
+    .fz-tab-btn.active {
+      color: var(--red);
+      text-shadow: 0 0 10px rgba(230, 36, 41, 0.3);
+    }
+
+    .fz-tab-btn.active::after {
+      transform: scaleX(1);
+    }
+
+    .fz-panel {
+      display: none;
+    }
+
+    .fz-panel.active {
+      display: block;
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    /* QUIZ SYSTEM */
+    .quiz-diff-select {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      text-align: center;
+    }
+
+    .quiz-diff-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .quiz-diff-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 24px;
+      cursor: none;
+      transition: all 0.3s;
+      text-align: center;
+    }
+
+    .quiz-diff-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .quiz-diff-card.easy:hover {
+      border-color: #00ff88;
+      background: rgba(0, 255, 136, 0.08);
+      box-shadow: 0 10px 30px rgba(0, 255, 136, 0.15);
+    }
+
+    .quiz-diff-card.medium:hover {
+      border-color: var(--gold);
+      background: rgba(255, 215, 0, 0.08);
+      box-shadow: 0 10px 30px rgba(255, 215, 0, 0.15);
+    }
+
+    .quiz-diff-card.hard:hover {
+      border-color: var(--red);
+      background: rgba(230, 36, 41, 0.08);
+      box-shadow: 0 10px 30px rgba(230, 36, 41, 0.15);
+    }
+
+    .quiz-diff-card.pro:hover {
+      border-color: #c05cff;
+      background: rgba(192, 92, 255, 0.08);
+      box-shadow: 0 10px 30px rgba(192, 92, 255, 0.15);
+    }
+
+    .quiz-diff-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 24px;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .quiz-diff-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .quiz-diff-card.easy { border-left: 3px solid #00ff88; }
+    .quiz-diff-card.medium { border-left: 3px solid var(--gold); }
+    .quiz-diff-card.hard { border-left: 3px solid var(--red); }
+    .quiz-diff-card.pro { border-left: 3px solid #c05cff; }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .quiz-info-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .quiz-timer-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      color: var(--gold);
+    }
+
+    .quiz-timer-bar-bg {
+      width: 100px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .quiz-timer-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), var(--red));
+      width: 100%;
+      transition: width 1s linear;
+    }
+
+    .quiz-question-text {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .quiz-options {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .quiz-opt {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 14px 20px;
+      border-radius: 8px;
+      text-align: left;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.85);
+      cursor: none;
+      transition: all 0.2s;
+    }
+
+    .quiz-opt:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .quiz-opt.correct {
+      background: rgba(0, 255, 136, 0.15) !important;
+      border-color: #00ff88 !important;
+      color: #00ff88;
+      font-weight: 600;
+    }
+
+    .quiz-opt.incorrect {
+      background: rgba(230, 36, 41, 0.15) !important;
+      border-color: var(--red) !important;
+      color: var(--red);
+    }
+
+    .quiz-result-view {
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    .quiz-score-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 72px;
+      color: var(--gold);
+      text-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+      line-height: 1;
+      margin: 16px 0;
+    }
+
+    .quiz-score-comment {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+
+    /* FIND ME GAME */
+    .fm-start-screen {
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    .fm-clues-box {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 20px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-height: 220px;
+    }
+
+    .fm-clue {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      line-height: 1.5;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.4s ease-out;
+      border-left: 3px solid var(--red);
+    }
+
+    .fm-clue.reveal {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .fm-input-wrap {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .fm-input {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: white;
+      padding: 12px 16px;
+      border-radius: 8px;
+      outline: none;
+      font-size: 14px;
+      font-family: 'Manrope', sans-serif;
+      transition: all 0.3s;
+    }
+
+    .fm-input:focus {
+      border-color: var(--red);
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 0 15px rgba(230, 36, 41, 0.2);
+    }
+
+    .fm-guess-btn {
+      background: var(--red);
+      color: white;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      letter-spacing: 0.1em;
+      border: none;
+      padding: 0 28px;
+      border-radius: 8px;
+      cursor: none;
+      transition: all 0.2s;
+    }
+
+    .fm-guess-btn:hover:not(:disabled) {
+      background: var(--red-glow);
+      box-shadow: 0 0 15px rgba(230, 36, 41, 0.4);
+    }
+
+    .fm-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .fm-timer {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      color: var(--red);
+    }
+
+    .fm-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 16px;
+    }
+
+    .fm-action-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: none;
+      transition: all 0.2s;
+    }
+
+    .fm-action-btn:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .fm-result {
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    .fm-result-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 36px;
+      margin-bottom: 8px;
+    }
+
+    .fm-result-title.win { color: #00ff88; }
+    .fm-result-title.lose { color: var(--red); }
+
+    .fm-answer-reveal {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      color: var(--gold);
+      margin: 16px 0;
+    }
+
+    .fz-primary-btn {
+      background: var(--red);
+      color: white;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      letter-spacing: 0.1em;
+      border: none;
+      padding: 10px 28px;
+      border-radius: 6px;
+      cursor: none;
+      transition: all 0.2s;
+      margin-top: 10px;
+      display: inline-block;
+    }
+
+    .fz-primary-btn:hover {
+      background: var(--red-glow);
+      box-shadow: 0 0 15px rgba(230, 36, 41, 0.4);
+    }
   </style>
 </head>
 
@@ -4155,6 +4557,11 @@
         <a href="#battle" class="nav-link nav-arena">ARENA</a>
       </li>
 
+      <!-- FAN ZONE -->
+      <li class="nav-item">
+        <a href="#fanzone" class="nav-link">FAN ZONE</a>
+      </li>
+
       <!-- SHOP DROPDOWN -->
       <li class="nav-item has-drop">
         <span class="nav-link">SHOP <span class="nav-chevron">▼</span></span>
@@ -4196,6 +4603,7 @@
 
     <div class="mob-section-label">More</div>
     <a href="#battle" class="mob-arena">Arena</a>
+    <a href="#fanzone">Fan Zone</a>
     <a href="#shop">Shop</a>
     <a href="#comics">Comics</a>
     <a href="#contact">Contact</a>
@@ -4341,15 +4749,14 @@
     <div class="section-header reveal" style="text-align:center">
       <span class="section-label">◆ Ultimate Showdown Simulator</span>
       <h2 class="section-title">BATTLE ARENA</h2>
-      <p class="section-sub" style="margin:16px auto 0">Choose any two heroes. We calculate who wins — based on real
-        power stats.</p>
+      <p class="section-sub" style="margin:16px auto 0">Choose any two characters. We calculate who wins — based on real power stats.</p>
     </div>
     <div class="arena-wrapper" id="arenaWrapper">
       <div class="arena-select-row">
         <div class="fighter-selector" id="selectorA">
           <div class="selector-label">Fighter 1</div>
           <div class="selector-search-wrap">
-            <input class="selector-input" id="searchA" placeholder="Search hero..." autocomplete="off">
+            <input class="selector-input" id="searchA" placeholder="Search hero or villain..." autocomplete="off">
             <div class="selector-dropdown" id="dropdownA"></div>
           </div>
           <div class="selected-fighter-card" id="cardA">
@@ -4367,7 +4774,7 @@
         <div class="fighter-selector" id="selectorB">
           <div class="selector-label">Fighter 2</div>
           <div class="selector-search-wrap">
-            <input class="selector-input" id="searchB" placeholder="Search hero..." autocomplete="off">
+            <input class="selector-input" id="searchB" placeholder="Search hero or villain..." autocomplete="off">
             <div class="selector-dropdown" id="dropdownB"></div>
           </div>
           <div class="selected-fighter-card" id="cardB">
@@ -4378,12 +4785,135 @@
           </div>
         </div>
       </div>
-      <div class="arena-quick-picks">
-        <div class="qp-label">Quick Pick:</div>
-        <div class="qp-chips" id="qpChips"></div>
-      </div>
       <div class="arena-result" id="arenaResult" style="display:none">
         <div class="result-inner" id="resultInner"></div>
+      </div>
+    </div>
+  <!-- FAN ZONE -->
+  <section id="fanzone">
+    <div class="section-header reveal" style="text-align:center">
+      <span class="section-label">◆ Interactive Marvel Fun ◆</span>
+      <h2 class="section-title">FAN ZONE</h2>
+      <p class="section-sub">Test your knowledge with the Marvel Quiz or challenge your deductive skills in the Clue Game.</p>
+    </div>
+    
+    <div class="fanzone-wrapper reveal">
+      <!-- Section Tab headers -->
+      <div class="fz-tabs">
+        <button class="fz-tab-btn active" onclick="switchFzTab('quiz', this)">⚡ Marvel Quiz</button>
+        <button class="fz-tab-btn" onclick="switchFzTab('findme', this)">🕵️ Find Me</button>
+      </div>
+
+      <!-- Quiz Panel -->
+      <div id="fz-panel-quiz" class="fz-panel active">
+        <!-- Difficulty Selection Screen -->
+        <div id="quiz-screen-select" class="quiz-diff-select">
+          <h3>Choose Your Difficulty Level</h3>
+          <p class="quiz-diff-desc">Each difficulty features 10 challenging Marvel questions. You have 10 seconds per question!</p>
+          <div class="quiz-diff-grid">
+            <button class="quiz-diff-card easy" onclick="startQuiz('easy')">
+              <div class="quiz-diff-name" style="color:#00ff88">Easy</div>
+              <div class="quiz-diff-desc">Novice level training. Safe for recruits.</div>
+            </button>
+            <button class="quiz-diff-card medium" onclick="startQuiz('medium')">
+              <div class="quiz-diff-name" style="color:var(--gold)">Medium</div>
+              <div class="quiz-diff-desc">S.H.I.E.L.D. Agent level. Requires core MCU knowledge.</div>
+            </button>
+            <button class="quiz-diff-card hard" onclick="startQuiz('hard')">
+              <div class="quiz-diff-name" style="color:var(--red)">Hard</div>
+              <div class="quiz-diff-desc">Avenger level clearance. Deeper lore questions.</div>
+            </button>
+            <button class="quiz-diff-card pro" onclick="startQuiz('pro')">
+              <div class="quiz-diff-name" style="color:#c05cff">Pro</div>
+              <div class="quiz-diff-desc">Grandmaster of the Universe. Obscure comics and details.</div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Question Screen -->
+        <div id="quiz-screen-play" class="fz-play-screen" style="display:none">
+          <div class="quiz-header">
+            <span class="quiz-info-label" id="quiz-progress-text">Question 1 of 10</span>
+            <div class="quiz-timer-wrap">
+              <span id="quiz-timer-sec">10s</span>
+              <div class="quiz-timer-bar-bg">
+                <div id="quiz-timer-fill" class="quiz-timer-bar"></div>
+              </div>
+            </div>
+            <span class="quiz-info-label" id="quiz-score-text">Score: 0</span>
+          </div>
+          <div class="quiz-question-text" id="quiz-question">What is Captain America's shield made of?</div>
+          <div class="quiz-options" id="quiz-options-container">
+            <!-- options will be injected here -->
+          </div>
+        </div>
+
+        <!-- Score Results Screen -->
+        <div id="quiz-screen-result" class="quiz-result-view" style="display:none">
+          <h3>Quiz Completed!</h3>
+          <div class="quiz-score-num" id="quiz-final-score">8 / 10</div>
+          <div class="quiz-score-comment" id="quiz-feedback">Outstanding, sir! Worthy of lifting Mjolnir.</div>
+          <button class="fz-primary-btn" onclick="resetQuiz()">Play Again</button>
+        </div>
+      </div>
+
+      <!-- Find Me Panel -->
+      <div id="fz-panel-findme" class="fz-panel">
+        <!-- Start Screen -->
+        <div id="fm-screen-start" class="quiz-diff-select">
+          <h3>Choose Your Difficulty Level</h3>
+          <p class="quiz-diff-desc">Identify 5 mystery characters based on clues. We will give you 4 clues one by one for each character. You have 45 seconds per character!</p>
+          <div class="quiz-diff-grid">
+            <button class="quiz-diff-card easy" onclick="startFindMe('easy')">
+              <div class="quiz-diff-name" style="color:#00ff88">Easy</div>
+              <div class="quiz-diff-desc">Super popular Marvel heroes. Recruits welcome.</div>
+            </button>
+            <button class="quiz-diff-card medium" onclick="startFindMe('medium')">
+              <div class="quiz-diff-name" style="color:var(--gold)">Medium</div>
+              <div class="quiz-diff-desc">Mainstream heroes and key villains. Core knowledge needed.</div>
+            </button>
+            <button class="quiz-diff-card hard" onclick="startFindMe('hard')">
+              <div class="quiz-diff-name" style="color:var(--red)">Hard</div>
+              <div class="quiz-diff-desc">Deeper characters and specific plot clues. Agent status.</div>
+            </button>
+            <button class="quiz-diff-card pro" onclick="startFindMe('pro')">
+              <div class="quiz-diff-name" style="color:#c05cff">Pro</div>
+              <div class="quiz-diff-desc">Obscure characters or highly specific lore. Grandmaster level.</div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Playing Screen -->
+        <div id="fm-screen-play" style="display:none">
+          <div class="fm-header">
+            <span class="quiz-info-label" id="fm-progress-text">Character 1 of 5</span>
+            <div class="fm-timer" id="fm-timer-sec">Time Remaining: 45s</div>
+            <span class="quiz-info-label" id="fm-score-text">Score: 0</span>
+          </div>
+          <div style="text-align: center; margin-top: 8px;">
+            <span class="quiz-info-label" id="fm-clue-count" style="font-size: 13px; color: var(--gold);">Clues Revealed: 1/4</span>
+          </div>
+          <div class="fm-clues-box" id="fm-clues-container">
+            <!-- clues will be injected here -->
+          </div>
+          <div class="fm-input-wrap">
+            <input type="text" class="fm-input" id="fm-user-guess" placeholder="Type character name (e.g. Spider-Man, Thanos...)" autocomplete="off">
+            <button class="fm-guess-btn" onclick="submitFmGuess()">GUESS</button>
+          </div>
+          <div class="fm-actions">
+            <button class="fm-action-btn" id="fm-next-clue-btn" onclick="revealNextFmClue()">Next Clue</button>
+            <button class="fm-action-btn" onclick="giveUpFindMe()">Give Up</button>
+          </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="fm-screen-result" class="fm-result" style="display:none">
+          <h3 id="fm-result-header">Game Completed!</h3>
+          <div class="quiz-score-num" id="fm-final-score">0 / 5</div>
+          <div class="quiz-score-comment" id="fm-feedback"></div>
+          <div class="fm-answer-reveal" id="fm-result-answer" style="display: none;"></div>
+          <button class="fz-primary-btn" onclick="resetFindMe()">Play Again</button>
+        </div>
       </div>
     </div>
   </section>
@@ -4859,12 +5389,64 @@
     ];
 
     const HEROES = [
-      { name: 'Iron Man', role: 'Genius', team: 'Avengers', tag: 'Active', power: 8, img: 'Ironman.jpg' },
-      { name: 'Captain America', role: 'Super Soldier', team: 'Avengers', tag: 'Active', power: 7, img: 'captainamerica1.jpg' },
+      { name: 'Iron Man', role: 'Genius', team: 'Avengers', tag: 'Active', power: 9, img: 'Ironman.jpg' },
+      { name: 'Captain America', role: 'Super Soldier', team: 'Avengers', tag: 'Active', power: 8, img: 'captainamerica1.jpg' },
       { name: 'Thor', role: 'God of Thunder', team: 'Avengers', tag: 'Active', power: 10, img: 'thor1.jpg' },
       { name: 'Spider-Man', role: 'Web Slinger', team: 'Avengers', tag: 'Active', power: 8, img: 'spiderman.jfif' },
       { name: 'Wolverine', role: 'Mutant', team: 'X-Men', tag: 'Active', power: 9, img: 'wolverine.jpg' },
-      { name: 'Doctor Strange', role: 'Sorcerer Supreme', team: 'Avengers', tag: 'Active', power: 10, img: 'doctorstrange.jfif' }
+      { name: 'Doctor Strange', role: 'Sorcerer Supreme', team: 'Avengers', tag: 'Active', power: 9, img: 'doctorstrange.jfif' },
+      { name: 'Black Widow', role: 'Elite Spy', team: 'Avengers', tag: 'Active', power: 7, img: 'blackwidow.jpg' },
+      { name: 'Hulk', role: 'Gamma Monster', team: 'Avengers', tag: 'Active', power: 10, img: 'hulk1.jpg' },
+      { name: 'Ant-Man', role: 'Size Changer', team: 'Avengers', tag: 'Active', power: 7, img: 'antman.jfif' },
+      { name: 'Black Panther', role: 'Wakandan King', team: 'Avengers', tag: 'Active', power: 9, img: 'blackpanther1.webp' },
+      { name: 'Captain Marvel', role: 'Cosmic Avenger', team: 'Avengers', tag: 'Active', power: 10, img: 'captainmarvel.jfif' },
+      { name: 'Hawkeye', role: 'Marksman', team: 'Avengers', tag: 'Active', power: 7, img: 'hawkeye.jfif' },
+      { name: 'Scarlet Witch', role: 'Chaos Magic', team: 'Avengers', tag: 'Active', power: 10, img: 'scarletwitch.jfif' },
+      { name: 'Vision', role: 'Synthezoid', team: 'Avengers', tag: 'Active', power: 9, img: 'vision.jfif' },
+      { name: 'Loki', role: 'God of Mischief', team: 'Asgardian', tag: 'Active', power: 9, img: 'loki.jfif' },
+      { name: 'Deadpool', role: 'Merc with a Mouth', team: 'X-Men', tag: 'Active', power: 8, img: 'deadpool.jpg' },
+      { name: 'Star-Lord', role: 'Guardians Leader', team: 'Guardians', tag: 'Active', power: 7, img: 'starlord.jfif' },
+      { name: 'Gamora', role: 'Deadliest Woman', team: 'Guardians', tag: 'Active', power: 8, img: 'gamora.jfif' },
+      { name: 'Drax', role: 'The Destroyer', team: 'Guardians', tag: 'Active', power: 8, img: 'drax.jfif' },
+      { name: 'Groot', role: 'Flora Colossus', team: 'Guardians', tag: 'Active', power: 8, img: 'groot.jpg' },
+      { name: 'Rocket Raccoon', role: 'Tactician', team: 'Guardians', tag: 'Active', power: 7, img: 'racoon.jfif' },
+      { name: 'Falcon', role: 'Air Support', team: 'Avengers', tag: 'Active', power: 7, img: 'falcon.jfif' },
+      { name: 'Winter Soldier', role: 'Super Soldier', team: 'Avengers', tag: 'Active', power: 8, img: 'bucky.jpg' },
+      { name: 'Moon Knight', role: 'Fist of Khonshu', team: 'Midnight Sons', tag: 'Active', power: 8, img: 'moonknight.jpg' },
+      { name: 'Ms. Marvel', role: 'Hard Light Maker', team: 'Avengers', tag: 'Active', power: 7, img: 'msmarvel.jpg' },
+      { name: 'She-Hulk', role: 'Gamma Attorney', team: 'Avengers', tag: 'Active', power: 8, img: 'shehulk.jpg' },
+      { name: 'Shang-Chi', role: 'Kung Fu Master', team: 'Avengers', tag: 'Active', power: 8, img: 'shangchi.jfif' },
+      { name: 'Nick Fury', role: 'Director', team: 'S.H.I.E.L.D.', tag: 'Active', power: 6, img: 'nickfury.jfif' },
+      { name: 'Valkyrie', role: 'Asgardian King', team: 'Asgardian', tag: 'Active', power: 8, img: 'Valkriey.jpg' },
+      { name: 'Daredevil', role: 'Man Without Fear', team: 'Defenders', tag: 'Active', power: 7, img: 'daredevil.jpg' },
+      { name: 'Punisher', role: 'Vigilante', team: 'Defenders', tag: 'Active', power: 7, img: 'punisher.jfif' },
+      { name: 'Professor X', role: 'Telepath Leader', team: 'X-Men', tag: 'Active', power: 9, img: 'professorx.jfif' },
+      { name: 'Cyclops', role: 'Optic Blaster', team: 'X-Men', tag: 'Active', power: 8, img: 'cyclops.jpg' },
+      { name: 'Jean Grey', role: 'Phoenix Telepath', team: 'X-Men', tag: 'Active', power: 10, img: 'jeangrey.jpg' },
+      { name: 'Storm', role: 'Weather Witch', team: 'X-Men', tag: 'Active', power: 9, img: 'storm.jfif' },
+      { name: 'Beast', role: 'Mutant Scholar', team: 'X-Men', tag: 'Active', power: 8, img: 'beast.jfif' },
+      { name: 'Gambit', role: 'Kinetic Charger', team: 'X-Men', tag: 'Active', power: 8, img: 'gambit.jpg' },
+      { name: 'Rogue', role: 'Power Absorber', team: 'X-Men', tag: 'Active', power: 9, img: 'rogue.jfif' },
+      { name: 'Colossus', role: 'Steel Skin', team: 'X-Men', tag: 'Active', power: 9, img: 'colossus.jfif' },
+      { name: 'Nightcrawler', role: 'Teleporter', team: 'X-Men', tag: 'Active', power: 8, img: 'nightcrowler.jfif' },
+      { name: 'Blade', role: 'Daywalker', team: 'Midnight Sons', tag: 'Active', power: 8, img: 'blade.jfif' },
+      { name: 'Silver Surfer', role: 'Sentinel of Spaceways', team: 'Cosmic', tag: 'Active', power: 10, img: 'silversurfer.jfif' },
+      { name: 'America Chavez', role: 'Portal Creator', team: 'Avengers', tag: 'Active', power: 8, img: 'Americacavez.jfif' },
+      { name: 'Kate Bishop', role: 'Bowman', team: 'Avengers', tag: 'Active', power: 7, img: 'katebishop.jfif' },
+      { name: 'Yelena Belova', role: 'Black Widow Spy', team: 'Avengers', tag: 'Active', power: 7, img: 'yelena.jfif' },
+      { name: 'Wong', role: 'Sorcerer Librarian', team: 'Avengers', tag: 'Active', power: 8, img: 'wong.jfif' },
+      { name: 'Monica Rambeau', role: 'Spectrum', team: 'Avengers', tag: 'Active', power: 9, img: 'monica.jfif' },
+      { name: 'Echo', role: 'Photographic Reflexes', team: 'Defenders', tag: 'Active', power: 7, img: 'echo.jfif' },
+      { name: 'Wiccan', role: 'Demiurge Magic', team: 'Avengers', tag: 'Active', power: 9, img: 'wiccan.jfif' },
+      { name: 'Speed', role: 'Speedster', team: 'Avengers', tag: 'Active', power: 7, img: 'speed.jfif' },
+      { name: 'Pepper Potts', role: 'Rescue Armored', team: 'Avengers', tag: 'Active', power: 7, img: 'Pepperpots.jfif' },
+      { name: 'Agatha Harkness', role: 'Witch', team: 'Villain-Hero', tag: 'Active', power: 9, img: 'agatha.jfif' },
+      { name: 'Wonder Man', role: 'Ionic Avenger', team: 'Avengers', tag: 'Active', power: 9, img: 'wonderman.jpg' },
+      { name: 'Red Guardian', role: 'Russian Captain', team: 'Avengers', tag: 'Active', power: 7, img: 'redguardian.jpg' },
+      { name: 'Reed Richards', role: 'Mr. Fantastic', team: 'Fantastic Four', tag: 'Active', power: 8, img: 'reed.jfif' },
+      { name: 'Invisible Woman', role: 'Force Fields', team: 'Fantastic Four', tag: 'Active', power: 8, img: 'invisiblewoman.jfif' },
+      { name: 'Human Torch', role: 'Plasma Fire', team: 'Fantastic Four', tag: 'Active', power: 8, img: 'humantorch.jfif' },
+      { name: 'The Thing', role: 'Rock Monster', team: 'Fantastic Four', tag: 'Active', power: 8, img: 'thing.jfif' }
     ];
     const CARDS_VISIBLE = () => window.innerWidth < 480 ? 1 : window.innerWidth < 768 ? 2 : window.innerWidth < 1100 ? 3 : window.innerWidth < 1400 ? 4 : 5;
     const CARD_WIDTH = 220 + 20; // card width + gap
@@ -5087,11 +5669,12 @@
     // ═══════════════════════════════════════════════
     const BATTLE_STATS = ['Strength', 'Intelligence', 'Speed', 'Durability', 'Energy', 'Combat'];
 
-    // Build full stat objects from hero data
-    function getHeroStats(hero) {
-      // deterministic per-hero stats derived from power rating + name hash
-      const seed = hero.name.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
-      const base = hero.power * 9;
+    // Build full stat objects from hero or villain data
+    function getHeroStats(char) {
+      // mapping threat level (0-100) to power scale (1-10) for villains if no explicit power rating exists
+      const power = char.power || Math.round((char.threat || 80) / 10);
+      const seed = char.name.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+      const base = power * 9;
       const r = (offset, range = 25) => Math.min(100, Math.max(30, base + ((seed * (offset + 7)) % range) - range / 2));
       return {
         Strength: Math.round(r(3)),
@@ -5113,12 +5696,16 @@
       input.addEventListener('input', () => {
         const q = input.value.toLowerCase().trim();
         if (!q) { drop.classList.remove('open'); drop.innerHTML = ''; return; }
-        const matches = HEROES.filter(h => h.name.toLowerCase().includes(q)).slice(0, 8);
+        
+        // combine heroes and villains
+        const allChars = [...HEROES, ...VILLAINS];
+        const matches = allChars.filter(c => c.name.toLowerCase().includes(q)).slice(0, 8);
         if (!matches.length) { drop.classList.remove('open'); return; }
-        drop.innerHTML = matches.map(h => `
-      <div class="drop-item" onclick="selectFighter('${h.name}','${slot}')">
-        <img class="drop-img" src="${h.img}" alt="${h.name}">
-        <div><div class="drop-name">${h.name}</div><div class="drop-team">${h.team}</div></div>
+        
+        drop.innerHTML = matches.map(c => `
+      <div class="drop-item" onclick="selectFighter('${c.name.replace(/'/g, "\\'")}','${slot}')">
+        <img class="drop-img" src="${c.img}" alt="${c.name}">
+        <div><div class="drop-name">${c.name}</div><div class="drop-team">${c.team || c.title || ''}</div></div>
       </div>`).join('');
         drop.classList.add('open');
       });
@@ -5127,18 +5714,18 @@
     }
 
     window.selectFighter = function (name, slot) {
-      const hero = HEROES.find(h => h.name === name);
-      if (!hero) return;
-      if (slot === 'A') { arenaA = hero; renderSelectedCard('cardA', hero, 'a'); document.getElementById('searchA').value = hero.name; }
-      else { arenaB = hero; renderSelectedCard('cardB', hero, 'b'); document.getElementById('searchB').value = hero.name; }
+      const allChars = [...HEROES, ...VILLAINS];
+      const char = allChars.find(c => c.name === name);
+      if (!char) return;
+      if (slot === 'A') { arenaA = char; renderSelectedCard('cardA', char, 'a'); document.getElementById('searchA').value = char.name; }
+      else { arenaB = char; renderSelectedCard('cardB', char, 'b'); document.getElementById('searchB').value = char.name; }
       document.getElementById('dropdownA').classList.remove('open');
       document.getElementById('dropdownB').classList.remove('open');
-      updateQuickChips();
       checkFightReady();
     };
 
-    function renderSelectedCard(id, hero, side) {
-      const stats = getHeroStats(hero);
+    function renderSelectedCard(id, char, side) {
+      const stats = getHeroStats(char);
       const card = document.getElementById(id);
       const color = side === 'a' ? 'var(--red)' : 'var(--gold)';
       const statBars = BATTLE_STATS.map(s => `
@@ -5152,11 +5739,11 @@
       card.style.boxShadow = `0 0 40px ${color}22`;
       card.innerHTML = `
     <div class="sfc-content">
-      <img src="${hero.img}" alt="${hero.name}">
+      <img src="${char.img}" alt="${char.name}">
       <div class="sfc-grad"></div>
       <div class="sfc-info">
-        <div class="sfc-name">${hero.name}</div>
-        <div class="sfc-role">${hero.role}</div>
+        <div class="sfc-name">${char.name}</div>
+        <div class="sfc-role">${char.role || char.title || ''}</div>
         <div class="sfc-stats">${statBars}</div>
       </div>
     </div>`;
@@ -5241,43 +5828,12 @@
       document.getElementById('searchA').value = '';
       document.getElementById('searchB').value = '';
       document.getElementById('arenaResult').style.display = 'none';
-      updateQuickChips();
       checkFightReady();
     };
-
-    // Quick pick chips — show 12 popular heroes
-    const QUICK_PICKS = ['Iron Man', 'Thor', 'Hulk', 'Spider-Man', 'Doctor Strange', 'Scarlet Witch', 'Captain Marvel', 'Black Panther', 'Wolverine', 'Deadpool', 'Thanos', 'Loki'].filter(n => HEROES.find(h => h.name === n));
-
-    function buildQuickPicks() {
-      const wrap = document.getElementById('qpChips');
-      if (!wrap) return;
-      QUICK_PICKS.forEach(name => {
-        const chip = document.createElement('div');
-        chip.className = 'qp-chip';
-        chip.textContent = name;
-        chip.dataset.name = name;
-        chip.addEventListener('click', () => {
-          const isA = !arenaA || (arenaA && arenaB && true);
-          if (!arenaA) selectFighter(name, 'A');
-          else if (!arenaB && arenaA.name !== name) selectFighter(name, 'B');
-          else if (arenaA && arenaB) { selectFighter(name, 'A'); }
-        });
-        wrap.appendChild(chip);
-      });
-    }
-
-    function updateQuickChips() {
-      document.querySelectorAll('.qp-chip').forEach(chip => {
-        chip.classList.remove('a-sel', 'b-sel');
-        if (arenaA && chip.dataset.name === arenaA.name) chip.classList.add('a-sel');
-        if (arenaB && chip.dataset.name === arenaB.name) chip.classList.add('b-sel');
-      });
-    }
 
     function initBattleArena() {
       setupArenaSearch('searchA', 'dropdownA', 'A');
       setupArenaSearch('searchB', 'dropdownB', 'B');
-      buildQuickPicks();
       checkFightReady();
     }
 
@@ -5815,7 +6371,7 @@
       });
 
       // Active section highlighting
-      const sectionIds = ['heroes', 'villains', 'movies', 'series', 'upcoming', 'news', 'battle', 'shop', 'comics', 'contact'];
+      const sectionIds = ['heroes', 'villains', 'movies', 'series', 'upcoming', 'news', 'battle', 'fanzone', 'shop', 'comics', 'contact'];
       let current = '';
       sectionIds.forEach(id => {
         const el = document.getElementById(id);
@@ -5957,66 +6513,6 @@
       jarvisSynth.speak(utterance);
     }
 
-    async function fetchGlobalKnowledge(query) {
-      // Clean up search query by removing conversational prefixes
-      let subject = query.replace(/^(who is|what is|tell me about|show me|search for|info about|who was|what was|tell me something about|do you know about|do you know who|can you tell me about)\s+/i, '');
-      subject = subject.replace(/\?+$/, '').trim();
-
-      if (!subject) return null;
-
-      // Restrict search strictly to Marvel context
-      let searchQuery = subject;
-      if (!subject.toLowerCase().includes('marvel') && !subject.toLowerCase().includes('mcu') && !subject.toLowerCase().includes('comics')) {
-        searchQuery = subject + ' marvel';
-      }
-
-      try {
-        // Step 1: Search Wikipedia for close titles using CORS-enabled OpenSearch API
-        const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(searchQuery)}&format=json&origin=*`;
-        const searchRes = await fetch(searchUrl);
-        const searchData = await searchRes.json();
-
-        if (searchData.query && searchData.query.search && searchData.query.search.length > 0) {
-          const bestResult = searchData.query.search[0];
-          const bestTitle = bestResult.title;
-          const snippet = bestResult.snippet.toLowerCase();
-          const titleLower = bestTitle.toLowerCase();
-
-          // Verify that the retrieved result is actually about Marvel/Comics/Avengers/MCU/Superheroes
-          const isMarvelTopic = titleLower.includes('marvel') ||
-            titleLower.includes('comic') ||
-            titleLower.includes('avenger') ||
-            titleLower.includes('superhero') ||
-            titleLower.includes('mcu') ||
-            titleLower.includes('character') ||
-            snippet.includes('marvel') ||
-            snippet.includes('comic') ||
-            snippet.includes('superhero') ||
-            snippet.includes('mcu') ||
-            snippet.includes('avenger') ||
-            snippet.includes('fictional') ||
-            snippet.includes('film');
-
-          if (!isMarvelTopic) return null;
-
-          // Step 2: Fetch full summary from REST API summary endpoint
-          const summaryUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(bestTitle.replace(/ /g, '_'))}`;
-          const summaryRes = await fetch(summaryUrl);
-
-          if (summaryRes.ok) {
-            const data = await summaryRes.json();
-            return {
-              title: data.title,
-              extract: data.extract
-            };
-          }
-        }
-      } catch (err) {
-        console.error("JARVIS satellite database uplink failed:", err);
-      }
-      return null;
-    }
-
     function initJarvis() {
       const btn = document.getElementById('jarvis-btn');
       const win = document.getElementById('jarvis-window');
@@ -6026,9 +6522,9 @@
       const sendBtn = document.getElementById('jarvis-send-btn');
       const input = document.getElementById('jarvis-input');
       const messagesContainer = document.getElementById('jarvis-messages');
-
+ 
       if (!btn || !win) return;
-
+ 
       // Toggle Open/Close Window
       btn.addEventListener('click', () => {
         win.classList.toggle('open');
@@ -6036,12 +6532,12 @@
           input.focus();
         }
       });
-
+ 
       closeBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         win.classList.remove('open');
       });
-
+ 
       // Speech toggle
       speechBtn.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -6051,7 +6547,7 @@
           jarvisSynth.cancel();
         }
       });
-
+ 
       // Clear chat
       clearBtn.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -6061,12 +6557,12 @@
           </div>`;
         if (jarvisSynth) jarvisSynth.cancel();
       });
-
+ 
       // Send Message
-      const sendMessage = async () => {
+      const sendMessage = () => {
         const text = input.value.trim();
         if (!text) return;
-
+ 
         // User message
         messagesContainer.innerHTML += `
           <div class="jarvis-msg user">
@@ -6074,7 +6570,7 @@
           </div>`;
         input.value = '';
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
+ 
         // Create thinking placeholder
         const thinkingId = 'jarvis-thinking-' + Date.now();
         messagesContainer.innerHTML += `
@@ -6085,63 +6581,33 @@
             </div>
           </div>`;
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
-        try {
-          const response = getJarvisResponse(text);
-          let htmlContent = '';
-          let textToSpeak = '';
-
-          // If local database fallback is triggered, query global Wikipedia databases!
-          if (response.startsWith("I've checked my local databanks")) {
-            const globalInfo = await fetchGlobalKnowledge(text);
-            if (globalInfo) {
-              textToSpeak = `I have successfully connected to my global archives, sir. Here is the intelligence on ${globalInfo.title}. ${globalInfo.extract}`;
-              htmlContent = `
-                <div class="msg-bubble">
-                  I've accessed my global database link, sir. Decrypting intelligence on <strong>${escapeHtml(globalInfo.title)}</strong>:<br><br>
-                  ${escapeHtml(globalInfo.extract)}
-                </div>
-              `;
-            } else {
-              textToSpeak = "My apologies, sir. That topic appears to fall outside our Marvel database parameters. I am programmed to assist exclusively with Marvel files, characters, timelines, and battle simulator indices.";
-              htmlContent = `
-                <div class="msg-bubble">
-                  <strong>Access Restricted</strong><br><br>
-                  My apologies, sir. That topic appears to fall outside our Marvel database parameters. I am programmed to assist exclusively with Marvel dossiers, timelines, and battle arena files.
-                </div>
-              `;
+ 
+        setTimeout(() => {
+          try {
+            const response = getJarvisResponse(text);
+            const htmlContent = `<div class="msg-bubble">${response}</div>`;
+            const thinkingEl = document.getElementById(thinkingId);
+            if (thinkingEl) {
+              thinkingEl.innerHTML = htmlContent;
+            }
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            jarvisSpeak(response);
+          } catch (err) {
+            console.error("JARVIS query engine error:", err);
+            const thinkingEl = document.getElementById(thinkingId);
+            if (thinkingEl) {
+              thinkingEl.innerHTML = `<div class="msg-bubble">My apologies, sir. It seems our mainframe database has encountered an unexpected error. Please resend the query.</div>`;
             }
           }
-
-          // Fallback to local response if global info is not found or not needed
-          if (!htmlContent) {
-            textToSpeak = response;
-            htmlContent = `<div class="msg-bubble">${response}</div>`;
-          }
-
-          // Render response in place of thinking bubble
-          const thinkingEl = document.getElementById(thinkingId);
-          if (thinkingEl) {
-            thinkingEl.innerHTML = htmlContent;
-          }
-          messagesContainer.scrollTop = messagesContainer.scrollHeight;
-          jarvisSpeak(textToSpeak);
-
-        } catch (err) {
-          console.error("JARVIS query engine error:", err);
-          const thinkingEl = document.getElementById(thinkingId);
-          if (thinkingEl) {
-            thinkingEl.innerHTML = `<div class="msg-bubble">My apologies, sir. It seems our satellite uplink has encountered a temporary interference. Please resend the query.</div>`;
-          }
-        }
+        }, 500);
       };
-
+ 
       sendBtn.addEventListener('click', sendMessage);
       input.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') sendMessage();
       });
     }
-
+ 
     function escapeHtml(text) {
       return text
         .replace(/&/g, "&amp;")
@@ -6150,96 +6616,718 @@
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
     }
-
+ 
     function getJarvisResponse(query) {
       query = query.toLowerCase().trim();
-
-      // Viewport scrolling triggers based on Jarvis understanding
+ 
+      // Viewport scrolling triggers
       if (query.includes('arena') || query.includes('battle') || query.includes('fight') || query.includes('simulator')) {
         setTimeout(() => smoothScrollTo('battle'), 2000);
-        return "Of course, sir. Re-routing viewport to the Battle Arena simulation sectors. You can run custom hero duels here.";
+        return "Of course, sir. Re-routing viewport to the Battle Arena simulation sectors. You can run custom character battles there.";
       }
-      if (query.includes('timeline') || query.includes('phase')) {
-        setTimeout(() => smoothScrollTo('movies'), 2000);
-        return "Understood, sir. Initiating chronological timeline scan. Let's take a look at the phases of the Saga.";
+      if (query.includes('timeline') || query.includes('movie') || query.includes('phase')) {
+        if (!/\bphase\s+[1-6]\b/.test(query)) {
+          setTimeout(() => smoothScrollTo('movies'), 2000);
+          return "Understood, sir. Initiating chronological timeline scan. Directing your viewport to the MCU Movie Timeline.";
+        }
       }
       if (query.includes('comic') || query.includes('comics')) {
         setTimeout(() => smoothScrollTo('comics'), 2000);
         return "Scanning comic book archives, sir. Directing you to our ranked curation slides.";
       }
-      if (query.includes('heroes') || query.includes('hero list')) {
+      if (query.includes('heroes') || query.includes('hero list') || query.includes('hero roster')) {
         setTimeout(() => smoothScrollTo('heroes'), 2000);
         return "Right away, sir. Directing you to Earth's Mightiest curation console. Here is the hero roster.";
       }
-      if (query.includes('villain') || query.includes('villains')) {
+      if (query.includes('villain') || query.includes('villains') || query.includes('threat index')) {
         setTimeout(() => smoothScrollTo('villains'), 2000);
         return "Understood. Accessing maximum level threat index archives immediately.";
       }
-
+      if (query.includes('shop') || query.includes('product') || query.includes('merchandise') || query.includes('store') || query.includes('buy')) {
+        setTimeout(() => smoothScrollTo('shop'), 2000);
+        return "Accessing the Stark Industries merchandise sector. Re-routing to the Shop.";
+      }
+      if (query.includes('news') || query.includes('updates') || query.includes('breaking')) {
+        setTimeout(() => smoothScrollTo('news'), 2000);
+        return "Scanning news channels, sir. Directing you to the latest Marvel updates.";
+      }
+      if (query.includes('contact') || query.includes('message') || query.includes('email') || query.includes('socials')) {
+        setTimeout(() => smoothScrollTo('contact'), 2000);
+        return "Opening secure communications link. Directing you to the Contact section, sir.";
+      }
+ 
       // Greetings
       if (query.includes('hello') || query.includes('hi') || query.includes('hey') || query.includes('jarvis')) {
         if (query === 'jarvis') return "J.A.R.V.I.S. online, sir. Systems are nominal. How can I help you today?";
         return "Good day, sir. Mainframe is secure. How may I be of assistance?";
       }
-
+ 
       if (query.includes('thank')) {
         return "You are very welcome, sir. Always a pleasure to assist in your endeavors.";
       }
-
+ 
       if (query.includes('who are you') || query.includes('what is your name') || query.includes('what are you')) {
         return "I am J.A.R.V.I.S., which stands for 'Just A Rather Very Intelligent System'. I act as your personal computerized assistant for the Marvel Multiverse database.";
       }
-
-      // Power querying
-      if (query.includes('strongest') || query.includes('most powerful')) {
-        const strongHeroes = HEROES.filter(h => h.power === 10).map(h => h.name);
-        return `According to my analysis, the heroes cataloged with a maximum power rating of 10 are: ${strongHeroes.join(', ')}. Uniquely destructive potentials, sir.`;
+ 
+      // Help / Capabilities
+      if (query.includes('help') || query.includes('what can you do') || query.includes('options') || query.includes('can you')) {
+        return "Sir, I can provide detailed dossiers on our heroes and villains, search for movies across MCU Phases 1 to 6, check television series data, list upcoming film/series details, check items in the Shop, summarize top-ranked comics, and show the latest news. What would you like to query?";
       }
-
-      // Hero search
+ 
+      // Search for specific Hero
       const foundHero = HEROES.find(h => query.includes(h.name.toLowerCase()));
       if (foundHero) {
-        return `Accessing profile for ${foundHero.name}. Classified as the '${foundHero.role}', team '${foundHero.team}'. Power Index is ${foundHero.power}/10. Status: '${foundHero.tag}'. Fully operational, sir.`;
+        return `Accessing profile for ${foundHero.name}. Role: ${foundHero.role}. Team: ${foundHero.team}. Power Index: ${foundHero.power}/10. Status: ${foundHero.tag}. Dossier is fully loaded, sir.`;
       }
-
-      // Villain search
+ 
+      // Search for specific Villain
       const foundVillain = VILLAINS.find(v => query.includes(v.name.toLowerCase()));
       if (foundVillain) {
-        return `Warning, sir. Threat profile loaded for ${foundVillain.name}. Rank #${foundVillain.rank} on the global warning grid. Threat index is ${foundVillain.threat}/100. As they say: "${foundVillain.quote}"`;
+        return `Warning, sir. Threat profile loaded for ${foundVillain.name}. Classified as '${foundVillain.title}'. Rank #${foundVillain.rank} on the global warning grid. Threat index is ${foundVillain.threat}/100. As they say: "${foundVillain.quote}"`;
       }
-
-      // Phase timeline info
-      if (query.includes('phase 1') || query.includes('phase one')) {
-        return "Phase One outlines the Marvel universe foundation from 2008 to 2012, sir. Spanning 6 legacy films from Iron Man up to the climax in The Avengers.";
+ 
+      // Search for specific movie or movie lists in phases
+      for (let p of PHASES) {
+        if (query.includes(p.id) || query.includes(p.label.toLowerCase()) || query.includes(p.name.toLowerCase())) {
+          const list = p.movies.map(m => `#${m.n} ${m.title} (${m.year})`).join(', ');
+          return `In ${p.name} (${p.tagline}), the cataloged films are: ${list}.`;
+        }
+        for (let m of p.movies) {
+          if (query.includes(m.title.toLowerCase())) {
+            return `Found film: ${m.title}. Part of ${p.name}, released in ${m.year} as movie #${m.n} of that phase. Watch link is available on the timeline board.`;
+          }
+        }
       }
-      if (query.includes('phase 2') || query.includes('phase two')) {
-        return "Phase Two encompasses expanding boundaries from 2013 to 2015, sir. Starting with Iron Man 3 and introducing the Guardians of the Galaxy and Ant-Man.";
+ 
+      // Search series
+      for (let sGroup of SERIES_DATA) {
+        if (query.includes(sGroup.label.toLowerCase()) || query.includes(sGroup.name.toLowerCase())) {
+          const list = sGroup.series.map(s => `#${s.n} ${s.title} (${s.info})`).join(', ');
+          return `Under ${sGroup.name} (${sGroup.tagline}), we have: ${list}.`;
+        }
+        for (let s of sGroup.series) {
+          if (query.includes(s.title.toLowerCase())) {
+            return `Found series: ${s.title}. Info: ${s.info}. Part of the ${sGroup.name} roster.`;
+          }
+        }
       }
-      if (query.includes('phase 3') || query.includes('phase three')) {
-        return "Phase Three is the legendary Infinity Saga conclusion from 2016 to 2019, sir, containing 11 films culminating in Avengers: Endgame.";
+ 
+      // Search upcoming
+      const allUpcoming = [...UPCOMING_MOVIES, ...UPCOMING_SERIES];
+      for (let item of allUpcoming) {
+        if (query.includes(item.title.toLowerCase())) {
+          return `Upcoming Project: ${item.title} (${item.phase}). Scheduled release: ${item.date} via ${item.platform}. Description: ${item.desc}`;
+        }
       }
-      if (query.includes('phase 4') || query.includes('phase four')) {
-        return "Phase Four begins the Multiverse Saga from 2021 to 2022, introducing WandaVision and the concept of infinite timelines, sir.";
+      if (query.includes('upcoming movies') || query.includes('future movies')) {
+        const list = UPCOMING_MOVIES.map(m => m.title).join(', ');
+        return `Upcoming films on our docket: ${list}.`;
       }
-      if (query.includes('phase 5') || query.includes('phase five')) {
-        return "Phase Five continues the Multiverse Saga from 2023 to 2025, sir, including Captain America: Brave New World and Thunderbolts.";
+      if (query.includes('upcoming series') || query.includes('future series')) {
+        const list = UPCOMING_SERIES.map(s => s.title).join(', ');
+        return `Upcoming series on our docket: ${list}.`;
       }
-      if (query.includes('phase 6') || query.includes('phase six')) {
-        return "Phase Six outlines our upcoming multiversal finale in 2026 and 2027, sir, including Spider-Man: Brand New Day, Avengers: Doomsday, and Avengers: Secret Wars.";
+ 
+      // Search products
+      const matchedProducts = PRODUCTS.filter(p => query.includes(p.name.toLowerCase()) || query.includes(p.cat.toLowerCase()));
+      if (matchedProducts.length > 0) {
+        const list = matchedProducts.slice(0, 3).map(p => `${p.name} (${p.cat}) for ${p.price}`).join(', ');
+        return `I found these matching items in our shop: ${list}. You can add them to your cart in the Shop section, sir.`;
       }
-
-      // Best Comic info
-      if (query.includes('best comic') || query.includes('rank 1 comic') || query.includes('top comic')) {
-        return "Archives catalog 'X-Men #1' (1991) as the best-selling comic book of all time, with 8.1 million copies sold. A legendary comic milestones, sir.";
+ 
+      // Search comics
+      for (let c of COMICS) {
+        if (query.includes(c.title.toLowerCase())) {
+          return `Comic File: "${c.title}" is ranked #${c.rank} in our all-time list. Published in ${c.year} under category ${c.cat}. Significance: ${c.significance} Description: ${c.desc}`;
+        }
       }
-
-      // Capabilities help
-      if (query.includes('help') || query.includes('what can you do') || query.includes('options') || query.includes('can you')) {
-        return "I have full access to details of 70 heroes, threat profiles for the 20 villains, timeline movie details, comic rankings, and quick scrolls to viewport sectors. How shall we proceed, sir?";
+      if (query.includes('comic rank') || query.includes('ranked comic') || query.includes('best comic')) {
+        return `Our top-ranked comic is "${COMICS[0].title}" (Rank 1), followed by "${COMICS[1].title}" (Rank 2) and "${COMICS[2].title}" (Rank 3). You can view the full list of 50 in our Comics slider, sir.`;
       }
-
-      return "I've checked my local databanks, sir, but that information is beyond my current intelligence arrays. May I assist you with characters, movie timelines, or arena simulator indices instead?";
+ 
+      // Search news
+      for (let n of NEWS_DATA) {
+        if (query.includes(n.title.toLowerCase())) {
+          return `Latest News: "${n.title}" (${n.date}). Summary: ${n.excerpt}`;
+        }
+      }
+      if (query.includes('latest news') || query.includes('news update') || query.includes('breaking news')) {
+        const headlines = NEWS_DATA.map(n => `"${n.title}"`).join(' | ');
+        return `Here are the latest headlines: ${headlines}.`;
+      }
+ 
+      // Fan Zone triggers
+      if (query.includes('fan zone') || query.includes('quiz') || query.includes('find me') || query.includes('game')) {
+        setTimeout(() => smoothScrollTo('fanzone'), 2000);
+        return "Accessing the Fan Zone sector, sir! We have interactive quizzes (Easy, Medium, Hard, and Pro) and a 'Find Me' character-clue game. Re-routing you there now.";
+      }
+ 
+      // Fallback
+      return "I have scanned our localized archives, sir, but I could not find a match. I am programmed to answer queries strictly based on the characters, movies, series, news, products, comics, and games present on this website. Please try asking about specific heroes, villains, phases, or items, sir.";
     }
+    // ═══════════════════════════════════════════════
+    // FAN ZONE SYSTEM (QUIZ & FIND ME)
+    // ═══════════════════════════════════════════════
+    
+    // Tab switcher
+    window.switchFzTab = function(tabName, btn) {
+      document.querySelectorAll('#fanzone .fz-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('#fanzone .fz-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('fz-panel-' + tabName).classList.add('active');
+    };
+
+    // Quiz Questions Data
+    const QUIZ_QUESTIONS = {
+      easy: [
+        { q: "What is Captain America's shield made of?", o: ["Vibranium", "Adamantium", "Uru", "Carbonadium"], a: 0 },
+        { q: "Who is Tony Stark's AI assistant turned Avenger?", o: ["Vision", "JARVIS", "Friday", "Ultron"], a: 0 },
+        { q: "Which planet is Thor from?", o: ["Asgard", "Earth", "Sakaar", "Xandar"], a: 0 },
+        { q: "What is the name of Peter Parker's aunt?", o: ["Peggy", "May", "MJ", "Gwen"], a: 1 },
+        { q: "What weapon does Thor use in the early MCU films?", o: ["Stormbreaker", "Mjolnir", "Gungnir", "Hofund"], a: 1 },
+        { q: "Which infinity stone is green?", o: ["Time Stone", "Mind Stone", "Power Stone", "Space Stone"], a: 0 },
+        { q: "Who is the King of Wakanda?", o: ["M'Baku", "T'Challa", "Killmonger", "W'Kabi"], a: 1 },
+        { q: "What is Bruce Banner's superhero identity?", o: ["The Hulk", "Abomination", "The Thing", "Beast"], a: 0 },
+        { q: "What is the name of the organization led by Nick Fury?", o: ["S.H.I.E.L.D.", "S.W.O.R.D.", "Hydra", "A.I.M."], a: 0 },
+        { q: "Which hero shrinks and grows in size?", o: ["Falcon", "Ant-Man", "Wasp", "Hawkeye"], a: 1 }
+      ],
+      medium: [
+        { q: "What is the real name of the character known as Star-Lord?", o: ["Peter Parker", "Peter Quill", "Scott Lang", "Clint Barton"], a: 1 },
+        { q: "Who was the main villain in the first Avengers movie (2012)?", o: ["Thanos", "Loki", "Ultron", "Red Skull"], a: 1 },
+        { q: "Which alien race does Ronan the Accuser belong to?", o: ["Kree", "Skrull", "Chitauri", "Sovereign"], a: 0 },
+        { q: "Where is the Soul Stone located in Avengers: Infinity War?", o: ["Titan", "Vormir", "Knowhere", "Nidavellir"], a: 1 },
+        { q: "Who designed the Falcon's wings?", o: ["S.H.I.E.L.D.", "Stark Industries", "Wakanda Design Group", "US Military"], a: 1 },
+        { q: "Which doctor became the Sorcerer Supreme?", o: ["Bruce Banner", "Stephen Strange", "Jane Foster", "Erik Selvig"], a: 1 },
+        { q: "What is the name of the super-soldier serum creator?", o: ["Howard Stark", "Abraham Erskine", "Arnim Zola", "Chester Phillips"], a: 1 },
+        { q: "Which movie does Wanda Maximoff make her first full appearance?", o: ["Avengers: Age of Ultron", "Captain America: The Winter Soldier", "Captain America: Civil War", "Iron Man 3"], a: 0 },
+        { q: "Who is Loki's biological father?", o: ["Odin", "Laufey", "Bor", "Thanos"], a: 1 },
+        { q: "What is the name of Deadpool's blind roommate?", o: ["Vanessa", "Blind Al", "Domino", "Negasonic"], a: 1 }
+      ],
+      hard: [
+        { q: "What is the name of Thor's elder sister?", o: ["Frigg", "Hela", "Sif", "Angela"], a: 1 },
+        { q: "In which comic book did Wolverine make his first full appearance?", o: ["X-Men #1", "The Incredible Hulk #181", "Giant-Size X-Men #1", "Amazing Fantasy #15"], a: 1 },
+        { q: "What is the name of the fictional metal that coats Wolverine's skeleton?", o: ["Vibranium", "Adamantium", "Uru", "Promethium"], a: 1 },
+        { q: "Who was the director of S.H.I.E.L.D. before Nick Fury?", o: ["Peggy Carter", "Alexander Pierce", "Howard Stark", "Chester Phillips"], a: 1 },
+        { q: "Who is the keeper of the Soul Stone on Vormir?", o: ["Thanos", "Red Skull", "Collector", "Grandmaster"], a: 1 },
+        { q: "What is the name of Black Widow's sister?", o: ["Melina Vostokoff", "Yelena Belova", "Natasha Romanoff", "Anya Derevkova"], a: 1 },
+        { q: "Who is the ruler of the Dark Dimension?", o: ["Mephisto", "Dormammu", "Surtur", "Loki"], a: 1 },
+        { q: "What is the subatomic dimension Ant-Man enters?", o: ["Mirror Dimension", "Quantum Realm", "Astral Dimension", "Negative Zone"], a: 1 },
+        { q: "What Wakandan deity is worshipped by the Jabari tribe?", o: ["Bast", "Hanuman", "Sekhmet", "Sobek"], a: 1 },
+        { q: "Which cosmic entity is the father of Star-Lord in the MCU?", o: ["Thanos", "Ego", "Galactus", "Odin"], a: 1 }
+      ],
+      pro: [
+        { q: "In the comics, what is the true identity of the villain Onslaught?", o: ["A clone of Wolverine", "A psionic entity of Professor X and Magneto", "An alternate Apocalypse", "A future version of Cable"], a: 1 },
+        { q: "Who is the oldest mutant in the Marvel Universe?", o: ["Apocalypse", "Selene", "Wolverine", "Namor"], a: 1 },
+        { q: "What is the name of the sword built to kill gods, wielded by Gorr?", o: ["Twilight Sword", "All-Black the Necrosword", "Odinsword", "Dragonfang"], a: 1 },
+        { q: "Which cosmic entity represents the sum total of all anti-existence?", o: ["Beyonder", "One Below All", "Mephisto", "Dormammu"], a: 1 },
+        { q: "In comics lore, who was the first herald of Galactus?", o: ["Silver Surfer", "The Fallen One", "Nova", "Air-Walker"], a: 1 },
+        { q: "What Wakandan group protects the King as personal bodyguards?", o: ["Border Tribe", "Dora Milaje", "War Dogs", "Hatut Zeraze"], a: 1 },
+        { q: "What is the name of the living computer from the planet Xandar?", o: ["Supreme Intelligence", "Worldmind", "Cerebro", "Mainframe"], a: 1 },
+        { q: "Which superhero team did Spider-Man first try to join in his solo comics?", o: ["Avengers", "Fantastic Four", "X-Men", "Defenders"], a: 1 },
+        { q: "What is the name of the Marvel universe's highest authority, the supreme creator?", o: ["Living Tribunal", "One Above All", "Eternity", "Beyonder"], a: 1 },
+        { q: "What is the name of Thor's hammer in Norse mythology and comics?", o: ["Stormbreaker", "Mjolnir", "Jarnbjorn", "Gungnir"], a: 1 }
+      ]
+    };
+
+    // Quiz State
+    let quizState = {
+      diff: null,
+      questions: [],
+      currentIdx: 0,
+      score: 0,
+      timer: 10,
+      timerInterval: null
+    };
+
+    window.startQuiz = function(difficulty) {
+      quizState.diff = difficulty;
+      quizState.questions = [...QUIZ_QUESTIONS[difficulty]];
+      quizState.currentIdx = 0;
+      quizState.score = 0;
+      
+      document.getElementById('quiz-screen-select').style.display = 'none';
+      document.getElementById('quiz-screen-play').style.display = 'block';
+      document.getElementById('quiz-screen-result').style.display = 'none';
+      
+      loadQuizQuestion();
+    };
+
+    function loadQuizQuestion() {
+      if (quizState.timerInterval) clearInterval(quizState.timerInterval);
+      
+      if (quizState.currentIdx >= quizState.questions.length) {
+        showQuizResults();
+        return;
+      }
+      
+      const qObj = quizState.questions[quizState.currentIdx];
+      document.getElementById('quiz-progress-text').textContent = `Question ${quizState.currentIdx + 1} of ${quizState.questions.length}`;
+      document.getElementById('quiz-score-text').textContent = `Score: ${quizState.score}`;
+      document.getElementById('quiz-question').textContent = qObj.q;
+      
+      const optionsContainer = document.getElementById('quiz-options-container');
+      optionsContainer.innerHTML = '';
+      
+      qObj.o.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-opt';
+        btn.textContent = opt;
+        btn.onclick = () => selectQuizAnswer(idx, btn);
+        optionsContainer.appendChild(btn);
+      });
+      
+      // Timer setup
+      quizState.timer = 10;
+      document.getElementById('quiz-timer-sec').textContent = '10s';
+      const fill = document.getElementById('quiz-timer-fill');
+      fill.style.transition = 'none';
+      fill.style.width = '100%';
+      // force reflow
+      void fill.offsetWidth;
+      fill.style.transition = 'width 10s linear';
+      fill.style.width = '0%';
+      
+      quizState.timerInterval = setInterval(() => {
+        quizState.timer--;
+        document.getElementById('quiz-timer-sec').textContent = `${quizState.timer}s`;
+        if (quizState.timer <= 0) {
+          clearInterval(quizState.timerInterval);
+          handleQuizTimeout();
+        }
+      }, 1000);
+    }
+
+    function selectQuizAnswer(selectedIndex, chosenBtn) {
+      clearInterval(quizState.timerInterval);
+      const qObj = quizState.questions[quizState.currentIdx];
+      const correctIdx = qObj.a;
+      
+      const buttons = document.querySelectorAll('#quiz-options-container .quiz-opt');
+      buttons.forEach(btn => btn.disabled = true);
+      
+      if (selectedIndex === correctIdx) {
+        chosenBtn.classList.add('correct');
+        quizState.score++;
+        document.getElementById('quiz-score-text').textContent = `Score: ${quizState.score}`;
+      } else {
+        chosenBtn.classList.add('incorrect');
+        buttons[correctIdx].classList.add('correct');
+      }
+      
+      setTimeout(() => {
+        quizState.currentIdx++;
+        loadQuizQuestion();
+      }, 1800);
+    }
+
+    function handleQuizTimeout() {
+      const qObj = quizState.questions[quizState.currentIdx];
+      const correctIdx = qObj.a;
+      const buttons = document.querySelectorAll('#quiz-options-container .quiz-opt');
+      buttons.forEach(btn => btn.disabled = true);
+      
+      buttons[correctIdx].classList.add('correct');
+      
+      setTimeout(() => {
+        quizState.currentIdx++;
+        loadQuizQuestion();
+      }, 1800);
+    }
+
+    function showQuizResults() {
+      document.getElementById('quiz-screen-play').style.display = 'none';
+      document.getElementById('quiz-screen-result').style.display = 'block';
+      
+      const finalScore = document.getElementById('quiz-final-score');
+      finalScore.textContent = `${quizState.score} / ${quizState.questions.length}`;
+      
+      const feedback = document.getElementById('quiz-feedback');
+      const ratio = quizState.score / quizState.questions.length;
+      if (ratio === 1) {
+        feedback.textContent = "Unbelievable, sir! You possess the Mind Stone itself! Perfect score!";
+      } else if (ratio >= 0.8) {
+        feedback.textContent = "Outstanding work, agent! Worthy of joining Earth's Mightiest Heroes.";
+      } else if (ratio >= 0.5) {
+        feedback.textContent = "Not bad, sir. S.H.I.E.L.D. archives suggest a refresher, but you survived.";
+      } else {
+        feedback.textContent = "Danger, sir. Ultron seems to have outsmarted us. Try again to save the universe!";
+      }
+    }
+
+    window.resetQuiz = function() {
+      document.getElementById('quiz-screen-select').style.display = 'block';
+      document.getElementById('quiz-screen-play').style.display = 'none';
+      document.getElementById('quiz-screen-result').style.display = 'none';
+    };
+
+    // Find Me Game Pool structured by difficulty
+    const FINDME_POOL = {
+      easy: [
+        {
+          name: "Spider-Man",
+          clues: [
+            "I got my powers from a radioactive spider bite in high school.",
+            "A tragedy involving my Uncle Ben taught me about great power and responsibility.",
+            "I live in Queens, New York, and have worked as a freelance photographer.",
+            "I wear a signature red and blue suit and fight crime by shooting webs."
+          ]
+        },
+        {
+          name: "Iron Man",
+          clues: [
+            "I am a billionaire industrialist, tech genius, and founding Avenger.",
+            "I built my first powered suit of armor in a cave to escape captivity.",
+            "I created the artificial intelligence systems J.A.R.V.I.S. and Friday.",
+            "I saved the universe by sacrificing myself to snap Thanos away."
+          ]
+        },
+        {
+          name: "Captain America",
+          clues: [
+            "I was a skinny kid from Brooklyn who wanted to serve in World War II.",
+            "I volunteered for the Super Soldier Program and received Abraham Erskine's serum.",
+            "I was frozen in ice for nearly 70 years before waking up in the modern era.",
+            "I wield a round, star-spangled Vibranium shield."
+          ]
+        },
+        {
+          name: "Hulk",
+          clues: [
+            "I am a brilliant scientist who was caught in a gamma bomb explosion.",
+            "Extreme anger, stress, or high heart rate triggers my monstrous transformation.",
+            "My alter ego is Dr. Bruce Banner.",
+            "I am a giant green rage monster known to yell 'SMASH!'"
+          ]
+        },
+        {
+          name: "Thor",
+          clues: [
+            "I am the Asgardian Prince of Thunder, son of Odin and Frigg.",
+            "I lost my eye, my home planet Asgard, and my hammer Mjolnir to my sister Hela.",
+            "I wield the powerful dwarf-forged storm axe Stormbreaker.",
+            "I am famously portrayed by Chris Hemsworth in the movies."
+          ]
+        }
+      ],
+      medium: [
+        {
+          name: "Black Panther",
+          clues: [
+            "I am the sovereign king of a technologically advanced, isolated African nation.",
+            "I consumed a heart-shaped herb to gain superhuman speed and agility.",
+            "My panther habit suit is woven with Vibranium and absorbs kinetic energy.",
+            "I lead my nation Wakanda with the battle cry 'Wakanda Forever!'"
+          ]
+        },
+        {
+          name: "Doctor Strange",
+          clues: [
+            "I was a brilliant, wealthy, and arrogant neurosurgeon before a car crash.",
+            "I sought healing in Kamar-Taj and discovered the mystic arts.",
+            "I once defeated Dormammu by trapping him in an infinite time loop.",
+            "I am the Master of Mystic Arts and wore the Cloak of Levitation."
+          ]
+        },
+        {
+          name: "Wolverine",
+          clues: [
+            "I am a mutant born in Canada who has lived for over a century.",
+            "My skeleton and claws are coated with indestructible Adamantium.",
+            "I have a powerful mutant healing factor and a berserker rage.",
+            "I go by the name Logan and am a core member of the X-Men."
+          ]
+        },
+        {
+          name: "Loki",
+          clues: [
+            "I am the biological son of Laufey, King of the Frost Giants.",
+            "I led a Chitauri army in the battle of New York in 2012.",
+            "I am the God of Mischief, known for my tricks and illusions.",
+            "I ended up holding the timelines together at the end of time."
+          ]
+        },
+        {
+          name: "Thanos",
+          clues: [
+            "I am a giant purple titan from a ruined planet, driven by a dark ideology.",
+            "I believe resources are finite and that half of the universe must be erased.",
+            "I adopted and trained two lethal daughters, Gamora and Nebula.",
+            "I collected all six Infinity Stones to perform the Decimation snap."
+          ]
+        }
+      ],
+      hard: [
+        {
+          name: "Deadpool",
+          clues: [
+            "I was a mercenary who volunteered for the Weapon X program to cure my cancer.",
+            "I am famous for constantly breaking the fourth wall and talking to the audience.",
+            "I wear a red and black suit to hide my disfigured skin and look cool.",
+            "I am known as the 'Merc with a Mouth' and love chimichangas."
+          ]
+        },
+        {
+          name: "Scarlet Witch",
+          clues: [
+            "My brother Pietro and I volunteered for Hydra experiments with the Mind Stone.",
+            "My grief created a sitcom-based hex reality in Westview.",
+            "My power source is Chaos Magic, and I am destined to destroy or rule the cosmos.",
+            "My real name is Wanda Maximoff."
+          ]
+        },
+        {
+          name: "Ant-Man",
+          clues: [
+            "I am a former thief with an electrical engineering degree who stole a special suit.",
+            "I use Pym Particles to alter my size while maintaining my human density strength.",
+            "My daughter's name is Cassie, and I entered the subatomic Quantum Realm.",
+            "My real name is Scott Lang, and I communicate with ants."
+          ]
+        },
+        {
+          name: "Vision",
+          clues: [
+            "I am a synthezoid created from vibranium, Helen Cho's cradle, and the Mind Stone.",
+            "I was originally programmed as Tony Stark's personal assistant J.A.R.V.I.S.",
+            "I can alter my density to phase through solid objects or become harder than diamond.",
+            "I fell in love with Wanda Maximoff and was killed by Thanos."
+          ]
+        },
+        {
+          name: "Hawkeye",
+          clues: [
+            "I am a master marksman who worked for S.H.I.E.L.D. before joining the Avengers.",
+            "I took on the dark vigilante identity of Ronin after my family disappeared in the snap.",
+            "I trained a young archer named Kate Bishop to be my successor.",
+            "My real name is Clint Barton, and my signature weapon is a recurve bow."
+          ]
+        }
+      ],
+      pro: [
+        {
+          name: "Sentry",
+          clues: [
+            "I gained the power of a million exploding suns from a golden super-soldier serum.",
+            "My dark side is a malevolent entity known as the Void.",
+            "My memories were erased from everyone's minds to keep my evil half locked away.",
+            "My real name is Robert Reynolds, and I am one of the most powerful beings on Earth."
+          ]
+        },
+        {
+          name: "Gorr",
+          clues: [
+            "I became an atheist after my prayers failed to save my dying daughter on a barren planet.",
+            "I bonded with the All-Black Necrosword after witnessing a battle between two gods.",
+            "I embarked on a crusade to slaughter every deity in existence.",
+            "I am known as the 'God Butcher' and fought Thor."
+          ]
+        },
+        {
+          name: "Onslaught",
+          clues: [
+            "I am a sentient psionic entity created from the merged consciousness of two powerful mutants.",
+            "I was born when Charles Xavier shut down Magneto's mind in anger.",
+            "I kidnapped Franklin Richards and reality-warping mutants to harness power.",
+            "My existence led to the 'Heroes Reborn' timeline event."
+          ]
+        },
+        {
+          name: "Mephisto",
+          clues: [
+            "I am a powerful extra-dimensional demon who rules a pocket dimension resembling Hell.",
+            "I gained control of Johnny Blaze's soul, creating the Ghost Rider.",
+            "I famously traded Peter Parker's marriage to Aunt May's life in a key storyline.",
+            "I am the Marvel Universe's primary lord of lies and contract broker."
+          ]
+        },
+        {
+          name: "Galactus",
+          clues: [
+            "I am the sole survivor of the universe that existed before the Big Bang.",
+            "I must consume the life force of planets to sustain my existence and cosmic hunger.",
+            "I employ heralds, like the Silver Surfer, to locate suitable worlds.",
+            "I am the Devourer of Worlds, clad in giant purple and blue armor."
+          ]
+        }
+      ]
+    };
+
+    // Find Me State
+    let fmState = {
+      diff: null,
+      questions: [],
+      currentIdx: 0,
+      score: 0,
+      targetChar: null,
+      cluesRevealed: 0,
+      timer: 45,
+      timerInterval: null
+    };
+
+    window.startFindMe = function(difficulty) {
+      fmState.diff = difficulty;
+      fmState.questions = [...FINDME_POOL[difficulty]];
+      fmState.currentIdx = 0;
+      fmState.score = 0;
+      
+      document.getElementById('fm-screen-start').style.display = 'none';
+      document.getElementById('fm-screen-play').style.display = 'block';
+      document.getElementById('fm-screen-result').style.display = 'none';
+      
+      loadFmQuestion();
+    };
+
+    function loadFmQuestion() {
+      if (fmState.timerInterval) clearInterval(fmState.timerInterval);
+      
+      if (fmState.currentIdx >= fmState.questions.length) {
+        showFmResults();
+        return;
+      }
+      
+      fmState.targetChar = fmState.questions[fmState.currentIdx];
+      fmState.cluesRevealed = 1;
+      fmState.timer = 45;
+      
+      document.getElementById('fm-progress-text').textContent = `Character ${fmState.currentIdx + 1} of ${fmState.questions.length}`;
+      document.getElementById('fm-score-text').textContent = `Score: ${fmState.score}`;
+      document.getElementById('fm-clue-count').textContent = `Clues Revealed: 1/4`;
+      document.getElementById('fm-timer-sec').textContent = `Time Remaining: 45s`;
+      document.getElementById('fm-next-clue-btn').disabled = false;
+      document.getElementById('fm-user-guess').value = '';
+      
+      const container = document.getElementById('fm-clues-container');
+      container.innerHTML = `<div class="fm-clue reveal"><strong>Clue 1:</strong> ${fmState.targetChar.clues[0]}</div>`;
+      
+      // key listener
+      const guessInput = document.getElementById('fm-user-guess');
+      guessInput.onkeydown = (e) => {
+        if (e.key === 'Enter') submitFmGuess();
+      };
+      
+      fmState.timerInterval = setInterval(() => {
+        fmState.timer--;
+        document.getElementById('fm-timer-sec').textContent = `Time Remaining: ${fmState.timer}s`;
+        
+        // Auto reveal clues on time thresholds
+        if (fmState.timer === 33 && fmState.cluesRevealed < 2) revealNextFmClue();
+        else if (fmState.timer === 22 && fmState.cluesRevealed < 3) revealNextFmClue();
+        else if (fmState.timer === 11 && fmState.cluesRevealed < 4) revealNextFmClue();
+        
+        if (fmState.timer <= 0) {
+          clearInterval(fmState.timerInterval);
+          handleFmTimeout();
+        }
+      }, 1000);
+    }
+
+    window.revealNextFmClue = function() {
+      if (!fmState.targetChar || fmState.cluesRevealed >= 4) return;
+      
+      fmState.cluesRevealed++;
+      const container = document.getElementById('fm-clues-container');
+      const div = document.createElement('div');
+      div.className = 'fm-clue';
+      div.innerHTML = `<strong>Clue ${fmState.cluesRevealed}:</strong> ${fmState.targetChar.clues[fmState.cluesRevealed - 1]}`;
+      container.appendChild(div);
+      
+      // trigger slide-up transition
+      setTimeout(() => div.classList.add('reveal'), 20);
+      
+      document.getElementById('fm-clue-count').textContent = `Clues Revealed: ${fmState.cluesRevealed}/4`;
+      
+      if (fmState.cluesRevealed === 4) {
+        document.getElementById('fm-next-clue-btn').disabled = true;
+      }
+    };
+
+    window.submitFmGuess = function() {
+      const input = document.getElementById('fm-user-guess');
+      const guess = input.value.trim().toLowerCase();
+      if (!guess) return;
+      
+      const target = fmState.targetChar.name.toLowerCase();
+      
+      // Normalize guesses for common characters
+      if (guess === target || 
+          (target === 'spider-man' && guess === 'spiderman') || 
+          (target === 'iron man' && guess === 'ironman') ||
+          (target === 'captain america' && guess === 'captainamerica')) {
+        
+        clearInterval(fmState.timerInterval);
+        fmState.score++;
+        
+        // Show correct screen styling briefly
+        input.style.border = '1px solid #00ff88';
+        input.style.boxShadow = '0 0 15px rgba(0, 255, 136, 0.4)';
+        
+        const container = document.getElementById('fm-clues-container');
+        container.innerHTML += `<div class="fm-clue reveal" style="border-left-color: #00ff88; color: #00ff88;"><strong>Correct!</strong> The character is indeed ${fmState.targetChar.name}.</div>`;
+        
+        setTimeout(() => {
+          input.style.border = '';
+          input.style.boxShadow = '';
+          fmState.currentIdx++;
+          loadFmQuestion();
+        }, 2000);
+      } else {
+        // wrong guess shake input effect
+        input.style.border = '1px solid var(--red)';
+        input.style.boxShadow = '0 0 15px rgba(230, 36, 41, 0.4)';
+        setTimeout(() => {
+          input.style.border = '';
+          input.style.boxShadow = '';
+        }, 1000);
+      }
+    };
+
+    function handleFmTimeout() {
+      const container = document.getElementById('fm-clues-container');
+      container.innerHTML += `<div class="fm-clue reveal" style="border-left-color: var(--red); color: var(--red);"><strong>Time's up!</strong> The character was: ${fmState.targetChar.name}.</div>`;
+      
+      setTimeout(() => {
+        fmState.currentIdx++;
+        loadFmQuestion();
+      }, 2500);
+    }
+
+    window.giveUpFindMe = function() {
+      clearInterval(fmState.timerInterval);
+      const container = document.getElementById('fm-clues-container');
+      container.innerHTML += `<div class="fm-clue reveal" style="border-left-color: var(--gold); color: var(--gold);"><strong>Revealed:</strong> The character is ${fmState.targetChar.name}.</div>`;
+      
+      setTimeout(() => {
+        fmState.currentIdx++;
+        loadFmQuestion();
+      }, 2500);
+    };
+
+    function showFmResults() {
+      document.getElementById('fm-screen-play').style.display = 'none';
+      document.getElementById('fm-screen-result').style.display = 'block';
+      
+      const finalScore = document.getElementById('fm-final-score');
+      finalScore.textContent = `${fmState.score} / ${fmState.questions.length}`;
+      
+      const feedback = document.getElementById('fm-feedback');
+      const ratio = fmState.score / fmState.questions.length;
+      if (ratio === 1) {
+        feedback.textContent = "Spectacular decryption, sir! You identified every single character perfectly!";
+      } else if (ratio >= 0.8) {
+        feedback.textContent = "Incredible tracking skills! S.H.I.E.L.D. threat analysis division wants you.";
+      } else if (ratio >= 0.5) {
+        feedback.textContent = "Decent tracking, sir. A few anomalies detected, but overall a successful campaign.";
+      } else {
+        feedback.textContent = "Mission failed, sir. The targets escaped our radar. Initiating recalibration sequence!";
+      }
+    }
+
+    window.resetFindMe = function() {
+      document.getElementById('fm-screen-start').style.display = 'block';
+      document.getElementById('fm-screen-play').style.display = 'none';
+      document.getElementById('fm-screen-result').style.display = 'none';
+    };
   </script>
 
   <!-- JARVIS CHATBOT WIDGET -->
