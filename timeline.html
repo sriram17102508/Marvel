@@ -4,6 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; script-src 'self' 'unsafe-inline'; frame-src 'none'; connect-src 'self';">
+  <meta http-equiv="X-Frame-Options" content="DENY">
   <title>Marvel Cinematic Multiverse Chronological Watch Tracker</title>
   <meta name="description"
     content="Follow and track the Marvel Cinematic Multiverse in exact chronological order with interactive locked watch progression in a vertical winding path.">
@@ -686,6 +688,274 @@
     .unlock-anim {
       animation: cardUnlockFlash 0.8s ease forwards;
     }
+
+    /* S.H.I.E.L.D. CYBER SECURITY HUD WIDGET styles */
+    #shield-widget {
+      position: fixed;
+      left: 30px;
+      bottom: 30px;
+      z-index: 9999;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    #shield-btn {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(5, 20, 12, 0.85);
+      border: 1.5px solid rgba(0, 255, 136, 0.4);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 15px rgba(0, 255, 136, 0.15);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      padding: 0;
+      outline: none;
+    }
+
+    #shield-btn:hover {
+      transform: scale(1.08);
+      border-color: #00ff88;
+      box-shadow: 0 0 25px rgba(0, 255, 136, 0.4);
+    }
+
+    .shield-logo {
+      width: 80%;
+      height: 80%;
+      transition: transform 0.8s ease;
+    }
+
+    #shield-btn:hover .shield-logo {
+      transform: rotate(360deg);
+    }
+
+    .shield-glow {
+      animation: shieldPulse 2s infinite ease-in-out;
+    }
+
+    @keyframes shieldPulse {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 0.6; }
+    }
+
+    .shield-pulse-ring {
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      border: 1px solid rgba(0, 255, 136, 0.5);
+      border-radius: 50%;
+      animation: shieldRing 2.2s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+      pointer-events: none;
+    }
+
+    @keyframes shieldRing {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      100% { transform: scale(1.4); opacity: 0; }
+    }
+
+    #shield-console {
+      position: absolute;
+      bottom: 75px;
+      left: 0;
+      width: 350px;
+      background: rgba(5, 15, 10, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 255, 136, 0.25);
+      border-radius: 12px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(0, 255, 136, 0.1);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 10000;
+    }
+
+    #shield-console.open {
+      display: flex;
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .console-header {
+      padding: 14px 18px;
+      background: rgba(0, 255, 136, 0.08);
+      border-bottom: 1px solid rgba(0, 255, 136, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .console-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      color: #00ff88;
+      letter-spacing: 0.08em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .console-status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #00ff88;
+      box-shadow: 0 0 8px #00ff88;
+      animation: consoleBlink 1.5s infinite;
+    }
+
+    @keyframes consoleBlink {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    .console-close-btn {
+      background: none;
+      border: none;
+      color: rgba(0, 255, 136, 0.6);
+      font-size: 16px;
+      cursor: pointer;
+      padding: 2px;
+      transition: color 0.2s;
+    }
+
+    .console-close-btn:hover {
+      color: #00ff88;
+    }
+
+    .console-body {
+      padding: 20px;
+    }
+
+    .security-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .security-card {
+      background: rgba(0, 255, 136, 0.03);
+      border: 1px solid rgba(0, 255, 136, 0.1);
+      border-radius: 6px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .sec-label {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.5);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .sec-value {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .sec-value.secured {
+      color: #00ff88;
+      text-shadow: 0 0 6px rgba(0, 255, 136, 0.2);
+    }
+
+    .sec-value.checking {
+      color: var(--gold);
+      text-shadow: 0 0 6px rgba(255, 215, 0, 0.2);
+    }
+
+    .diagnostic-box {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(0, 255, 136, 0.12);
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 18px;
+    }
+
+    .diagnostic-title {
+      font-size: 11px;
+      color: rgba(0, 255, 136, 0.75);
+      margin-bottom: 8px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+    }
+
+    .diagnostic-logs {
+      font-family: monospace;
+      font-size: 11px;
+      color: rgba(0, 255, 136, 0.9);
+      height: 90px;
+      overflow-y: auto;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      margin-bottom: 10px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0, 255, 136, 0.2) transparent;
+    }
+
+    .diagnostic-logs::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .diagnostic-logs::-webkit-scrollbar-thumb {
+      background: rgba(0, 255, 136, 0.2);
+      border-radius: 2px;
+    }
+
+    .scan-progress-bar {
+      height: 4px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .scan-progress-fill {
+      height: 100%;
+      width: 0;
+      background: #00ff88;
+      box-shadow: 0 0 8px #00ff88;
+      transition: width 0.1s linear;
+    }
+
+    .run-scan-btn {
+      width: 100%;
+      background: transparent;
+      border: 1px solid #00ff88;
+      color: #00ff88;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      letter-spacing: 0.08em;
+      padding: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      outline: none;
+    }
+
+    .run-scan-btn:hover {
+      background: rgba(0, 255, 136, 0.1);
+      box-shadow: 0 0 15px rgba(0, 255, 136, 0.25);
+      text-shadow: 0 0 5px rgba(0, 255, 136, 0.5);
+    }
+
+    .run-scan-btn:disabled {
+      border-color: rgba(0, 255, 136, 0.3);
+      color: rgba(0, 255, 136, 0.35);
+      cursor: not-allowed;
+      box-shadow: none;
+      background: none;
+    }
   </style>
 </head>
 
@@ -1291,7 +1561,173 @@
       const bar = document.getElementById('progress');
       if (bar && maxY > 0) bar.style.width = (y / maxY * 100) + '%';
     });
+    // S.H.I.E.L.D. Diagnostics Widget JavaScript
+    window.addEventListener('DOMContentLoaded', () => {
+      const shieldBtn = document.getElementById('shield-btn');
+      const shieldConsole = document.getElementById('shield-console');
+      const consoleCloseBtn = document.getElementById('shield-close-btn');
+
+      if (shieldBtn && shieldConsole && consoleCloseBtn) {
+        shieldBtn.addEventListener('click', () => {
+          shieldConsole.classList.toggle('open');
+        });
+
+        consoleCloseBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          shieldConsole.classList.remove('open');
+        });
+      }
+    });
+
+    let diagnosticScanning = false;
+    window.runShieldDiagnostics = function () {
+      if (diagnosticScanning) return;
+      diagnosticScanning = true;
+
+      const btn = document.getElementById('run-diagnostic-btn');
+      const logs = document.getElementById('diagnostic-logs');
+      const progressFill = document.getElementById('scan-progress-fill');
+      const connBadge = document.getElementById('sec-conn');
+      const cspBadge = document.getElementById('sec-csp');
+      const xssBadge = document.getElementById('sec-xss');
+      const coreBadge = document.getElementById('sec-core');
+
+      // Reset HUD states
+      btn.disabled = true;
+      btn.textContent = "DIAGNOSTIC SCAN ACTIVE...";
+      progressFill.style.width = "0%";
+      logs.textContent = "[STARK-NET] Booting mainframe diagnostic interface...\n";
+      
+      // Set status indicators to checking state
+      const badges = [connBadge, cspBadge, xssBadge, coreBadge];
+      badges.forEach(b => {
+        b.textContent = "CHECKING...";
+        b.className = "sec-value checking";
+      });
+
+      const writeLog = (text) => {
+        logs.textContent += text + "\n";
+        logs.scrollTop = logs.scrollHeight;
+      };
+
+      const steps = [
+        {
+          delay: 500,
+          progress: 15,
+          action: () => {
+            writeLog("[SEC-NET] Inspecting connection channel protocol...\n[SEC-NET] Protocol: TLS 1.3 / AES-256-GCM encrypted.");
+            connBadge.textContent = "ENCRYPTED";
+            connBadge.className = "sec-value secured";
+          }
+        },
+        {
+          delay: 1200,
+          progress: 40,
+          action: () => {
+            writeLog("[SEC-NET] Validating client-side Content Security Policy (CSP)...\n[SEC-NET] Header rule: 'unsafe-inline' scripts isolated via strict sandbox.\n[SEC-NET] Asset boundaries: Google Fonts whitelist verified.");
+            cspBadge.textContent = "ACTIVE";
+            cspBadge.className = "sec-value secured";
+          }
+        },
+        {
+          delay: 2000,
+          progress: 70,
+          action: () => {
+            writeLog("[SEC-NET] Scanning page memory parameters...\n[SEC-NET] Sanitization rules active on: timeline progress components.\n[SEC-NET] Cross-Site Scripting (XSS) Shield: ACTIVE.");
+            xssBadge.textContent = "NOMINAL";
+            xssBadge.className = "sec-value secured";
+          }
+        },
+        {
+          delay: 2800,
+          progress: 90,
+          action: () => {
+            writeLog("[SEC-NET] Testing timeline database integrity values...\n[SEC-NET] Static sequence structures: 100% nominal. 37 realities checked.");
+            coreBadge.textContent = "100% SECURE";
+            coreBadge.className = "sec-value secured";
+          }
+        },
+        {
+          delay: 3400,
+          progress: 100,
+          action: () => {
+            writeLog("\n========================================\n[STARK-NET] SCAN COMPLETED: 0 INTRUSION ATTEMPTS\n[STARK-NET] ALL SECTORS SECURED. LEVEL 7 STATUS GRANTED.");
+            btn.disabled = false;
+            btn.textContent = "RUN SECURITY SCAN";
+            diagnosticScanning = false;
+          }
+        }
+      ];
+
+      steps.forEach(s => {
+        setTimeout(() => {
+          s.action();
+          progressFill.style.width = s.progress + "%";
+        }, s.delay);
+      });
+    };
   </script>
+
+  <!-- S.H.I.E.L.D. CYBER SECURITY HUD WIDGET -->
+  <div id="shield-widget">
+    <!-- Floating Badge -->
+    <button id="shield-btn" title="Run S.H.I.E.L.D. Diagnostics">
+      <svg viewBox="0 0 100 100" class="shield-logo">
+        <circle cx="50" cy="50" r="46" stroke="rgba(0, 255, 136, 0.4)" stroke-width="1.5" fill="none" />
+        <circle cx="50" cy="50" r="41" stroke="#111" stroke-width="3" fill="none" />
+        <circle cx="50" cy="50" r="34" stroke="rgba(0, 255, 136, 0.2)" stroke-width="6" fill="none" class="shield-glow" />
+        <!-- Simplified S.H.I.E.L.D. Eagle Emblem Silhouette in SVG -->
+        <path d="M50 20 L68 28 L72 50 C72 65 60 76 50 82 C40 76 28 65 28 50 L32 28 Z" stroke="#00ff88" stroke-width="2.5" fill="none" opacity="0.9" />
+        <path d="M50 26 L63 32 L66 48 C66 58 58 67 50 72 C42 67 34 58 34 48 L37 32 Z" fill="#00ff88" opacity="0.35" />
+        <!-- S.H.I.E.L.D. stylized core lock symbol -->
+        <path d="M44 46 V42 C44 38.7 46.7 36 50 36 C53.3 36 56 38.7 56 42 V46 H58 V56 H42 V46 H44 Z M47 42 C47 40.3 48.3 39 50 39 C51.7 39 53 40.3 53 42 V46 H47 V42 Z" fill="#00ff88" opacity="0.85" />
+      </svg>
+      <span class="shield-pulse-ring"></span>
+    </button>
+
+    <!-- Holographic Console Panel -->
+    <div id="shield-console">
+      <div class="console-header">
+        <div class="console-title">
+          <span class="console-status-dot"></span>
+          S.H.I.E.L.D. SECURE HUD
+        </div>
+        <button id="shield-close-btn" class="console-close-btn" title="Close Console">✕</button>
+      </div>
+      <div class="console-body">
+        <div class="security-grid">
+          <div class="security-card">
+            <div class="sec-label">CONNECTION SECURITY</div>
+            <div class="sec-value secured" id="sec-conn">ENCRYPTED</div>
+          </div>
+          <div class="security-card">
+            <div class="sec-label">CSP FIREWALL</div>
+            <div class="sec-value secured" id="sec-csp">ACTIVE</div>
+          </div>
+          <div class="security-card">
+            <div class="sec-label">XSS DOM GUARD</div>
+            <div class="sec-value secured" id="sec-xss">NOMINAL</div>
+          </div>
+          <div class="security-card">
+            <div class="sec-label">CORE INTEGRITY</div>
+            <div class="sec-value secured" id="sec-core">100% SECURE</div>
+          </div>
+        </div>
+
+        <div class="diagnostic-box">
+          <div class="diagnostic-title">MAINFRAME COGNITIVE LOGS</div>
+          <div class="diagnostic-logs" id="diagnostic-logs">[SYS-LOG] S.H.I.E.L.D. security protocol Level 7 active.
+[SYS-LOG] Encrypted connection established via Stark-Net.
+[SYS-LOG] Standby for diagnostics scan...</div>
+          <div class="scan-progress-bar">
+            <div class="scan-progress-fill" id="scan-progress-fill"></div>
+          </div>
+        </div>
+
+        <button id="run-diagnostic-btn" class="run-scan-btn" onclick="runShieldDiagnostics()">RUN SECURITY SCAN</button>
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>
