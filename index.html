@@ -2174,6 +2174,10 @@
       }
     }
 
+    .mobile-search-trigger {
+      display: none;
+    }
+
     @media(max-width:900px) {
 
       .nav-center,
@@ -2183,6 +2187,11 @@
 
       .hamburger {
         display: flex
+      }
+
+      .mobile-search-trigger {
+        display: flex;
+        margin-right: 8px;
       }
     }
 
@@ -4514,6 +4523,749 @@
       box-shadow: 0 0 15px rgba(230, 36, 41, 0.4);
     }
 
+    /* ==========================================
+       ADVANCED SEARCH OVERLAY
+       ========================================== */
+    #search-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 5, 5, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 80px clamp(16px, 6vw, 100px) 40px;
+      overflow-y: auto;
+    }
+
+    #search-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .search-close-btn {
+      position: absolute;
+      top: 24px;
+      right: clamp(16px, 5vw, 56px);
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 32px;
+      cursor: none;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .search-close-btn:hover {
+      color: var(--red);
+      transform: rotate(90deg);
+    }
+
+    .search-container {
+      width: 100%;
+      max-width: 800px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .search-input-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    .search-input-field {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 18px 60px 18px 24px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 18px;
+      color: #FFF;
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .search-input-field:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 20px rgba(230, 36, 41, 0.25);
+    }
+
+    .search-icon-inside {
+      position: absolute;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 20px;
+      color: rgba(255, 255, 255, 0.4);
+      pointer-events: none;
+    }
+
+    /* Popular, Trending, and Recents */
+    .search-info-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .search-group-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 14px;
+      letter-spacing: 0.15em;
+      color: var(--gold);
+      text-transform: uppercase;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .search-clear-recent {
+      font-family: 'Manrope', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0;
+      color: var(--text-muted);
+      cursor: none;
+      background: none;
+      border: none;
+      transition: color 0.2s;
+    }
+
+    .search-clear-recent:hover {
+      color: var(--red);
+    }
+
+    .search-tags-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .search-tag-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.8);
+      cursor: none;
+      transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.1s;
+    }
+
+    .search-tag-btn:hover {
+      background: rgba(230, 36, 41, 0.12);
+      border-color: var(--red);
+      color: #FFF;
+      transform: translateY(-2px);
+    }
+
+    /* Suggestions & Results Panel */
+    .search-suggestions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .search-suggestion-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 10px 16px;
+      cursor: none;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .search-suggestion-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(230, 36, 41, 0.4);
+    }
+
+    .search-suggestion-img {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .search-suggestion-info {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .search-suggestion-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.03em;
+      color: #FFF;
+    }
+
+    .search-suggestion-role {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .search-suggestion-tag {
+      background: rgba(230, 36, 41, 0.15);
+      color: var(--red);
+      border: 1px solid rgba(230, 36, 41, 0.3);
+      font-size: 10px;
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 0.1em;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .search-suggestion-tag.villain {
+      background: rgba(192, 92, 255, 0.15);
+      color: #c05cff;
+      border: 1px solid rgba(192, 92, 255, 0.3);
+    }
+
+    /* UI States styling */
+    .search-loading-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding: 40px 0;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .search-loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(230, 36, 41, 0.2);
+      border-top-color: var(--red);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    .search-empty-state, .search-no-results-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 12px;
+      padding: 50px 20px;
+      border: 1px dashed rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    .search-state-icon {
+      font-size: 44px;
+      color: var(--red);
+      opacity: 0.7;
+    }
+
+    .search-state-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      color: #FFF;
+      letter-spacing: 0.05em;
+    }
+
+    .search-state-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      max-width: 400px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Navbar search trigger button */
+    .nav-search-trigger {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #FFF;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: none;
+      transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.2s;
+      flex-shrink: 0;
+    }
+
+    .nav-search-trigger:hover {
+      background: var(--red);
+      border-color: var(--red);
+      color: #FFF;
+      transform: scale(1.08);
+      box-shadow: 0 0 12px rgba(230, 36, 41, 0.4);
+    }
+
+    /* ==========================================
+       CHARACTER DETAILS MODAL
+       ========================================== */
+    #char-details-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 5, 5, 0.85);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      z-index: 1100;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    #char-details-modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Theme Variables */
+    #char-details-modal.theme-hero {
+      --modal-accent: #e62429;
+      --modal-accent-rgb: 230, 36, 41;
+      --modal-glow-shadow: rgba(230, 36, 41, 0.25);
+      --modal-badge-border: var(--gold);
+      --modal-badge-color: var(--gold);
+      --modal-badge-bg: rgba(255, 215, 0, 0.05);
+    }
+
+    #char-details-modal.theme-villain {
+      --modal-accent: #ff0055;
+      --modal-accent-rgb: 255, 0, 85;
+      --modal-glow-shadow: rgba(255, 0, 85, 0.25);
+      --modal-badge-border: #c05cff;
+      --modal-badge-color: #c05cff;
+      --modal-badge-bg: rgba(192, 92, 255, 0.05);
+    }
+
+    .modal-card {
+      background: rgba(13, 13, 13, 0.75);
+      border: 1px solid rgba(var(--modal-accent-rgb, 255, 255, 255), 0.15);
+      box-shadow: 0 0 50px var(--modal-glow-shadow, rgba(0, 0, 0, 0.5)), 0 30px 100px rgba(0, 0, 0, 0.8);
+      width: 100%;
+      max-width: 950px;
+      max-height: 90vh;
+      border-radius: 20px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      backdrop-filter: blur(40px) saturate(1.8);
+      -webkit-backdrop-filter: blur(40px) saturate(1.8);
+      animation: modalSlideUp 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    @keyframes modalSlideUp {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal-close-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      height: 0;
+      display: flex;
+      justify-content: flex-end;
+      pointer-events: none;
+    }
+
+    .modal-close-btn {
+      position: relative;
+      top: 16px;
+      right: 16px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #FFF;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: none;
+      z-index: 20;
+      transition: background 0.2s, border-color 0.2s, transform 0.2s;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      pointer-events: auto;
+      flex-shrink: 0;
+    }
+
+    .modal-close-btn:hover {
+      background: var(--modal-accent, var(--red));
+      border-color: var(--modal-accent, var(--red));
+      transform: scale(1.1);
+    }
+
+    /* Character Header Section: Portrait Left, Info Right */
+    .char-header-section {
+      position: relative;
+      display: flex;
+      align-items: stretch;
+      gap: 30px;
+      padding: 40px;
+      overflow: hidden;
+      border-bottom: 1px solid rgba(var(--modal-accent-rgb, 255, 255, 255), 0.15);
+      background: rgba(10, 10, 10, 0.4);
+      flex-shrink: 0;
+    }
+
+    .char-banner-bg {
+      position: absolute;
+      inset: -20px;
+      background-size: cover;
+      background-position: center top;
+      filter: blur(20px) brightness(0.35) saturate(1.2);
+      z-index: 1;
+      transition: transform 0.5s;
+    }
+
+    .char-portrait-left {
+      position: relative;
+      z-index: 2;
+      width: 260px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      flex-shrink: 0;
+      align-self: stretch;
+    }
+
+    .char-portrait-left img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .char-info-right {
+      position: relative;
+      z-index: 2;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .char-real-name {
+      font-family: 'Manrope', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--modal-accent, var(--gold));
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    .char-badges {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .char-badge {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 4px;
+      padding: 4px 10px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      color: rgba(255, 255, 255, 0.9);
+      text-transform: uppercase;
+    }
+
+    .char-badge.alliance {
+      border-color: var(--modal-badge-border, var(--gold));
+      color: var(--modal-badge-color, var(--gold));
+      background: var(--modal-badge-bg, rgba(255, 215, 0, 0.05));
+    }
+
+    .char-badge.villain {
+      border-color: var(--modal-badge-border, #c05cff);
+      color: var(--modal-badge-color, #c05cff);
+      background: var(--modal-badge-bg, rgba(192, 92, 255, 0.05));
+    }
+
+    .char-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(34px, 5vw, 54px);
+      line-height: 1.1;
+      letter-spacing: 0.02em;
+      color: #FFF;
+      text-shadow: 0 0 20px rgba(var(--modal-accent-rgb, 255, 255, 255), 0.3);
+    }
+
+    .char-role-label {
+      font-family: 'Manrope', sans-serif;
+      font-size: 16px;
+      color: var(--text-muted);
+      font-weight: 500;
+      letter-spacing: 0.05em;
+    }
+
+    /* Modal Body grid */
+    .modal-body {
+      padding: 40px;
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 40px;
+      z-index: 2;
+    }
+
+    @media (max-width: 768px) {
+      .modal-body {
+        grid-template-columns: 1fr;
+        padding: 24px;
+        gap: 30px;
+      }
+      .char-header-section {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 30px 24px;
+        gap: 20px;
+      }
+      .char-portrait-left {
+        width: 180px;
+        height: 240px;
+        align-self: auto;
+      }
+    }
+
+    .modal-left, .modal-right {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .modal-section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 0.1em;
+      color: var(--modal-accent, var(--red));
+      border-bottom: 1.5px solid rgba(var(--modal-accent-rgb, 230, 36, 41), 0.2);
+      padding-bottom: 8px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.3s, border-color 0.3s;
+    }
+
+    .char-bio {
+      font-family: 'Manrope', sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    /* Stat grid columns */
+    .info-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .info-stat-card {
+      background: rgba(var(--modal-accent-rgb, 255, 255, 255), 0.03);
+      border: 1px solid rgba(var(--modal-accent-rgb, 255, 255, 255), 0.06);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: background 0.3s, border-color 0.3s, transform 0.3s;
+    }
+
+    .info-stat-card:hover {
+      background: rgba(var(--modal-accent-rgb, 255, 255, 255), 0.06);
+      border-color: rgba(var(--modal-accent-rgb, 255, 255, 255), 0.15);
+      transform: translateY(-2px);
+    }
+
+    .info-stat-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+
+    .info-stat-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px;
+      color: var(--gold);
+      letter-spacing: 0.04em;
+    }
+
+    /* Power Bars */
+    .power-bars-container {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .power-bar-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .power-bar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+      letter-spacing: 0.04em;
+    }
+
+    .power-bar-bg {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .power-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--modal-accent, var(--red)), rgba(255, 255, 255, 0.3));
+      border-radius: 4px;
+      width: 0;
+      transition: width 1.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .theme-hero .power-bar-fill {
+      background: linear-gradient(90deg, #e62429, var(--gold));
+      box-shadow: 0 0 10px rgba(230, 36, 41, 0.4);
+    }
+
+    .theme-villain .power-bar-fill {
+      background: linear-gradient(90deg, #ff0055, #c05cff);
+      box-shadow: 0 0 10px rgba(255, 0, 85, 0.4);
+    }
+
+    /* Related Characters & Popular Comics List */
+    .related-chars-row {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .related-char-thumb {
+      flex: 0 0 75px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 6px;
+      cursor: none;
+    }
+
+    .related-char-thumb img {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .related-char-thumb:hover img {
+      transform: scale(1.08);
+      border-color: var(--modal-accent, var(--red));
+    }
+
+    .related-char-name {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+    }
+
+    .popular-comics-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .popular-comic-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 8px 12px;
+      border-radius: 8px;
+    }
+
+    .popular-comic-img {
+      width: 40px;
+      height: 55px;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .popular-comic-info {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .popular-comic-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #FFF;
+    }
+
+    .popular-comic-year {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* Custom cursor interaction changes */
+    #cursor.hovered {
+      width: 24px;
+      height: 24px;
+      background: transparent;
+      border: 1.5px solid var(--red);
+    }
+    #cursor-ring.hovered {
+      width: 48px;
+      height: 48px;
+      border-color: var(--gold);
+    }
+
   </style>
 </head>
 
@@ -4604,6 +5356,9 @@
   <!-- MOBILE MENU -->
   <div class="mobile-menu" id="mobileMenu">
     <button class="mobile-close" id="closeMenuBtn">✕</button>
+
+    <div class="mob-section-label" style="color:var(--gold)">Search</div>
+    <a href="#" onclick="openSearchOverlay(event)" style="color: var(--gold); border: 1px solid rgba(255,215,0,0.3); border-radius: 8px; padding: 8px 16px; margin: 4px 12px 12px; display: flex; align-items: center; justify-content: center; gap: 8px;">🔍 Search Database</a>
 
     <div class="mob-section-label">Universe</div>
     <a href="#heroes">Heroes</a>
@@ -5425,9 +6180,9 @@
     ];
 
     const HEROES = [
+      { name: 'Captain America', role: 'Super Soldier', team: 'Avengers', tag: 'Active', power: 8, img: 'captain.jfif' },
       { name: 'Iron Man', role: 'Genius', team: 'Avengers', tag: 'Active', power: 9, img: 'Ironman.jpg' },
-      { name: 'Captain America', role: 'Super Soldier', team: 'Avengers', tag: 'Active', power: 8, img: 'captainamerica1.jpg' },
-      { name: 'Thor', role: 'God of Thunder', team: 'Avengers', tag: 'Active', power: 10, img: 'thor1.jpg' },
+      { name: 'Thor', role: 'God of Thunder', team: 'Avengers', tag: 'Active', power: 10, img: 'thor.jfif' },
       { name: 'Spider-Man', role: 'Web Slinger', team: 'Avengers', tag: 'Active', power: 8, img: 'spiderman.jfif' },
       { name: 'Wolverine', role: 'Mutant', team: 'X-Men', tag: 'Active', power: 9, img: 'wolverine.jpg' },
       { name: 'Doctor Strange', role: 'Sorcerer Supreme', team: 'Avengers', tag: 'Active', power: 9, img: 'doctorstrange.jfif' },
@@ -5495,7 +6250,7 @@
       filtered.forEach(h => {
         const pips = Array(10).fill(0).map((_, i) => `<div class="pip${i < h.power ? ' on' : ''}"></div>`).join('');
         track.innerHTML += `
-      <div class="hero-card">
+      <div class="hero-card" onclick="showCharacterProfile('${h.name.replace(/'/g, "\\'")}', 'hero')">
         <img src="${h.img}" alt="${h.name}" loading="lazy">
         <div class="hero-card-overlay"></div>
         <div class="hero-card-glow"></div>
@@ -5625,7 +6380,7 @@
       const track = document.getElementById('villainsTrack');
       VILLAINS.forEach(v => {
         track.innerHTML += `
-      <div class="villain-card">
+      <div class="villain-card" onclick="showCharacterProfile('${v.name.replace(/'/g, "\\'")}', 'villain')">
         <img src="${v.img}" alt="${v.name}" loading="lazy">
         <div class="villain-overlay"></div>
         <div class="villain-rank">${v.rank}</div>
@@ -6503,6 +7258,7 @@
       initParticles();
       initJarvis();
       initBackToTop();
+      initAdvancedFeatures();
 
       // Dismiss loader & unlock scroll after 2.8s
       setTimeout(() => {
@@ -6646,19 +7402,22 @@
         messagesContainer.appendChild(thinkingMsg);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-        setTimeout(() => {
+        setTimeout(async () => {
           try {
-            const response = getJarvisResponse(text);
+            const response = await getJarvisResponse(text);
             const thinkingEl = document.getElementById(thinkingId);
             if (thinkingEl) {
               thinkingEl.innerHTML = '';
               const responseBubble = document.createElement('div');
               responseBubble.className = 'msg-bubble';
-              responseBubble.textContent = response;
+              responseBubble.innerHTML = response;
               thinkingEl.appendChild(responseBubble);
             }
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            jarvisSpeak(response);
+            
+            // Strip HTML for speech
+            const cleanText = response.replace(/<[^>]*>/g, ' ');
+            jarvisSpeak(cleanText);
           } catch (err) {
             console.error("JARVIS query engine error:", err);
             const thinkingEl = document.getElementById(thinkingId);
@@ -6688,7 +7447,71 @@
         .replace(/'/g, "&#039;");
     }
 
-    function getJarvisResponse(query) {
+    // Helper function to search the actual content of the webpage DOM
+    function searchLocalDOM(query) {
+      const q = query.toLowerCase().trim();
+      if (!q) return null;
+      
+      const sections = ['heroes', 'villains', 'comics', 'upcoming', 'news', 'shop', 'fanzone'];
+      for (let secId of sections) {
+        const el = document.getElementById(secId);
+        if (el) {
+          const text = el.innerText || el.textContent;
+          if (text.toLowerCase().includes(q)) {
+            // Find specific matching card/item to return a concise answer
+            const cards = el.querySelectorAll('.hero-card, .villain-card, .movie-card, .upcoming-card, .comic-slide, .product-card, .news-card, .popular-comic-item, .uc-body');
+            for (let card of cards) {
+              const cardText = card.innerText || card.textContent;
+              if (cardText.toLowerCase().includes(q)) {
+                const cleanText = cardText.replace(/\s+/g, ' ').trim();
+                return `Sir, I located a match in the ${secId.toUpperCase()} sector on this webpage. Detail: "${cleanText}"`;
+              }
+            }
+          }
+        }
+      }
+      return null;
+    }
+
+    // Helper function to fetch from Wikipedia's Search and Page Summary REST APIs
+    async function fetchFromWikipedia(query) {
+      try {
+        let searchQuery = query;
+        if (!query.toLowerCase().includes('marvel')) {
+          searchQuery += ' Marvel';
+        }
+        
+        const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(searchQuery)}&format=json&origin=*`;
+        const searchRes = await fetch(searchUrl);
+        const searchData = await searchRes.json();
+        
+        if (!searchData.query || !searchData.query.search || searchData.query.search.length === 0) {
+          return null;
+        }
+        
+        const topResult = searchData.query.search[0];
+        const title = topResult.title;
+        
+        const summaryUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title.replace(/ /g, '_'))}`;
+        const summaryRes = await fetch(summaryUrl);
+        const summaryData = await summaryRes.json();
+        
+        if (summaryData.type === 'standard' || summaryData.extract) {
+          return {
+            title: summaryData.title,
+            extract: summaryData.extract,
+            url: summaryData.content_urls ? summaryData.content_urls.desktop.page : `https://en.wikipedia.org/wiki/${encodeURIComponent(title.replace(/ /g, '_'))}`,
+            thumbnail: summaryData.thumbnail ? summaryData.thumbnail.source : null
+          };
+        }
+        return null;
+      } catch (err) {
+        console.error("Wikipedia search failed:", err);
+        return null;
+      }
+    }
+
+    async function getJarvisResponse(query) {
       query = query.toLowerCase().trim();
 
       // Viewport scrolling triggers
@@ -6834,8 +7657,26 @@
         return "Accessing the Fan Zone sector, sir! We have interactive quizzes (Easy, Medium, Hard, and Pro) and a 'Find Me' character-clue game. Re-routing you there now.";
       }
 
-      // Fallback
-      return "I have scanned our localized archives, sir, but I could not find a match. I am programmed to answer queries strictly based on the characters, movies, series, news, products, comics, and games present on this website. Please try asking about specific heroes, villains, phases, or items, sir.";
+      // Fallback: Check local DOM first, then fallback to Wikipedia API
+      const localDomMatch = searchLocalDOM(query);
+      if (localDomMatch) {
+        return localDomMatch;
+      }
+
+      const wikiInfo = await fetchFromWikipedia(query);
+      if (wikiInfo) {
+        let responseHTML = `I searched Wikipedia archives for "${wikiInfo.title}", sir. Here is the dossier summary:<br><br>${wikiInfo.extract}<br><br>`;
+        if (wikiInfo.thumbnail) {
+          responseHTML = `<div style="display:flex; gap:12px; margin-bottom:10px; align-items:flex-start;">
+            <img src="${wikiInfo.thumbnail}" style="width:60px; border-radius:6px; border:1px solid rgba(255,255,255,0.15); flex-shrink:0; box-shadow:0 4px 10px rgba(0,0,0,0.5);">
+            <div>${responseHTML}</div>
+          </div>`;
+        }
+        responseHTML += `<a href="${wikiInfo.url}" target="_blank" style="color:var(--gold); text-decoration:underline; font-weight:bold; display:inline-flex; align-items:center; gap:4px;">Read the full website here ↗</a>`;
+        return responseHTML;
+      }
+
+      return "I have scanned our localized archives and query grids, sir, but could not find a match. Please try asking about specific heroes, villains, phases, or other Marvel topics.";
     }
     // ═══════════════════════════════════════════════
     // FAN ZONE SYSTEM (QUIZ & FIND ME)
@@ -7540,6 +8381,805 @@
       }, 600);
     };
 
+    // ═══════════════════════════════════════════════
+    // ADVANCED SEARCH & CHARACTER DETAILS LOGIC
+    // ═══════════════════════════════════════════════
+
+    // 10 variations of professional fallback messages for missing character descriptions
+    const FALLBACK_DESCRIPTIONS = [
+      "No official description available in S.H.I.E.L.D. database.",
+      "Character information is currently classified or unavailable.",
+      "More details may be added in future Marvel database updates.",
+      "The bio for this cosmic entity is temporarily offline. Check back later.",
+      "Data corrupted or missing. S.H.I.E.L.D. archives are attempting recovery.",
+      "No historical records found. This profile is waiting for database synchronization.",
+      "Character intelligence reports are presently unavailable for this asset.",
+      "Dossier details are restricted. Full data may compile in a later system patch.",
+      "A detailed biography is currently pending verification from the Stark network.",
+      "Official records for this timeline entity are blank. Updating data grids."
+    ];
+
+    // Handcrafted detailed profiles for key Marvel figures
+    const CHARACTER_PROFILES = {
+      'Iron Man': {
+        bio: 'Tony Stark is a billionaire industrialist, genius inventor, and armored superhero. After being captured by terrorists, he created a high-tech suit of armor to escape, choosing to use his wealth and intellect to protect the world as Iron Man.',
+        firstApp: 'Tales of Suspense #39 (1963)',
+        comics: 3105,
+        series: 142,
+        stories: 4850,
+        powers: ['Genius Intellect', 'Powered Armor Suit', 'Flight', 'Repulsor Rays', 'Nanotechnology', 'Tactical Analysis'],
+        stats: { intellect: 95, strength: 85, speed: 80, durability: 85, energy: 90, fighting: 70 },
+        comicsList: [
+          { title: 'Iron Man #1', year: '1968', img: '26.jpg' },
+          { title: 'Civil War #1', year: '2006', img: '15.webp' },
+          { title: 'Demon in a Bottle', year: '1979', img: '1.jpg' }
+        ]
+      },
+      'Spider-Man': {
+        bio: 'Peter Parker was a high school student when a radioactive spider bite granted him incredible arachnid-like abilities. Guided by the tragic loss of his Uncle Ben and the wisdom that "with great power must also come great responsibility," he fights crime as Spider-Man.',
+        firstApp: 'Amazing Fantasy #15 (1962)',
+        comics: 4210,
+        series: 185,
+        stories: 6200,
+        powers: ['Wall-Crawling', 'Spider-Sense', 'Superhuman Strength', 'Web-Shooters', 'Enhanced Agility', 'Rapid Healing'],
+        stats: { intellect: 90, strength: 75, speed: 85, durability: 70, energy: 40, fighting: 85 },
+        comicsList: [
+          { title: 'The Amazing Spider-Man #1', year: '1963', img: '7.jpg' },
+          { title: 'Amazing Fantasy #15', year: '1962', img: '6.jpg' },
+          { title: 'Ultimate Spider-Man #1', year: '2000', img: '11.jpg' }
+        ]
+      },
+      'Thanos': {
+        bio: 'Thanos is a colossal mutant Eternal from Titan, obsessed with death and balance. Wielding the Infinity Gauntlet, he slaughtered half of all life in the universe in a misguided attempt to prevent resources from collapsing, making him the ultimate cosmic threat.',
+        firstApp: 'Iron Man #55 (1973)',
+        comics: 982,
+        series: 48,
+        stories: 1420,
+        powers: ['Superhuman Durability', 'Cosmic Energy Manipulation', 'Eternal Physiology', 'Intellectual Mastermind', 'Super Strength'],
+        stats: { intellect: 95, strength: 98, speed: 70, durability: 98, energy: 95, fighting: 85 },
+        comicsList: [
+          { title: 'Infinity Gauntlet #1', year: '1991', img: '16.jpg' },
+          { title: 'Silver Surfer #34', year: '1990', img: '35.jfif' },
+          { title: 'Secret Wars #1', year: '1984', img: '8.jpg' }
+        ]
+      },
+      'Captain America': {
+        bio: 'During WWII, Steve Rogers volunteered for a secret super-soldier program and was transformed into Captain America. Frozen in ice for decades, he awoke in the modern era to lead the Avengers with unwavering morals and tactical brilliance.',
+        firstApp: 'Captain America Comics #1 (1941)',
+        comics: 3820,
+        series: 165,
+        stories: 5900,
+        powers: ['Super-Soldier Physiology', 'Master Martial Artist', 'Tactical Genius', 'Vibranium Shield Master', 'Enhanced Reflexes', 'Indomitable Will'],
+        stats: { intellect: 80, strength: 65, speed: 70, durability: 75, energy: 10, fighting: 95 },
+        comicsList: [
+          { title: 'Captain America Comics #1', year: '1941', img: '27.jpg' },
+          { title: 'Captain America #109', year: '1969', img: '4.jpg' },
+          { title: 'Civil War #1', year: '2006', img: '15.webp' }
+        ]
+      },
+      'Doctor Doom': {
+        bio: 'Victor von Doom is the brilliant, scarred monarch of Latveria. A master of both advanced technology and sorcery, Doom is driven by a deep-seated rivalry with Reed Richards and a belief that he alone can save the universe through absolute rule.',
+        firstApp: 'Fantastic Four #5 (1962)',
+        comics: 1820,
+        series: 85,
+        stories: 2900,
+        powers: ['Genius Intellect', 'Sorcery & Magic', 'Power Armor', 'Diplomatic Immunity', 'Forcefields', 'Mind Transferral'],
+        stats: { intellect: 98, strength: 80, speed: 60, durability: 90, energy: 88, fighting: 80 },
+        comicsList: [
+          { title: 'Fantastic Four #5', year: '1962', img: '25.jpg' },
+          { title: 'Secret Wars #1', year: '1984', img: '8.jpg' },
+          { title: 'Books of Doom #1', year: '2005', img: '10.jpg' }
+        ]
+      },
+      'Wolverine': {
+        bio: 'Logan, also known as Wolverine, is a mutant possessing animal-keen senses, enhanced physical capabilities, and a powerful regenerative healing factor. He was subjected to the Weapon X program, which coated his skeleton and claws in indestructible Adamantium.',
+        firstApp: 'The Incredible Hulk #180 (1974)',
+        comics: 2850,
+        series: 115,
+        stories: 4200,
+        powers: ['Regenerative Healing', 'Adamantium Skeleton', 'Retractable Claws', 'Animal Senses', 'Berserker Rage'],
+        stats: { intellect: 70, strength: 60, speed: 70, durability: 95, energy: 15, fighting: 95 },
+        comicsList: [
+          { title: 'Wolverine #1', year: '1982', img: '20.jfif' },
+          { title: 'Giant-Size X-Men #1', year: '1975', img: '22.jfif' },
+          { title: 'The Incredible Hulk #181', year: '1974', img: '21.jpg' }
+        ]
+      },
+      'Thor': {
+        bio: 'Thor Odinson is the Asgardian God of Thunder. Wielding the mystical hammer Mjolnir (and later the storm axe Stormbreaker), Thor defends both Asgard and Earth (Midgard) as a founding member of the Avengers.',
+        firstApp: 'Journey into Mystery #83 (1962)',
+        comics: 3450,
+        series: 138,
+        stories: 5100,
+        powers: ['Godlike Strength', 'Weather Manipulation', 'Mjolnir Wielder', 'Flight', 'Longevity', 'Energy Projection'],
+        stats: { intellect: 75, strength: 98, speed: 85, durability: 95, energy: 95, fighting: 85 },
+        comicsList: [
+          { title: 'Thor #1', year: '1966', img: '24.jpg' },
+          { title: 'Thor #337', year: '1983', img: '29.jpg' },
+          { title: 'Infinity Gauntlet #1', year: '1991', img: '16.jpg' }
+        ]
+      },
+      'Loki': {
+        bio: 'The biological son of the Frost Giant king Laufey, Loki was adopted by Odin and raised as an Asgardian prince. Known as the God of Mischief, he oscillates between being a power-hungry villain and a heroic protector of the timeline.',
+        firstApp: 'Venus #6 (1949) / Journey into Mystery #85 (1962)',
+        comics: 1450,
+        series: 68,
+        stories: 2100,
+        powers: ['Sorcery & Illusion Casting', 'Shapeshifting', 'Asgardian Physiology', 'Teleportation', 'Mind Control Resistance'],
+        stats: { intellect: 88, strength: 60, speed: 65, durability: 70, energy: 85, fighting: 70 },
+        comicsList: [
+          { title: 'Journey into Mystery #85', year: '1962', img: '24.jpg' },
+          { title: 'Loki #1', year: '2004', img: '15.webp' },
+          { title: 'Avengers #1', year: '1963', img: '24.jpg' }
+        ]
+      },
+      'Hulk': {
+        bio: 'Bruce Banner is a brilliant nuclear physicist who was caught in a gamma bomb explosion. Since then, stress or high heart rates transform him into the Hulk, a green-skinned titan of pure, unlimited physical rage.',
+        firstApp: 'The Incredible Hulk #1 (1962)',
+        comics: 2980,
+        series: 125,
+        stories: 4500,
+        powers: ['Infinite Physical Strength', 'Superhuman Durability', 'Gamma Radiation Manipulation', 'Leaping Miles', 'Regenerative Healing'],
+        stats: { intellect: 60, strength: 100, speed: 60, durability: 100, energy: 30, fighting: 75 },
+        comicsList: [
+          { title: 'The Incredible Hulk #1', year: '1962', img: '28.jpg' },
+          { title: 'Planet Hulk #1', year: '2006', img: '43.jpg' },
+          { title: 'The Incredible Hulk #181', year: '1974', img: '21.jpg' }
+        ]
+      },
+      'Doctor Strange': {
+        bio: 'Stephen Strange was a brilliant but arrogant neurosurgeon whose career was ended by a car crash. In Kamar-Taj, he discovered the mystic arts, eventually becoming the Sorcerer Supreme and protecting Earth from magical and extradimensional threats.',
+        firstApp: 'Strange Tales #110 (1963)',
+        comics: 1750,
+        series: 80,
+        stories: 2600,
+        powers: ['Master of Mystic Arts', 'Astral Projection', 'Eye of Agamotto Wielder', 'Cloak of Levitation', 'Dimensional Travel'],
+        stats: { intellect: 90, strength: 15, speed: 30, durability: 40, energy: 95, fighting: 70 },
+        comicsList: [
+          { title: 'Strange Tales #110', year: '1963', img: '6.jpg' },
+          { title: 'Doctor Strange #1', year: '1974', img: '37.jfif' },
+          { title: 'Secret Wars #1', year: '1984', img: '8.jpg' }
+        ]
+      }
+    };
+
+    // Auto-generator fallback for remaining character assets
+    function generateDynamicCharacterProfile(name, type) {
+      let charObj = null;
+      if (type === 'hero') {
+        charObj = HEROES.find(h => h.name === name);
+      } else {
+        charObj = VILLAINS.find(v => v.name === name);
+      }
+
+      if (!charObj) {
+        charObj = HEROES.find(h => h.name === name) || VILLAINS.find(v => v.name === name);
+        type = HEROES.some(h => h.name === name) ? 'hero' : 'villain';
+      }
+
+      const isHero = type === 'hero';
+      const role = charObj ? (isHero ? charObj.role : charObj.title) : 'Marvel Database Entry';
+      const team = charObj ? (isHero ? charObj.team : 'Threat Grid') : 'Multiverse';
+      const img = charObj ? charObj.img : 'bg.webp';
+      const basePower = charObj ? (isHero ? charObj.power : Math.round(charObj.threat / 10)) : 7;
+      const rank = charObj && !isHero ? charObj.rank : null;
+
+      // Select deterministic fallback bio using a simple name character code hash
+      let hash = 0;
+      for (let i = 0; i < name.length; i++) {
+        hash = name.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      const bioIndex = Math.abs(hash) % FALLBACK_DESCRIPTIONS.length;
+      const bio = FALLBACK_DESCRIPTIONS[bioIndex];
+
+      const comics = Math.abs(hash % 850) + 70;
+      const series = Math.abs(hash % 35) + 6;
+      const stories = Math.abs(hash % 1100) + 120;
+
+      const startYear = 1961 + Math.abs(hash % 63);
+      const firstApp = `Marvel Premiere #${Math.abs(hash % 45) + 1} (${startYear})`;
+
+      let powers = ['Superhuman Physiology', 'Enhanced Reflexes', 'Combat Training'];
+      if (name.toLowerCase().includes('witch') || name.toLowerCase().includes('magic') || name.toLowerCase().includes('strange') || name.toLowerCase().includes('agatha')) {
+        powers = ['Spellcasting', 'Magic Siphoning', 'Astral Travel', 'Elemental Force'];
+      } else if (name.toLowerCase().includes('captain') || name.toLowerCase().includes('soldier') || name.toLowerCase().includes('spy') || name.toLowerCase().includes('widow') || name.toLowerCase().includes('guardian')) {
+        powers = ['Peak Human Agility', 'Tactical Mastery', 'Melee Proficiency', 'Unbreakable Fortitude'];
+      } else if (name.toLowerCase().includes('man') || name.toLowerCase().includes('wasp') || name.toLowerCase().includes('ant') || name.toLowerCase().includes('spider')) {
+        powers = ['Wall-Clinging', 'Acrobatic Traversal', 'Bio-Synthetic Blasts', 'Reflexive Speed'];
+      } else if (basePower >= 9) {
+        powers = ['Cosmic Invulnerability', 'Energy Blasts', 'Matter Realignment', 'Flight'];
+      }
+
+      const scale = basePower * 10;
+      const stats = {
+        intellect: Math.abs((hash + 2) % 25) + 65,
+        strength: Math.max(30, Math.min(100, scale + Math.abs((hash + 5) % 15) - 5)),
+        speed: Math.abs((hash + 7) % 30) + 60,
+        durability: Math.max(35, Math.min(100, scale + Math.abs((hash + 11) % 15) - 5)),
+        energy: Math.max(10, Math.min(100, basePower * 10 + Math.abs((hash + 13) % 20) - 10)),
+        fighting: Math.abs((hash + 17) % 20) + 75
+      };
+
+      const comicsList = [
+        { title: `Ultimate ${name} #1`, year: `${startYear + 4}`, img: '4.jpg' },
+        { title: `${name}: Reborn`, year: `${startYear + 10}`, img: '2.jpg' },
+        { title: `Secret Wars: ${name} Dossier`, year: '2015', img: '8.jpg' }
+      ];
+
+      return {
+        name,
+        role,
+        team,
+        img,
+        bio,
+        firstApp,
+        comics,
+        series,
+        stories,
+        powers,
+        stats,
+        comicsList,
+        type,
+        rank
+      };
+    }
+
+    // Resolves character profiles
+    function getCharacterProfile(name, type) {
+      if (CHARACTER_PROFILES[name]) {
+        const profile = CHARACTER_PROFILES[name];
+        let charObj = null;
+        if (type === 'hero') charObj = HEROES.find(h => h.name === name);
+        else charObj = VILLAINS.find(v => v.name === name);
+        if (!charObj) charObj = HEROES.find(h => h.name === name) || VILLAINS.find(v => v.name === name);
+        
+        return {
+          name: name,
+          role: charObj ? (charObj.role || charObj.title) : 'Marvel Hero',
+          team: charObj ? charObj.team : 'Avengers',
+          img: charObj ? charObj.img : 'bg.webp',
+          bio: profile.bio,
+          firstApp: profile.firstApp,
+          comics: profile.comics,
+          series: profile.series,
+          stories: profile.stories,
+          powers: profile.powers,
+          stats: profile.stats,
+          comicsList: profile.comicsList,
+          type: type || (HEROES.some(h => h.name === name) ? 'hero' : 'villain'),
+          rank: charObj ? charObj.rank : null
+        };
+      } else {
+        return generateDynamicCharacterProfile(name, type);
+      }
+    }
+
+    // Real Name mapping for all Marvel Heroes and Villains
+    const REAL_NAMES = {
+      'Iron Man': 'Tony Stark',
+      'Captain America': 'Steve Rogers',
+      'Thor': 'Thor Odinson',
+      'Spider-Man': 'Peter Parker',
+      'Wolverine': 'Logan / James Howlett',
+      'Doctor Strange': 'Stephen Strange',
+      'Black Widow': 'Natasha Romanoff',
+      'Hulk': 'Bruce Banner',
+      'Ant-Man': 'Scott Lang',
+      'Black Panther': 'T\'Challa',
+      'Captain Marvel': 'Carol Danvers',
+      'Hawkeye': 'Clint Barton',
+      'Scarlet Witch': 'Wanda Maximoff',
+      'Vision': 'Vision',
+      'Loki': 'Loki Laufeyson',
+      'Deadpool': 'Wade Wilson',
+      'Star-Lord': 'Peter Quill',
+      'Gamora': 'Gamora',
+      'Drax': 'Drax the Destroyer',
+      'Groot': 'Groot',
+      'Rocket Raccoon': 'Rocket Raccoon',
+      'Falcon': 'Sam Wilson',
+      'Winter Soldier': 'Bucky Barnes',
+      'Moon Knight': 'Marc Spector',
+      'Ms. Marvel': 'Kamala Khan',
+      'She-Hulk': 'Jennifer Walters',
+      'Shang-Chi': 'Shang-Chi',
+      'Nick Fury': 'Nicholas Joseph Fury',
+      'Valkyrie': 'Brunnhilde',
+      'Daredevil': 'Matt Murdock',
+      'Punisher': 'Frank Castle',
+      'Professor X': 'Charles Xavier',
+      'Cyclops': 'Scott Summers',
+      'Jean Grey': 'Jean Grey',
+      'Storm': 'Ororo Munroe',
+      'Beast': 'Hank McCoy',
+      'Gambit': 'Remy LeBeau',
+      'Rogue': 'Anna Marie',
+      'Colossus': 'Piotr Rasputin',
+      'Nightcrawler': 'Kurt Wagner',
+      'Blade': 'Eric Brooks',
+      'Silver Surfer': 'Norrin Radd',
+      'America Chavez': 'America Chavez',
+      'Kate Bishop': 'Kate Bishop',
+      'Yelena Belova': 'Yelena Belova',
+      'Wong': 'Wong',
+      'Monica Rambeau': 'Monica Rambeau',
+      'Echo': 'Maya Lopez',
+      'Wiccan': 'Billy Kaplan',
+      'Speed': 'Tommy Shepherd',
+      'Pepper Potts': 'Pepper Potts',
+      'Agatha Harkness': 'Agatha Harkness',
+      'Wonder Man': 'Simon Williams',
+      'Red Guardian': 'Alexei Shostakov',
+      'Reed Richards': 'Reed Richards',
+      'Invisible Woman': 'Sue Storm',
+      'Human Torch': 'Johnny Storm',
+      'The Thing': 'Ben Grimm',
+      'One Below All': 'The Dark Aspect of the One Above All',
+      'Beyonder': 'The Beyonder',
+      'Doctor Doom': 'Victor von Doom',
+      'Thanos': 'Thanos of Titan',
+      'Infinity Ultron': 'Ultron',
+      'Galactus': 'Galan of Taa',
+      'Dark Phoenix': 'Jean Grey',
+      'Knull': 'The Lord of the Abyss',
+      'Dormammu': 'Dormammu',
+      'Onslaught': 'Charles Xavier / Erik Lehnsherr',
+      'Kang the Conqueror': 'Nathaniel Richards',
+      'Mephisto': 'Mephisto',
+      'Apocalypse': 'En Sabah Nur',
+      'Hela': 'Hela Odinsdottir',
+      'Gorr the God Butcher': 'Gorr',
+      'Surtur': 'Surtur',
+      'Ultron': 'Ultron',
+      'Annihilus': 'Annihilus',
+      'Magneto': 'Erik Lehnsherr / Max Eisenhardt',
+      'Mangog': 'The Hatred of a Billion Billion Beings'
+    };
+
+    // Modal Actions
+    window.showCharacterProfile = function(name, type) {
+      const profile = getCharacterProfile(name, type);
+      
+      // Bind details to modal elements
+      document.getElementById('char-modal-name').textContent = profile.name;
+      
+      // Bind real name
+      const realName = REAL_NAMES[profile.name] || '';
+      const realNameEl = document.getElementById('char-modal-real-name');
+      if (realNameEl) {
+        realNameEl.textContent = realName;
+        realNameEl.style.display = realName ? 'block' : 'none';
+      }
+      
+      document.getElementById('char-modal-role').textContent = profile.role;
+      document.getElementById('char-modal-bio').textContent = profile.bio;
+      document.getElementById('char-modal-first-app').textContent = profile.firstApp;
+      document.getElementById('char-modal-comics-count').textContent = profile.comics.toLocaleString();
+      document.getElementById('char-modal-series-count').textContent = profile.series.toLocaleString();
+      document.getElementById('char-modal-stories-count').textContent = profile.stories.toLocaleString();
+      
+      const bannerBg = document.getElementById('char-modal-bg');
+      if (bannerBg) bannerBg.style.backgroundImage = `url('${profile.img}')`;
+      
+      const portraitImg = document.getElementById('char-modal-portrait');
+      if (portraitImg) portraitImg.src = profile.img;
+      
+      const badgesContainer = document.getElementById('char-modal-badges');
+      if (badgesContainer) {
+        badgesContainer.innerHTML = '';
+        
+        const statusBadge = document.createElement('span');
+        statusBadge.className = 'char-badge';
+        statusBadge.textContent = 'ACTIVE FILE';
+        badgesContainer.appendChild(statusBadge);
+        
+        const teamBadge = document.createElement('span');
+        teamBadge.className = 'char-badge alliance';
+        if (profile.type === 'villain') {
+          teamBadge.className = 'char-badge villain';
+          teamBadge.textContent = `THREAT RANK #${profile.rank || 'N/A'}`;
+        } else {
+          teamBadge.textContent = profile.team || 'AVENGERS';
+        }
+        badgesContainer.appendChild(teamBadge);
+      }
+
+      // S.H.I.E.L.D Power Grid Render
+      const powerContainer = document.getElementById('char-modal-power-bars');
+      if (powerContainer) {
+        powerContainer.innerHTML = '';
+        const statLabels = {
+          intellect: 'Intelligence',
+          strength: 'Strength',
+          speed: 'Speed',
+          durability: 'Durability',
+          energy: 'Energy Projection',
+          fighting: 'Fighting Skills'
+        };
+        
+        Object.keys(profile.stats).forEach(statKey => {
+          const val = profile.stats[statKey];
+          const barItem = document.createElement('div');
+          barItem.className = 'power-bar-item';
+          barItem.innerHTML = `
+            <div class="power-bar-header">
+              <span>${statLabels[statKey] || statKey}</span>
+              <span>${val}%</span>
+            </div>
+            <div class="power-bar-bg">
+              <div class="power-bar-fill" style="width: 0%"></div>
+            </div>
+          `;
+          powerContainer.appendChild(barItem);
+          setTimeout(() => {
+            const fill = barItem.querySelector('.power-bar-fill');
+            if (fill) fill.style.width = val + '%';
+          }, 80);
+        });
+      }
+
+      // Powers render
+      const powersContainer = document.getElementById('char-modal-powers-list');
+      if (powersContainer) {
+        powersContainer.innerHTML = '';
+        profile.powers.forEach(p => {
+          const span = document.createElement('span');
+          span.className = 'search-tag-btn';
+          span.textContent = p;
+          powersContainer.appendChild(span);
+        });
+      }
+
+      // Affiliates lookup
+      const relatedContainer = document.getElementById('char-modal-related-chars');
+      if (relatedContainer) {
+        relatedContainer.innerHTML = '';
+        
+        let affiliates = [];
+        if (profile.type === 'hero') {
+          affiliates = HEROES.filter(h => h.name !== profile.name && h.team === profile.team).slice(0, 5);
+          if (affiliates.length < 3) {
+            affiliates = HEROES.filter(h => h.name !== profile.name).slice(0, 5);
+          }
+        } else {
+          affiliates = VILLAINS.filter(v => v.name !== profile.name).slice(0, 5);
+        }
+
+        affiliates.forEach(aff => {
+          const affDiv = document.createElement('div');
+          affDiv.className = 'related-char-thumb';
+          const affType = HEROES.some(h => h.name === aff.name) ? 'hero' : 'villain';
+          affDiv.onclick = (e) => {
+            e.stopPropagation();
+            showCharacterProfile(aff.name, affType);
+          };
+          affDiv.innerHTML = `
+            <img src="${aff.img}" alt="${aff.name}" loading="lazy">
+            <span class="related-char-name">${aff.name}</span>
+          `;
+          relatedContainer.appendChild(affDiv);
+        });
+      }
+
+      // Key Comic appearances render
+      const comicsContainer = document.getElementById('char-modal-popular-comics');
+      if (comicsContainer) {
+        comicsContainer.innerHTML = '';
+        profile.comicsList.forEach(com => {
+          const item = document.createElement('div');
+          item.className = 'popular-comic-item';
+          item.innerHTML = `
+            <img src="${com.img}" class="popular-comic-img" alt="${com.title}">
+            <div class="popular-comic-info">
+              <span class="popular-comic-title">${com.title}</span>
+              <span class="popular-comic-year">Published in ${com.year}</span>
+            </div>
+          `;
+          comicsContainer.appendChild(item);
+        });
+      }
+
+      // Show details modal overlay
+      const modal = document.getElementById('char-details-modal');
+      if (modal) {
+        modal.classList.remove('theme-hero', 'theme-villain');
+        modal.classList.add(profile.type === 'hero' ? 'theme-hero' : 'theme-villain');
+        const modalCard = modal.querySelector('.modal-card');
+        if (modalCard) modalCard.scrollTop = 0;
+        modal.classList.add('active');
+      }
+      document.body.style.overflow = 'hidden';
+    };
+
+    window.closeCharacterProfile = function() {
+      const modal = document.getElementById('char-details-modal');
+      if (modal) {
+        modal.classList.remove('active');
+        modal.classList.remove('theme-hero', 'theme-villain');
+      }
+      document.body.style.overflow = '';
+    };
+
+    // Advanced Search Overlay variables and state
+    let searchPlaceholderIdx = 0;
+    const SEARCH_PLACEHOLDERS = [
+      "Search 'Iron Man'...",
+      "Search 'Thanos'...",
+      "Search 'Wolverine'...",
+      "Search 'Doctor Doom'...",
+      "Search 'Spider-Man'...",
+      "Search 'Captain America'...",
+      "Search 'Loki'..."
+    ];
+    let placeholderInterval = null;
+    let searchDebounceTimeout = null;
+
+    window.openSearchOverlay = function(e) {
+      if (e) e.preventDefault();
+      
+      const mobMenu = document.getElementById('mobileMenu');
+      if (mobMenu) mobMenu.classList.remove('open');
+
+      const overlay = document.getElementById('search-overlay');
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      
+      const input = document.getElementById('search-input');
+      input.value = '';
+      input.focus();
+      
+      renderRecentSearches();
+      showSearchState('empty');
+      
+      clearInterval(placeholderInterval);
+      input.placeholder = SEARCH_PLACEHOLDERS[0];
+      searchPlaceholderIdx = 1;
+      placeholderInterval = setInterval(() => {
+        input.placeholder = SEARCH_PLACEHOLDERS[searchPlaceholderIdx];
+        searchPlaceholderIdx = (searchPlaceholderIdx + 1) % SEARCH_PLACEHOLDERS.length;
+      }, 3000);
+    };
+
+    window.closeSearchOverlay = function() {
+      const overlay = document.getElementById('search-overlay');
+      if (overlay) {
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+      clearInterval(placeholderInterval);
+    };
+
+    function showSearchState(state) {
+      const emptyState = document.getElementById('search-empty-state');
+      const loadingState = document.getElementById('search-loading-state');
+      const noResultsState = document.getElementById('search-no-results-state');
+      const suggestionsCont = document.getElementById('search-suggestions-container');
+      const recentGroup = document.getElementById('recent-searches-group');
+      const trendingGroup = document.getElementById('trending-group');
+      const categoriesGroup = document.getElementById('categories-group');
+
+      emptyState.style.display = 'none';
+      loadingState.style.display = 'none';
+      noResultsState.style.display = 'none';
+      suggestionsCont.style.display = 'none';
+
+      if (state === 'empty') {
+        emptyState.style.display = 'flex';
+        trendingGroup.style.display = 'block';
+        categoriesGroup.style.display = 'block';
+        
+        const recents = getRecentSearches();
+        if (recents.length > 0) {
+          recentGroup.style.display = 'block';
+        } else {
+          recentGroup.style.display = 'none';
+        }
+      } else if (state === 'loading') {
+        loadingState.style.display = 'flex';
+        recentGroup.style.display = 'none';
+        trendingGroup.style.display = 'none';
+        categoriesGroup.style.display = 'none';
+      } else if (state === 'no-results') {
+        noResultsState.style.display = 'flex';
+        recentGroup.style.display = 'none';
+        trendingGroup.style.display = 'none';
+        categoriesGroup.style.display = 'none';
+      } else if (state === 'results') {
+        suggestionsCont.style.display = 'flex';
+        recentGroup.style.display = 'none';
+        trendingGroup.style.display = 'none';
+        categoriesGroup.style.display = 'none';
+      }
+    }
+
+    function getRecentSearches() {
+      try {
+        const stored = localStorage.getItem('marvel_recent_searches');
+        return stored ? JSON.parse(stored) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function addRecentSearch(name) {
+      let recents = getRecentSearches();
+      recents = recents.filter(r => r !== name);
+      recents.unshift(name);
+      if (recents.length > 5) recents.pop();
+      try {
+        localStorage.setItem('marvel_recent_searches', JSON.stringify(recents));
+      } catch (e) {}
+    }
+
+    function renderRecentSearches() {
+      const container = document.getElementById('recent-searches-list');
+      const group = document.getElementById('recent-searches-group');
+      const recents = getRecentSearches();
+      
+      if (recents.length === 0) {
+        group.style.display = 'none';
+        return;
+      }
+      
+      container.innerHTML = '';
+      recents.forEach(name => {
+        const btn = document.createElement('button');
+        btn.className = 'search-tag-btn';
+        btn.textContent = name;
+        btn.onclick = () => {
+          showCharacterProfile(name);
+          closeSearchOverlay();
+        };
+        container.appendChild(btn);
+      });
+      
+      const input = document.getElementById('search-input');
+      if (!input.value.trim()) {
+        group.style.display = 'block';
+      }
+    }
+
+    window.clearRecentSearches = function() {
+      try {
+        localStorage.removeItem('marvel_recent_searches');
+      } catch (e) {}
+      renderRecentSearches();
+    };
+
+    window.triggerSearchTag = function(name) {
+      addRecentSearch(name);
+      showCharacterProfile(name);
+      closeSearchOverlay();
+    };
+
+    window.triggerSearchCategory = function(catName) {
+      const input = document.getElementById('search-input');
+      input.value = catName;
+      performSearch(catName);
+    };
+
+    function performSearch(query) {
+      const text = query.trim().toLowerCase();
+      if (!text) {
+        showSearchState('empty');
+        return;
+      }
+
+      showSearchState('loading');
+
+      if (searchDebounceTimeout) clearTimeout(searchDebounceTimeout);
+
+      // Simulate network decrypt delay
+      searchDebounceTimeout = setTimeout(() => {
+        const matchingHeroes = HEROES.filter(h => 
+          h.name.toLowerCase().includes(text) || 
+          h.role.toLowerCase().includes(text) ||
+          h.team.toLowerCase().includes(text)
+        );
+
+        const matchingVillains = VILLAINS.filter(v => 
+          v.name.toLowerCase().includes(text) || 
+          v.title.toLowerCase().includes(text)
+        );
+
+        const allMatches = [
+          ...matchingHeroes.map(h => ({ ...h, type: 'hero' })),
+          ...matchingVillains.map(v => ({ ...v, type: 'villain' }))
+        ];
+
+        if (allMatches.length === 0) {
+          showSearchState('no-results');
+        } else {
+          const suggestionsCont = document.getElementById('search-suggestions-container');
+          suggestionsCont.innerHTML = '';
+          
+          allMatches.forEach(char => {
+            const item = document.createElement('div');
+            item.className = 'search-suggestion-item';
+            
+            const badgeClass = char.type === 'villain' ? 'search-suggestion-tag villain' : 'search-suggestion-tag';
+            const badgeText = char.type === 'villain' ? 'Villain' : char.team;
+            const subtitle = char.type === 'villain' ? char.title : char.role;
+
+            item.onclick = () => {
+              addRecentSearch(char.name);
+              showCharacterProfile(char.name, char.type);
+              closeSearchOverlay();
+            };
+
+            item.innerHTML = `
+              <img class="search-suggestion-img" src="${char.img}" alt="${char.name}" loading="lazy">
+              <div class="search-suggestion-info">
+                <span class="search-suggestion-name">${char.name}</span>
+                <span class="search-suggestion-role">${subtitle}</span>
+              </div>
+              <span class="${badgeClass}">${badgeText}</span>
+            `;
+            suggestionsCont.appendChild(item);
+          });
+          
+          showSearchState('results');
+        }
+      }, 350);
+    }
+
+    // Register active features event listeners
+    window.initAdvancedFeatures = function() {
+      const searchInput = document.getElementById('search-input');
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          performSearch(e.target.value);
+        });
+      }
+
+      const searchClose = document.getElementById('search-close');
+      if (searchClose) searchClose.addEventListener('click', closeSearchOverlay);
+
+      const modalClose = document.getElementById('modal-close');
+      if (modalClose) modalClose.addEventListener('click', closeCharacterProfile);
+
+      const clearRecents = document.getElementById('clear-recent-btn');
+      if (clearRecents) clearRecents.addEventListener('click', clearRecentSearches);
+
+      const modal = document.getElementById('char-details-modal');
+      if (modal) {
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) closeCharacterProfile();
+        });
+      }
+
+      const searchOverlay = document.getElementById('search-overlay');
+      if (searchOverlay) {
+        searchOverlay.addEventListener('click', (e) => {
+          if (e.target === searchOverlay) closeSearchOverlay();
+        });
+      }
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeSearchOverlay();
+          closeCharacterProfile();
+        }
+      });
+
+      // Unified custom cursor hover trigger
+      document.addEventListener('mouseover', e => {
+        const target = e.target;
+        const c = document.getElementById('cursor');
+        const r = document.getElementById('cursor-ring');
+        if (!c || !r) return;
+        
+        const isInteractive = target.closest('a, button, input, textarea, .hero-card, .villain-card, .search-tag-btn, .search-suggestion-item, .related-char-thumb');
+        if (isInteractive) {
+          c.classList.add('hovered');
+          r.classList.add('hovered');
+        } else {
+          c.classList.remove('hovered');
+          r.classList.remove('hovered');
+        }
+      });
+    };
+
   </script>
 
   <!-- GO TO TOP BUTTON -->
@@ -7613,6 +9253,172 @@
           </svg>
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- ADVANCED SEARCH OVERLAY -->
+  <div id="search-overlay" role="dialog" aria-modal="true">
+    <button class="search-close-btn" id="search-close" aria-label="Close search">&times;</button>
+    <div class="search-container">
+      <div class="search-input-wrapper">
+        <input type="text" class="search-input-field" id="search-input" placeholder="Search Marvel Multiverse..." autocomplete="off">
+        <div class="search-icon-inside">🔍</div>
+      </div>
+      
+      <!-- SUGGESTIONS CONTAINER -->
+      <div id="search-suggestions-container" class="search-suggestions-list" style="display: none;"></div>
+      
+      <!-- RECENT SEARCHES -->
+      <div class="search-info-group" id="recent-searches-group" style="display: none;">
+        <div class="search-group-title">
+          <span>Recent Searches</span>
+          <button class="search-clear-recent" id="clear-recent-btn">Clear All</button>
+        </div>
+        <div class="search-tags-grid" id="recent-searches-list">
+          <!-- Recent searches tags injected here -->
+        </div>
+      </div>
+
+      <!-- TRENDING CHARACTERS -->
+      <div class="search-info-group" id="trending-group">
+        <div class="search-group-title">Trending Characters</div>
+        <div class="search-tags-grid" id="trending-list">
+          <button class="search-tag-btn" onclick="triggerSearchTag('Spider-Man')">Spider-Man</button>
+          <button class="search-tag-btn" onclick="triggerSearchTag('Thanos')">Thanos</button>
+          <button class="search-tag-btn" onclick="triggerSearchTag('Doctor Doom')">Doctor Doom</button>
+          <button class="search-tag-btn" onclick="triggerSearchTag('Wolverine')">Wolverine</button>
+          <button class="search-tag-btn" onclick="triggerSearchTag('Loki')">Loki</button>
+        </div>
+      </div>
+
+      <!-- POPULAR CATEGORIES -->
+      <div class="search-info-group" id="categories-group">
+        <div class="search-group-title">Popular Categories</div>
+        <div class="search-tags-grid" id="categories-list">
+          <button class="search-tag-btn" onclick="triggerSearchCategory('Avengers')">Avengers</button>
+          <button class="search-tag-btn" onclick="triggerSearchCategory('X-Men')">X-Men</button>
+          <button class="search-tag-btn" onclick="triggerSearchCategory('Guardians')">Guardians</button>
+          <button class="search-tag-btn" onclick="triggerSearchCategory('Fantastic Four')">Fantastic Four</button>
+          <button class="search-tag-btn" onclick="triggerSearchCategory('Defenders')">Defenders</button>
+        </div>
+      </div>
+
+      <!-- SEARCH STATES -->
+      <!-- Empty State -->
+      <div class="search-empty-state" id="search-empty-state">
+        <div class="search-state-icon">🛡️</div>
+        <div class="search-state-title">S.H.I.E.L.D. Mainframe Search</div>
+        <div class="search-state-desc">Access threat records and heroic profiles across the Multiverse. Start typing to filter.</div>
+      </div>
+
+      <!-- Loading State -->
+      <div class="search-loading-state" id="search-loading-state" style="display: none;">
+        <div class="search-loading-spinner"></div>
+        <div style="font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.1em;">UPLINK SECURED. DECRYPTING HERO DOSSIERS...</div>
+      </div>
+
+      <!-- No Results State -->
+      <div class="search-no-results-state" id="search-no-results-state" style="display: none;">
+        <div class="search-state-icon">⚠️</div>
+        <div class="search-state-title">No Files Found</div>
+        <div class="search-state-desc">No data streams found matching that key. Try searching for a different Avenger or cosmic threat.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHARACTER DETAILS MODAL -->
+  <div id="char-details-modal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-close-wrap">
+        <button class="modal-close-btn" id="modal-close" aria-label="Close details">&times;</button>
+      </div>
+      
+      <!-- Character Header Section: Portrait Left, Info Right -->
+      <div class="char-header-section">
+        <div class="char-banner-bg" id="char-modal-bg"></div>
+        <div class="char-portrait-left">
+          <img id="char-modal-portrait" src="" alt="Portrait">
+        </div>
+        <div class="char-info-right">
+          <div class="char-badges" id="char-modal-badges"></div>
+          <h2 class="char-name" id="char-modal-name">Character Name</h2>
+          <div class="char-real-name" id="char-modal-real-name">Real Name</div>
+          <div class="char-role-label" id="char-modal-role">Role Label</div>
+          
+          <div class="info-stats-grid" style="margin-top: 15px;">
+            <div class="info-stat-card">
+              <span class="info-stat-label">First Appearance</span>
+              <span class="info-stat-value" id="char-modal-first-app" style="font-size: 14px; font-family: 'Manrope', sans-serif; font-weight: 700; color: #FFF; margin-top: 4px;">Amazing Fantasy #15</span>
+            </div>
+            <div class="info-stat-card">
+              <span class="info-stat-label">Comics Count</span>
+              <span class="info-stat-value" id="char-modal-comics-count">3,450</span>
+            </div>
+            <div class="info-stat-card">
+              <span class="info-stat-label">Series Count</span>
+              <span class="info-stat-value" id="char-modal-series-count">120</span>
+            </div>
+            <div class="info-stat-card">
+              <span class="info-stat-label">Stories Count</span>
+              <span class="info-stat-value" id="char-modal-stories-count">5,200</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Body (Details below) -->
+      <div class="modal-body">
+        
+        <!-- Left Side: Biography, S.H.I.E.L.D. Power Grid -->
+        <div class="modal-left">
+          
+          <!-- Biography Section -->
+          <div>
+            <h3 class="modal-section-title">Biography</h3>
+            <p class="char-bio" id="char-modal-bio">Biography text goes here...</p>
+          </div>
+
+          <!-- Power Grid Section -->
+          <div>
+            <h3 class="modal-section-title">S.H.I.E.L.D. Power Grid</h3>
+            <div class="power-bars-container" id="char-modal-power-bars">
+              <!-- Power bars injected here -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Side: Powers List, Related Characters, Key Appearances -->
+        <div class="modal-right">
+          
+          <!-- Powers & Abilities Section -->
+          <div>
+            <h3 class="modal-section-title">Powers & Abilities</h3>
+            <div class="search-tags-grid" id="char-modal-powers-list">
+              <!-- Powers list tags injected here -->
+            </div>
+          </div>
+
+          <!-- Key Appearances Section -->
+          <div>
+            <h3 class="modal-section-title">Key Appearances</h3>
+            <div class="popular-comics-list" id="char-modal-popular-comics">
+              <!-- Comics list injected here -->
+            </div>
+          </div>
+
+          <!-- Related Characters Section -->
+          <div>
+            <h3 class="modal-section-title">Known Affiliates</h3>
+            <div class="related-chars-row" id="char-modal-related-chars">
+              <!-- Related chars thumbnails injected here -->
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
   </div>
 
