@@ -1,0 +1,2361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marvel Fansite</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --red: #e62429;
+      --red-glow: rgba(230, 36, 41, 0.25);
+      --gold: #ffd700;
+      --bg: #070708;
+      --card-bg: rgba(20, 20, 22, 0.65);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #f0f0f2;
+      --text-muted: #a0a0ab;
+      --green: #00ff88;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      line-height: 1.75;
+      padding: 60px 20px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambient background glows */
+    body::before {
+      content: '';
+      position: absolute;
+      top: -5%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1000px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(230, 36, 41, 0.07) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: absolute;
+      bottom: 5%;
+      left: 5%;
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(255, 215, 0, 0.02) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Print & Export Floating bar */
+    .action-bar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: #FFF;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn:hover {
+      background: var(--red);
+      border-color: var(--red);
+      box-shadow: 0 0 15px var(--red-glow);
+      transform: translateY(-2px);
+    }
+
+    /* Case Study Header - Stark Mainframe Blueprint Redesign */
+    header {
+      text-align: center;
+      margin-bottom: 60px;
+      padding: 90px 40px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: radial-gradient(circle at 50% 50%, rgba(230, 36, 41, 0.08) 0%, transparent 80%),
+        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 100% 100%, 24px 24px, 24px 24px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      transition: border-color 0.4s ease;
+    }
+
+    header:hover {
+      border-color: rgba(230, 36, 41, 0.25);
+    }
+
+    /* HUD corner brackets */
+    .hud-corner {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      border: 2px solid transparent;
+      pointer-events: none;
+      opacity: 0.6;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .hud-corner.top-left {
+      top: 20px;
+      left: 20px;
+      border-top-color: var(--red);
+      border-left-color: var(--red);
+    }
+
+    .hud-corner.top-right {
+      top: 20px;
+      right: 20px;
+      border-top-color: var(--red);
+      border-right-color: var(--red);
+    }
+
+    .hud-corner.bottom-left {
+      bottom: 20px;
+      left: 20px;
+      border-bottom-color: var(--gold);
+      border-left-color: var(--gold);
+    }
+
+    .hud-corner.bottom-right {
+      bottom: 20px;
+      right: 20px;
+      border-bottom-color: var(--gold);
+      border-right-color: var(--gold);
+    }
+
+    header:hover .hud-corner {
+      opacity: 1;
+      width: 36px;
+      height: 36px;
+    }
+
+    /* Target locator / scanning line */
+    .hud-scanner {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--red), transparent);
+      animation: scan-vertical 6s linear infinite;
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    @keyframes scan-vertical {
+      0% {
+        top: 0%;
+      }
+
+      50% {
+        top: 100%;
+      }
+
+      100% {
+        top: 0%;
+      }
+    }
+
+    /* J.A.R.V.I.S. circular HUD background styling */
+    .hud-radar {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 420px;
+      height: 420px;
+      pointer-events: none;
+      z-index: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.12;
+    }
+
+    /* Core light source */
+    .jarvis-core {
+      position: absolute;
+      width: 90px;
+      height: 90px;
+      border: 2px solid var(--red);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(230, 36, 41, 0.25) 0%, transparent 70%);
+      box-shadow: 0 0 25px rgba(230, 36, 41, 0.45);
+    }
+
+    /* Ring 1 - inner rotating dashed ring */
+    .jarvis-ring-1 {
+      position: absolute;
+      width: 190px;
+      height: 190px;
+      border: 2px dashed var(--gold);
+      border-radius: 50%;
+      transform: rotate(15deg);
+    }
+
+    /* Ring 2 - middle segmented ring */
+    .jarvis-ring-2 {
+      position: absolute;
+      width: 290px;
+      height: 290px;
+      border: 1.5px double var(--red);
+      border-left-color: transparent;
+      border-right-color: transparent;
+      border-radius: 50%;
+      transform: rotate(-30deg);
+    }
+
+    /* Ring 3 - outer telemetry ring */
+    .jarvis-ring-3 {
+      position: absolute;
+      width: 380px;
+      height: 380px;
+      border: 1px dashed rgba(255, 255, 255, 0.18);
+      border-radius: 50%;
+      transform: rotate(45deg);
+    }
+
+    .jarvis-ring-3::before {
+      content: '';
+      position: absolute;
+      inset: -15px;
+      border: 1px solid rgba(230, 36, 41, 0.08);
+      border-radius: 50%;
+    }
+
+
+
+    .badge-premium {
+      background: rgba(230, 36, 41, 0.15);
+      border: 1px solid rgba(230, 36, 41, 0.5);
+      color: var(--red);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 14px;
+      letter-spacing: 0.15em;
+      padding: 6px 16px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 24px;
+      position: relative;
+      z-index: 1;
+      text-shadow: 0 0 10px rgba(230, 36, 41, 0.3);
+    }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(54px, 8vw, 84px);
+      line-height: 1.0;
+      letter-spacing: 0.03em;
+      background: linear-gradient(135deg, #FFF 30%, var(--red) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+      text-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+
+    .subtitle {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 700px;
+      margin: 0 auto;
+      font-weight: 300;
+      line-height: 1.6;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Executive Meta details cards - Stark Mainframe redesign */
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+      margin-bottom: 50px;
+    }
+
+    .meta-card {
+      background: rgba(17, 17, 17, 0.7);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--gold);
+      padding: 24px 20px;
+      border-radius: 16px;
+      backdrop-filter: blur(15px);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), inset 0 0 15px rgba(255, 255, 255, 0.02);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .meta-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0.5;
+    }
+
+    .meta-card:hover {
+      transform: translateY(-5px) scale(1.02);
+      border-color: rgba(255, 215, 0, 0.35);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 215, 0, 0.15);
+    }
+
+    .meta-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      color: var(--red);
+      margin-bottom: 12px;
+      transition: color 0.3s ease;
+      text-shadow: 0 0 5px rgba(230, 36, 41, 0.2);
+    }
+
+    .meta-card:hover .meta-label {
+      color: var(--red);
+    }
+
+    .meta-value {
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #FFF;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Section styling - spacious 1.3x padding */
+    section {
+      margin-bottom: 56px;
+      background: rgba(13, 13, 15, 0.4);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px 32px;
+      backdrop-filter: blur(10px);
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 0.05em;
+      color: var(--red);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(230, 36, 41, 0.4), transparent);
+    }
+
+    /* Grid layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    @media (max-width: 768px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+    }
+
+    /* Bento Grid for Design Tokens */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    @media (min-width: 900px) {
+      .bento-grid {
+        grid-template-columns: repeat(3, 1fr);
+        grid-auto-rows: 1fr;
+      }
+    }
+
+    .bento-card {
+      background: #121214;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px 32px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .bento-card:hover {
+      border-color: rgba(230, 36, 41, 0.25);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 15px rgba(230, 36, 41, 0.1);
+      transform: translateY(-3px);
+    }
+
+    /* General Typography & Paragraph elements - 1.3x roomy spacing */
+    p.description {
+      font-size: 17.5px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      line-height: 1.8;
+    }
+
+    /* Persona Card */
+    .persona-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .persona-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+    }
+
+    .persona-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: #FFF;
+    }
+
+    .persona-age {
+      font-size: 13px;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .persona-lists {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    @media (max-width: 480px) {
+      .persona-lists {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .persona-list-title {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--gold);
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+
+    ul.check-list,
+    ul.bullet-list {
+      list-style: none;
+    }
+
+    ul.check-list li {
+      position: relative;
+      padding-left: 20px;
+      margin-bottom: 6px;
+      font-size: 15.5px;
+      color: var(--text-muted);
+    }
+
+    ul.check-list li::before {
+      content: '✔';
+      position: absolute;
+      left: 0;
+      color: var(--green);
+    }
+
+    ul.bullet-list li {
+      position: relative;
+      padding-left: 20px;
+      margin-bottom: 6px;
+      font-size: 15.5px;
+      color: var(--text-muted);
+    }
+
+    ul.bullet-list li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: var(--red);
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    /* Avengers themed background container for process cards */
+    .process-timeline-wrapper {
+      position: relative;
+      background: radial-gradient(circle at center, rgba(230, 36, 41, 0.08) 0%, #0c0c0e 80%);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 48px 32px;
+      margin-bottom: 40px;
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(230, 36, 41, 0.02);
+    }
+
+    .avengers-watermark-circle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 280px;
+      height: 280px;
+      border: 6px double rgba(230, 36, 41, 0.03);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .avengers-watermark-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) skewX(-12deg);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 320px;
+      font-weight: 800;
+      color: rgba(230, 36, 41, 0.04);
+      line-height: 1;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Process Timeline Cards with connection lines */
+    .process-timeline {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (max-width: 1024px) {
+      .process-timeline {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .process-timeline {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .process-timeline {
+        grid-template-columns: 1fr;
+      }
+    }
+
+
+
+    .process-card {
+      background: #141416;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 12px;
+      text-align: center;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      width: 100%;
+      position: relative;
+      z-index: 1;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* Watermark background styling */
+    .card-watermark {
+      position: absolute;
+      bottom: -15px;
+      right: -15px;
+      width: 76px;
+      height: 76px;
+      opacity: 0.03;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+      z-index: 0;
+      color: #fff;
+    }
+
+    .process-card:hover .card-watermark {
+      opacity: 0.15;
+      transform: scale(1.15) rotate(-12deg);
+    }
+
+    /* Individual Character card hover states, border-glows and watermark highlights */
+    .process-card.card-cap:hover {
+      border-color: #0088ff;
+      background: rgba(0, 136, 255, 0.04);
+      box-shadow: 0 15px 30px rgba(0, 136, 255, 0.12), 0 0 20px rgba(0, 136, 255, 0.15);
+    }
+
+    .process-card.card-cap .process-badge {
+      color: #0088ff;
+      border-color: rgba(0, 136, 255, 0.3);
+    }
+
+    .process-card.card-cap:hover .process-badge {
+      background: #0088ff;
+      border-color: #0088ff;
+      color: #fff;
+      box-shadow: 0 0 15px rgba(0, 136, 255, 0.4);
+    }
+
+    .card-cap:hover .card-watermark {
+      color: #0088ff;
+      filter: drop-shadow(0 0 6px rgba(0, 136, 255, 0.5));
+    }
+
+    .process-card.card-iron:hover {
+      border-color: #00f0ff;
+      background: rgba(0, 240, 255, 0.04);
+      box-shadow: 0 15px 30px rgba(0, 240, 255, 0.12), 0 0 20px rgba(0, 240, 255, 0.15);
+    }
+
+    .process-card.card-iron .process-badge {
+      color: #00f0ff;
+      border-color: rgba(0, 240, 255, 0.3);
+    }
+
+    .process-card.card-iron:hover .process-badge {
+      background: #00f0ff;
+      border-color: #00f0ff;
+      color: #000;
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+    }
+
+    .card-iron:hover .card-watermark {
+      color: #00f0ff;
+      filter: drop-shadow(0 0 6px rgba(0, 240, 255, 0.5));
+    }
+
+    .process-card.card-thor:hover {
+      border-color: var(--gold);
+      background: rgba(255, 215, 0, 0.04);
+      box-shadow: 0 15px 30px rgba(255, 215, 0, 0.12), 0 0 20px rgba(255, 215, 0, 0.15);
+    }
+
+    .process-card.card-thor .process-badge {
+      color: var(--gold);
+      border-color: rgba(255, 215, 0, 0.3);
+    }
+
+    .process-card.card-thor:hover .process-badge {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: #000;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+    }
+
+    .card-thor:hover .card-watermark {
+      color: var(--gold);
+      filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.5));
+    }
+
+    .process-card.card-hulk:hover {
+      border-color: #00ff88;
+      background: rgba(0, 255, 136, 0.04);
+      box-shadow: 0 15px 30px rgba(0, 255, 136, 0.12), 0 0 20px rgba(0, 255, 136, 0.15);
+    }
+
+    .process-card.card-hulk .process-badge {
+      color: #00ff88;
+      border-color: rgba(0, 255, 136, 0.3);
+    }
+
+    .process-card.card-hulk:hover .process-badge {
+      background: #00ff88;
+      border-color: #00ff88;
+      color: #000;
+      box-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
+    }
+
+    .card-hulk:hover .card-watermark {
+      color: #00ff88;
+      filter: drop-shadow(0 0 6px rgba(0, 255, 136, 0.5));
+    }
+
+    .process-card.card-hawkeye:hover {
+      border-color: #d800ff;
+      background: rgba(216, 0, 255, 0.04);
+      box-shadow: 0 15px 30px rgba(216, 0, 255, 0.12), 0 0 20px rgba(216, 0, 255, 0.15);
+    }
+
+    .process-card.card-hawkeye .process-badge {
+      color: #d800ff;
+      border-color: rgba(216, 0, 255, 0.3);
+    }
+
+    .process-card.card-hawkeye:hover .process-badge {
+      background: #d800ff;
+      border-color: #d800ff;
+      color: #fff;
+      box-shadow: 0 0 15px rgba(216, 0, 255, 0.4);
+    }
+
+    .card-hawkeye:hover .card-watermark {
+      color: #d800ff;
+      filter: drop-shadow(0 0 6px rgba(216, 0, 255, 0.5));
+    }
+
+    .process-card.card-widow:hover {
+      border-color: var(--red);
+      background: rgba(230, 36, 41, 0.04);
+      box-shadow: 0 15px 30px rgba(230, 36, 41, 0.12), 0 0 20px rgba(230, 36, 41, 0.15);
+    }
+
+    .process-card.card-widow .process-badge {
+      color: var(--red);
+      border-color: rgba(230, 36, 41, 0.3);
+    }
+
+    .process-card.card-widow:hover .process-badge {
+      background: var(--red);
+      border-color: var(--red);
+      color: #fff;
+      box-shadow: 0 0 15px rgba(230, 36, 41, 0.4);
+    }
+
+    .card-widow:hover .card-watermark {
+      color: var(--red);
+      filter: drop-shadow(0 0 6px rgba(230, 36, 41, 0.5));
+    }
+
+    .process-card.card-spidey:hover {
+      border-color: #ff3c00;
+      background: rgba(255, 60, 0, 0.04);
+      box-shadow: 0 15px 30px rgba(255, 60, 0, 0.12), 0 0 20px rgba(255, 60, 0, 0.15);
+    }
+
+    .process-card.card-spidey .process-badge {
+      color: #ff3c00;
+      border-color: rgba(255, 60, 0, 0.3);
+    }
+
+    .process-card.card-spidey:hover .process-badge {
+      background: #ff3c00;
+      border-color: #ff3c00;
+      color: #fff;
+      box-shadow: 0 0 15px rgba(255, 60, 0, 0.4);
+    }
+
+    .card-spidey:hover .card-watermark {
+      color: #ff3c00;
+      filter: drop-shadow(0 0 6px rgba(255, 60, 0, 0.5));
+    }
+
+    .process-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1.5px solid var(--border);
+      color: var(--text-muted);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      transition: all 0.4s ease;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      position: relative;
+      z-index: 1;
+    }
+
+    .process-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: #FFF;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .process-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.4;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Problem Statements Cards */
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .problem-card {
+      background: rgba(255, 255, 255, 0.02);
+      border-left: 4px solid var(--red);
+      border-top: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 16px;
+      border-radius: 0 12px 12px 0;
+      transition: transform 0.3s ease;
+    }
+
+    .problem-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .problem-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      color: var(--red);
+      margin-bottom: 4px;
+    }
+
+    .problem-card h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      color: #FFF;
+      margin-bottom: 6px;
+    }
+
+    .problem-card p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Design System Block */
+    .design-sys-card {
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid var(--border);
+      padding: 20px;
+      border-radius: 12px;
+    }
+
+    .sys-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .sys-col {
+      flex: 1;
+      min-width: 240px;
+    }
+
+    .sys-label {
+      font-weight: 700;
+      font-size: 14px;
+      color: #FFF;
+      margin-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .color-swatches {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .swatch-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 6px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .swatch-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .swatch-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .swatch-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: #FFF;
+    }
+
+    .swatch-hex {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Fonts Showcase */
+    .font-showcase {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .font-bebas {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 30px;
+      line-height: 1;
+      color: #FFF;
+      letter-spacing: 0.05em;
+    }
+
+    .font-manrope {
+      font-family: 'Manrope', sans-serif;
+      font-size: 16px;
+      color: var(--text-muted);
+    }
+
+    .font-outfit {
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px;
+      color: var(--text-muted);
+    }
+
+    /* Modal Layout Grid comparison visualizer */
+    .layout-viz-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .layout-card {
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .layout-header {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #FFF;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .layout-tag {
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .layout-tag.old {
+      background: rgba(230, 36, 41, 0.1);
+      color: var(--red);
+      border: 1px solid rgba(230, 36, 41, 0.3);
+    }
+
+    .layout-tag.new {
+      background: rgba(0, 255, 136, 0.1);
+      color: var(--green);
+      border: 1px solid rgba(0, 255, 136, 0.3);
+    }
+
+    /* CSS drawing of modal wireframe */
+    .wireframe-box {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1.5px dashed var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .wireframe-header {
+      display: flex;
+      gap: 12px;
+    }
+
+    .wf-portrait {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    /* Old wireframe specs */
+    .old-wf .wf-portrait {
+      width: 70px;
+      height: 95px;
+      align-self: flex-start;
+    }
+
+    .old-wf .wf-portrait::after {
+      content: 'Fixed Height (300px)';
+    }
+
+    /* New wireframe specs */
+    .new-wf .wf-portrait {
+      width: 90px;
+      align-self: stretch;
+      background: rgba(230, 36, 41, 0.05);
+      border-color: rgba(230, 36, 41, 0.35);
+      color: #FFF;
+      box-shadow: inset 0 0 10px rgba(230, 36, 41, 0.1);
+    }
+
+    .new-wf .wf-portrait::after {
+      content: 'Stretched (Zero Gap)';
+    }
+
+    .wf-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .wf-bar {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+    }
+
+    .wf-bar.title {
+      width: 80%;
+      background: var(--text-muted);
+    }
+
+    .wf-bar.subtitle {
+      width: 50%;
+    }
+
+    .wf-bar.grid-item {
+      height: 30px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 6px;
+    }
+
+    .wf-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    .old-wf .gap-indicator {
+      height: 25px;
+      border: 1px dashed rgba(230, 36, 41, 0.5);
+      background: rgba(230, 36, 41, 0.04);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      color: var(--red);
+      font-weight: 600;
+    }
+
+    .new-wf .gap-indicator {
+      display: none;
+    }
+
+    /* Flowchart for J.A.R.V.I.S chatbot lookup */
+    .flow-container {
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      overflow-x: auto;
+    }
+
+    .flow-diagram {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      position: relative;
+    }
+
+    .flow-node {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 14.5px;
+      font-family: 'Outfit', sans-serif;
+      text-align: center;
+      min-width: 170px;
+      max-width: 250px;
+      position: relative;
+    }
+
+    .flow-node.start {
+      border-color: var(--gold);
+      background: rgba(255, 215, 0, 0.05);
+      font-weight: 700;
+    }
+
+    .flow-node.process {
+      border-color: var(--border);
+    }
+
+    .flow-node.decision {
+      background: rgba(230, 36, 41, 0.05);
+      border-color: rgba(230, 36, 41, 0.35);
+      border-radius: 12px;
+      font-weight: 600;
+    }
+
+    .flow-arrow {
+      height: 24px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--red), var(--gold));
+      position: relative;
+      margin-top: 6px !important;
+      margin-bottom: 8px !important;
+      box-shadow: 0 0 8px rgba(230, 36, 41, 0.4);
+    }
+
+    .flow-arrow::after {
+      content: '▼';
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px;
+      color: var(--gold);
+      text-shadow: 0 0 5px rgba(255, 215, 0, 0.8);
+    }
+
+    .decision-options {
+      display: flex;
+      gap: 36px;
+      width: 100%;
+      justify-content: center;
+      position: relative;
+      margin-top: 40px !important;
+    }
+
+    /* Horizontal connecting line */
+    .decision-options::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: 25%;
+      right: 25%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--red), var(--gold));
+      box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+      z-index: 1;
+    }
+
+    /* Vertical line up to parent node - leaves 6px gap from bottom of parent card */
+    .decision-options::after {
+      content: '';
+      position: absolute;
+      top: -34px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 14px;
+      background: var(--red);
+      box-shadow: 0 0 6px rgba(230, 36, 41, 0.5);
+      z-index: 1;
+    }
+
+    .decision-path {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      max-width: 200px;
+      position: relative;
+    }
+
+    /* Vertical line down to paths - starts at horizontal line, leaves 6px gap above label */
+    .decision-path::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 14px;
+      background: var(--gold);
+      box-shadow: 0 0 6px rgba(255, 215, 0, 0.5);
+      z-index: 1;
+    }
+
+    .path-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 0px !important;
+      z-index: 2;
+      background: #070708;
+      /* solid background mask to prevent any line showing through */
+      padding: 2px 6px;
+      border-radius: 4px;
+      line-height: 1.2;
+    }
+
+    /* Challenges Grid & Premium Design */
+    .challenges-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .challenge-card-premium {
+      background: rgba(13, 13, 15, 0.65);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .challenge-card-premium:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(230, 36, 41, 0.15);
+      border-color: rgba(230, 36, 41, 0.25);
+    }
+
+    .challenge-part {
+      padding: 24px;
+      background: linear-gradient(135deg, rgba(230, 36, 41, 0.05) 0%, transparent 100%);
+      border-right: 1px solid var(--border);
+    }
+
+    .solution-part {
+      padding: 24px;
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.03) 0%, transparent 100%);
+    }
+
+    .part-badge {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      padding: 4px 10px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+
+    .badge-challenge {
+      background: rgba(230, 36, 41, 0.15);
+      color: var(--red);
+      border: 1px solid rgba(230, 36, 41, 0.3);
+    }
+
+    .badge-solution {
+      background: rgba(255, 215, 0, 0.15);
+      color: var(--gold);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+    }
+
+    .challenge-title-text {
+      font-size: 17px;
+      font-weight: 700;
+      color: #FFF;
+      margin-bottom: 8px;
+    }
+
+    .challenge-desc-text {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    @media (max-width: 768px) {
+      .challenge-card-premium {
+        grid-template-columns: 1fr;
+      }
+
+      .challenge-part {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+    }
+
+    /* Brand Personality Grid */
+    .personality-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .personality-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      padding: 16px 12px;
+      border-radius: 12px;
+      text-align: center;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .personality-card:hover {
+      border-color: var(--red);
+      background: rgba(230, 36, 41, 0.05);
+      box-shadow: 0 0 15px rgba(230, 36, 41, 0.2);
+      transform: translateY(-3px);
+    }
+
+    .personality-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 0.05em;
+      color: #FFF;
+      margin-bottom: 4px;
+    }
+
+    .personality-desc {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      line-height: 1.3;
+    }
+
+    /* Buttons Demonstration styles */
+    .btn-primary-demo {
+      background: var(--red);
+      border: 1px solid var(--red);
+      color: #FFF;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 0 10px rgba(230, 36, 41, 0.25);
+      display: inline-block;
+    }
+
+    .btn-primary-demo:hover {
+      transform: scale(1.06);
+      box-shadow: 0 0 20px rgba(230, 36, 41, 0.5), 0 0 10px var(--gold);
+    }
+
+    .btn-secondary-demo {
+      background: transparent;
+      border: 1.5px solid rgba(255, 255, 255, 0.12);
+      color: #FFF;
+      padding: 9px 19px;
+      border-radius: 6px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: inline-block;
+    }
+
+    .btn-secondary-demo:hover {
+      background: var(--red);
+      border-color: var(--red);
+      box-shadow: 0 0 15px rgba(230, 36, 41, 0.3);
+    }
+
+    /* Showcase items */
+    .radius-showcase,
+    .shadow-showcase {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .radius-item,
+    .shadow-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .radius-box {
+      width: 60px;
+      height: 35px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .shadow-box {
+      width: 80px;
+      height: 40px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: #FFF;
+      flex-shrink: 0;
+    }
+
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(44px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .icon-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      height: 44px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: all 0.3s ease;
+    }
+
+    .icon-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: var(--gold);
+      transform: scale(1.1);
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+    }
+
+    /* Highlight panels (Upgrades & Pipeline) */
+    .highlight-panel {
+      background: rgba(13, 13, 15, 0.65);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .highlight-panel::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+    }
+
+    .upgrades-panel::before {
+      background: var(--green);
+    }
+
+    .upgrades-panel {
+      box-shadow: inset 0 0 15px rgba(0, 255, 136, 0.03);
+    }
+
+    .upgrades-panel:hover {
+      border-color: rgba(0, 255, 136, 0.25);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 255, 136, 0.08);
+    }
+
+    .pipeline-panel::before {
+      background: var(--red);
+    }
+
+    .pipeline-panel {
+      box-shadow: inset 0 0 15px rgba(230, 36, 41, 0.03);
+    }
+
+    .pipeline-panel:hover {
+      border-color: rgba(230, 36, 41, 0.25);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(230, 36, 41, 0.08);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 12px;
+    }
+
+    .panel-icon {
+      font-size: 20px;
+    }
+
+    .panel-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.05em;
+      color: #FFF;
+    }
+
+    .panel-content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .upgrade-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .upgrade-title {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: #FFF;
+    }
+
+    .upgrade-desc {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .pipeline-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .pipe-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--red);
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+
+    .pipe-text {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .pipe-text strong {
+      color: #FFF;
+    }
+
+    /* Metrics and Key Outcomes */
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 20px;
+    }
+
+    .metric-card {
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid var(--border);
+      border-top: 2px solid var(--gold);
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .metric-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 36px;
+      color: var(--gold);
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    .metric-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Footer styling */
+    footer {
+      border-top: 1px solid var(--border);
+      padding-top: 30px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 12px;
+      margin-top: 60px;
+    }
+
+    /* Responsive styling */
+    @media (max-width: 768px) {
+      body {
+        padding: 20px 10px;
+      }
+
+      header {
+        margin-bottom: 40px;
+      }
+
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    /* Print styles optimized for PDF/Image capture */
+    @media print {
+      body {
+        background-color: #FFF;
+        color: #000;
+        padding: 0;
+      }
+
+      :root {
+        --bg: #FFF;
+        --card-bg: #f8f9fa;
+        --border: #dee2e6;
+        --text: #212529;
+        --text-muted: #6c757d;
+        --red: #c00c0c;
+        --gold: #b38600;
+        --green: #009944;
+      }
+
+      .action-bar,
+      body::before,
+      body::after {
+        display: none !important;
+      }
+
+      .wireframe-box {
+        background: #f8f9fa;
+      }
+
+      h1 {
+        background: none;
+        -webkit-text-fill-color: initial;
+        color: #000;
+      }
+
+      section {
+        background: #FFF;
+        border: 1px solid #dee2e6;
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- Action buttons for Capture -->
+    <div class="action-bar">
+      <button class="btn" onclick="window.print()">
+        <span>🖨️</span> Save as PDF / Long Image
+      </button>
+      <button class="btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+        <span>▲</span> Top
+      </button>
+    </div>
+
+    <!-- Header Block -->
+    <header>
+      <!-- HUD elements for futuristic theme -->
+      <div class="hud-corner top-left"></div>
+      <div class="hud-corner top-right"></div>
+      <div class="hud-corner bottom-left"></div>
+      <div class="hud-corner bottom-right"></div>
+      <div class="hud-scanner"></div>
+      <div class="hud-radar">
+        <div class="jarvis-core"></div>
+        <div class="jarvis-ring-1"></div>
+        <div class="jarvis-ring-2"></div>
+        <div class="jarvis-ring-3"></div>
+      </div>
+
+      <span class="badge-premium">UX/UI Case Study</span>
+      <h1>Marvel Fansite</h1>
+      <p class="subtitle">A Premium Website Redesign And Interactive Chatbot Guide For Marvel Superheroes, Villains, And
+        Comic Characters – Built By A Fan, For Fans.</p>
+    </header>
+
+    <!-- Meta Details Cards -->
+    <div class="meta-grid">
+      <div class="meta-card">
+        <div class="meta-label">Project Name</div>
+        <div class="meta-value">Marvel Fansite</div>
+      </div>
+      <div class="meta-card">
+        <div class="meta-label">Role</div>
+        <div class="meta-value">Frontend Developer</div>
+      </div>
+      <div class="meta-card">
+        <div class="meta-label">Duration</div>
+        <div class="meta-value">2 Weeks</div>
+      </div>
+      <div class="meta-card">
+        <div class="meta-label">Tools Used</div>
+        <div class="meta-value">HTML, CSS, JavaScript, Web APIs</div>
+      </div>
+    </div>
+
+    <!-- Section 1: Overview & Solution -->
+    <section>
+      <h2 class="section-title">Project Overview</h2>
+      <div class="grid-2">
+        <div>
+          <p class="description">
+            <strong>Marvel</strong> is a web application designed for Marvel enthusiasts to discover, search, and
+            explore their favorite superheroes, villains, and comic book characters. The platform leverages active
+            client-side connections to retrieve and format real-time character information through a clean, engaging,
+            and premium user experience.
+          </p>
+          <p class="description">
+            Prior to this redesign iteration, fans struggled to find accurate character bios quickly due to scattered
+            sources and slow search interactions. Marvel aggregates this vast catalog into a cohesive, responsive
+            experience.
+          </p>
+        </div>
+        <div>
+          <div class="persona-list-title" style="color: var(--red);">Core Solution Focus</div>
+          <ul class="check-list">
+            <li>Fast character search functionality (debounced dynamic matching)</li>
+            <li>Real-time API-powered data with Wikipedia search fallbacks</li>
+            <li>Mobile-responsive adaptive grid layouts</li>
+            <li>Stretched vertical dossier visuals for a clean details interface</li>
+            <li>Futuristic J.A.R.V.I.S. voice synthesis & chatbot integration</li>
+            <li>Primary Marvel Red branding to replace inconsistent blue glows</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Research & Personas -->
+    <section>
+      <h2 class="section-title">Research & User Persona</h2>
+      <div class="grid-2">
+
+        <!-- Key findings -->
+        <div>
+          <div class="persona-list-title">Research Key Findings</div>
+          <p class="description" style="margin-bottom: 12px; font-size: 14px;">
+            The project began by examining how Marvel fans interact with wiki lists and media archives.
+          </p>
+          <ul class="bullet-list" style="margin-bottom: 20px;">
+            <li><strong>Quick Search Dominance</strong>: Users prefer instant search inputs over wading through endless
+              category drop-downs.</li>
+            <li><strong>Portraits Drive Engagement</strong>: High-quality portrait graphics dramatically increase
+              time-on-page metrics.</li>
+            <li><strong>Mobile-First Necessity</strong>: Over 60% of test queries are executed on mobile screens during
+              media viewings.</li>
+            <li><strong>Secondary Roster Exploration</strong>: Fans enjoy exploring lesser-known villains and cosmic
+              entities when clear cards are provided.</li>
+          </ul>
+        </div>
+
+        <!-- User Persona card -->
+        <div class="persona-card">
+          <div class="persona-header">
+            <span class="persona-name">Marvel Enthusiast Persona</span>
+            <span class="persona-age">Age: 18–35</span>
+          </div>
+          <div class="persona-lists">
+            <div>
+              <div class="persona-list-title">Goals</div>
+              <ul class="check-list">
+                <li>Search favorite characters</li>
+                <li>Learn backgrounds quickly</li>
+                <li>Explore team relationships</li>
+                <li>Track MCU timeline events chronologically</li>
+                <li>Compare character stats & combat metrics</li>
+              </ul>
+            </div>
+            <div>
+              <div class="persona-list-title">Pain Points</div>
+              <ul class="bullet-list">
+                <li>Scattered wiki articles</li>
+                <li>Slow search speeds</li>
+                <li>Cluttered mobile visual gaps</li>
+                <li>Confused by the timeline watch order of MCU movies/series</li>
+                <li>No quick way to find comics significance & issue lists</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: Design Process -->
+    <section>
+      <h2 class="section-title">Design Process</h2>
+
+      <!-- Steps timeline inside a unified Avengers card background -->
+      <div class="process-timeline-wrapper">
+        <div class="avengers-watermark-circle"></div>
+        <div class="avengers-watermark-text">A</div>
+        <div class="process-timeline">
+          <div class="process-card card-cap">
+            <svg class="card-watermark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <circle cx="12" cy="12" r="6" />
+              <polygon points="12 8 13.5 11.5 17 11.5 14 13.5 15.5 17 12 15 8.5 17 10 13.5 7 11.5 10.5 11.5" />
+            </svg>
+            <div class="process-badge">01</div>
+            <div class="process-name">Research</div>
+          </div>
+          <div class="process-card card-iron">
+            <svg class="card-watermark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <polygon points="12 6 17 15 7 15" />
+              <circle cx="12" cy="12" r="2" />
+            </svg>
+            <div class="process-badge">02</div>
+            <div class="process-name">User Persona</div>
+          </div>
+          <div class="process-card card-thor">
+            <svg class="card-watermark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="12" x2="12" y2="21" />
+              <path d="M10 21h4" />
+              <rect x="7" y="5" width="10" height="7" rx="1" />
+              <path d="M9 5l1-2h4l1 2" />
+            </svg>
+            <div class="process-badge">03</div>
+            <div class="process-name">User Journey</div>
+          </div>
+          <div class="process-card card-hulk">
+            <svg class="card-watermark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M18 10a2 2 0 0 0-2-2h-3a1 1 0 0 1-1-1V5a2 2 0 0 0-4 0v3H7a2 2 0 0 0-2 2v6a4 4 0 0 0 4 4h6a4 4 0 0 0 4-4v-6z" />
+              <path d="M8 12h8" />
+              <path d="M8 15h8" />
+            </svg>
+            <div class="process-badge">04</div>
+            <div class="process-name">Wireframing</div>
+          </div>
+          <div class="process-card card-hawkeye">
+            <svg class="card-watermark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 18c3-3 3-9 0-12" />
+              <line x1="6" y1="6" x2="6" y2="18" />
+              <line x1="5" y1="12" x2="18" y2="12" />
+              <polygon points="18 12 15 9 15 15" fill="none" />
+            </svg>
+            <div class="process-badge">05</div>
+            <div class="process-name">UI Design</div>
+          </div>
+          <div class="process-card card-widow">
+            <svg class="card-watermark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="5 4 19 4 12 12" />
+              <polygon points="12 12 19 20 5 20" />
+            </svg>
+            <div class="process-badge">06</div>
+            <div class="process-name">Development</div>
+          </div>
+          <div class="process-card card-spidey">
+            <svg class="card-watermark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="3" x2="21" y2="21" />
+              <line x1="21" y1="3" x2="3" y2="21" />
+              <line x1="12" y1="2" x2="12" y2="22" />
+              <line x1="2" y1="12" x2="22" y2="12" />
+              <path d="M12 7c2 0 3 1 3 3s-1 3-3 3-3-1-3-3 1-3 3-3z" />
+              <path d="M12 4c4 0 6 2 6 6s-2 6-6 6-6-2-6-6 2-6 6-6z" />
+            </svg>
+            <div class="process-badge">07</div>
+            <div class="process-name">Testing</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Section 3b: Design Evolution: Mid-Fi to High-Fi -->
+    <section>
+      <h2 class="section-title">Design Evolution: Mid-Fi to High-Fi</h2>
+      <p class="description">
+        We refined our layout conceptualizations directly from structured mid-fidelity wireframes into a high-fidelity
+        cinematic digital environment.
+      </p>
+
+      <div class="grid-2">
+        <!-- Mid-Fidelity Wireframes -->
+        <div
+          style="background: rgba(255,255,255,0.01); border: 1px solid var(--border); border-radius: 16px; padding: 28px; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div class="persona-list-title"
+              style="color: var(--gold); display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+              <span>📐</span> Mid-Fidelity Interface Wireframe
+            </div>
+            <p class="description" style="font-size: 13.5px; margin-bottom: 20px;">
+              Initial blueprint structuring character details grids, headers, profile divisions, and responsive stacks.
+            </p>
+          </div>
+          <div
+            style="background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 8px; padding: 16px; text-align: center; margin-top: auto; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 480px;">
+            <img src="mid_fi_wireframe.png" alt="Mid-Fidelity Wireframe"
+              style="max-height: 400px; max-width: 100%; width: auto; object-fit: contain; border-radius: 4px; display: block; margin: 0 auto; box-shadow: 0 4px 15px rgba(0,0,0,0.6);">
+            <span class="swatch-hex" style="margin-top: 10px; font-size: 11.5px; display: inline-block;">Mid-Fi UI
+              Layout Specification</span>
+          </div>
+        </div>
+
+        <!-- High-Fidelity UI Design -->
+        <div
+          style="background: rgba(255,255,255,0.01); border: 1px solid var(--border); border-radius: 16px; padding: 28px; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div class="persona-list-title"
+              style="color: var(--red); display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+              <span>✨</span> High-Fidelity UI Redesign
+            </div>
+            <p class="description" style="font-size: 13.5px; margin-bottom: 20px;">
+              Final user interface styling, featuring glowing active accents, primary red colors, and cinematic ambient
+              backdrops.
+            </p>
+          </div>
+          <div
+            style="background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 8px; padding: 16px; text-align: center; margin-top: auto; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 480px;">
+            <img src="media__1781438784090.png" alt="High-Fidelity UI Design"
+              style="max-height: 400px; max-width: 100%; width: auto; object-fit: contain; border-radius: 4px; display: block; margin: 0 auto; box-shadow: 0 4px 15px rgba(0,0,0,0.6);">
+            <span class="swatch-hex" style="margin-top: 10px; font-size: 11.5px; display: inline-block;">Final Cinematic
+              High-Fi Interface</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Visual Identity & Design Tokens (Bento Grid) -->
+    <section>
+      <h2 class="section-title">Visual Identity & Design Tokens</h2>
+      <p class="description">
+        A premium design system was built from the ground up to establish consistency and maintain clean brand
+        expression.
+      </p>
+
+      <div class="bento-grid">
+
+        <!-- Bento Card 1: Brand Personality -->
+        <div class="bento-card">
+          <div class="persona-list-title" style="color: var(--red); margin-bottom: 16px;">Brand Personality</div>
+          <ul class="bullet-list" style="display: flex; flex-direction: column; gap: 14px; padding: 0; margin: 0; list-style: none;">
+            <li><strong>Bold</strong>: Prominent uppercase titles and solid high-contrast borders.</li>
+            <li><strong>Energetic</strong>: High-intensity colors evoking combat and adventure.</li>
+            <li><strong>Modern</strong>: Clean geometric details and glassmorphic overlays.</li>
+            <li><strong>Immersive</strong>: Ambient radial flows and cinematic background layers.</li>
+            <li><strong>Fan-Centric</strong>: Deep historical timelines, character details, and lists.</li>
+          </ul>
+        </div>
+
+        <!-- Bento Card 2: Color Palette -->
+        <div class="bento-card">
+          <div class="persona-list-title" style="color: var(--gold); margin-bottom: 16px;">Color Palette</div>
+          <div class="color-swatches" style="display: flex; flex-direction: column; gap: 14px;">
+            <div class="swatch-item">
+              <div class="swatch-circle"
+                style="background-color: #e62429; box-shadow: 0 0 10px rgba(230, 36, 41, 0.4);"></div>
+              <div class="swatch-info">
+                <span class="swatch-name">Primary Marvel Red</span>
+                <span class="swatch-hex">#e62429</span>
+              </div>
+            </div>
+            <div class="swatch-item">
+              <div class="swatch-circle"
+                style="background-color: #ffd700; box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);"></div>
+              <div class="swatch-info">
+                <span class="swatch-name">Stark Gold</span>
+                <span class="swatch-hex">#ffd700</span>
+              </div>
+            </div>
+            <div class="swatch-item">
+              <div class="swatch-circle" style="background-color: #0d0d0d;"></div>
+              <div class="swatch-info">
+                <span class="swatch-name">Deep Charcoal</span>
+                <span class="swatch-hex">#0d0d0d</span>
+              </div>
+            </div>
+            <div class="swatch-item">
+              <div class="swatch-circle" style="background-color: #050505;"></div>
+              <div class="swatch-info">
+                <span class="swatch-name">Background Black</span>
+                <span class="swatch-hex">#050505</span>
+              </div>
+            </div>
+            <div class="swatch-item">
+              <div class="swatch-circle" style="background-color: #ffffffb3;"></div>
+              <div class="swatch-info">
+                <span class="swatch-name">Muted Off-White</span>
+                <span class="swatch-hex">#ffffffb3</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bento Card 3: Typography Scale -->
+        <div class="bento-card">
+          <div class="persona-list-title" style="color: var(--red); margin-bottom: 16px;">Typography Scale</div>
+          <div class="font-showcase" style="display: flex; flex-direction: column; gap: 14px;">
+            <div>
+              <div class="font-bebas" style="font-size: 28px; line-height: 1;">Bebas Neue (Headings - 32px)</div>
+              <span class="swatch-hex">Main titles and section headers</span>
+            </div>
+            <div>
+              <div class="font-manrope" style="font-size: 14px; font-weight: 700; color: #FFF; line-height: 1.2;">
+                Manrope (Subheaders & Labels - 15px)</div>
+              <span class="swatch-hex">Meta headers and database keys</span>
+            </div>
+            <div>
+              <div class="font-outfit" style="font-size: 13.5px; line-height: 1.4;">Outfit (Body Copy & Chat UI - 14px)
+              </div>
+              <span class="swatch-hex">Paragraph description text and chat bubbles</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bento Card 4: Border Radius -->
+        <div class="bento-card">
+          <div class="persona-list-title" style="color: var(--gold); margin-bottom: 16px;">Border Radius</div>
+          <div class="radius-showcase" style="display: flex; flex-direction: column; gap: 14px;">
+            <div class="radius-item">
+              <div class="radius-box" style="border-radius: 16px;"></div>
+              <div class="swatch-info">
+                <span class="swatch-name">16px Radius</span>
+                <span class="swatch-hex">Main dashboard sections and container cards</span>
+              </div>
+            </div>
+            <div class="radius-item">
+              <div class="radius-box" style="border-radius: 12px;"></div>
+              <div class="swatch-info">
+                <span class="swatch-name">12px Radius</span>
+                <span class="swatch-hex">Inner overlay cards and details boxes</span>
+              </div>
+            </div>
+            <div class="radius-item">
+              <div class="radius-box" style="border-radius: 8px;"></div>
+              <div class="swatch-info">
+                <span class="swatch-name">8px / 6px Radius</span>
+                <span class="swatch-hex">Buttons, list labels, and form input controls</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bento Card 5: Elevation & Shadows -->
+        <div class="bento-card">
+          <div class="persona-list-title" style="color: var(--red); margin-bottom: 16px;">Elevation & Shadows</div>
+          <div class="shadow-showcase" style="display: flex; flex-direction: column; gap: 14px;">
+            <div class="shadow-item">
+              <div class="shadow-box" style="box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);">Elevation</div>
+              <div class="swatch-info">
+                <span class="swatch-name">Standard Card Lift</span>
+                <span class="swatch-hex">0 10px 30px rgba(0,0,0,0.5)</span>
+              </div>
+            </div>
+            <div class="shadow-item">
+              <div class="shadow-box" style="box-shadow: 0 0 20px rgba(230, 36, 41, 0.4); border-color: var(--red);">
+                Glow State</div>
+              <div class="swatch-info">
+                <span class="swatch-name">Active Brand Glow</span>
+                <span class="swatch-hex">0 0 20px rgba(230,36,41,0.4)</span>
+              </div>
+            </div>
+            <div class="shadow-item">
+              <div class="shadow-box"
+                style="box-shadow: 0 15px 30px rgba(230,36,41,0.15), 0 0 40px rgba(230,36,41,0.3); border-color: var(--red);">
+                Hover Card</div>
+              <div class="swatch-info">
+                <span class="swatch-name">Interactive Hover Glow</span>
+                <span class="swatch-hex">0 15px 30px rgba(...0.15)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bento Card 6: Components & UI Details -->
+        <div class="bento-card">
+          <div class="persona-list-title" style="color: var(--gold); margin-bottom: 16px;">Components & UI Details</div>
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div class="sys-col">
+              <span class="swatch-name" style="display: block; margin-bottom: 8px;">Interactive Buttons</span>
+              <div style="display: flex; gap: 12px; align-items: center;">
+                <button class="btn-primary-demo" onclick="event.preventDefault()">Primary</button>
+                <button class="btn-secondary-demo" onclick="event.preventDefault()">Secondary</button>
+              </div>
+            </div>
+            <div class="sys-col">
+              <span class="swatch-name" style="display: block; margin-bottom: 8px;">Metadata Iconography</span>
+              <div class="icon-grid" style="margin-top: 0;">
+                <div class="icon-item">🦸</div>
+                <div class="icon-item">💀</div>
+                <div class="icon-item">⏱</div>
+                <div class="icon-item">📺</div>
+                <div class="icon-item">💬</div>
+                <div class="icon-item">🔍</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 5: J.A.R.V.I.S. Mainframe Architecture -->
+    <section>
+      <h2 class="section-title">System Architecture: Chatbot Upgrades</h2>
+      <div class="flow-container" style="margin-bottom: 24px;">
+        <div class="flow-diagram">
+          <div class="flow-node start">User Inputs Query</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node decision">Matches Navigation/UI Trigger?</div>
+          <div class="decision-options">
+            <div class="decision-path">
+              <span class="path-label">Yes</span>
+              <div class="flow-arrow"></div>
+              <div class="flow-node process">Scroll Viewport & Confirm Action</div>
+            </div>
+            <div class="decision-path">
+              <span class="path-label">No</span>
+              <div class="flow-arrow"></div>
+              <div class="flow-node decision">Matches Local Hero/Villain Profile?</div>
+              <div class="decision-options">
+                <div class="decision-path">
+                  <span class="path-label">Yes</span>
+                  <div class="flow-arrow"></div>
+                  <div class="flow-node process">Format Dossier Details Response</div>
+                </div>
+                <div class="decision-path">
+                  <span class="path-label">No</span>
+                  <div class="flow-arrow"></div>
+                  <div class="flow-node decision">Scan Webpage DOM Content</div>
+                  <div class="decision-options">
+                    <div class="decision-path">
+                      <span class="path-label">Match Found</span>
+                      <div class="flow-arrow"></div>
+                      <div class="flow-node process">Format Excerpt Response</div>
+                    </div>
+                    <div class="decision-path">
+                      <span class="path-label">No Match</span>
+                      <div class="flow-arrow"></div>
+                      <div class="flow-node process" style="border-color: var(--red);">Query Wikipedia Search & Summary
+                        REST APIs</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Section 6: Challenges & Solutions -->
+    <section>
+      <h2 class="section-title">Challenges & Solutions</h2>
+      <div class="challenges-grid">
+
+        <!-- Challenge 1 -->
+        <div class="challenge-card-premium">
+          <div class="challenge-part">
+            <span class="part-badge badge-challenge">⚠️ Challenge 01</span>
+            <div class="challenge-title-text">Large Dataset Handling</div>
+            <div class="challenge-desc-text">
+              Marvel contains thousands of active assets, which can bog down loading performance.
+            </div>
+          </div>
+          <div class="solution-part">
+            <span class="part-badge badge-solution">✔ Solution Implemented</span>
+            <div class="challenge-title-text" style="color: var(--gold);">Debounced Dynamic Filtering</div>
+            <div class="challenge-desc-text">
+              Added debounced client-side filtering and loading images lazily to help users find characters quickly.
+            </div>
+          </div>
+        </div>
+
+        <!-- Challenge 2 -->
+        <div class="challenge-card-premium">
+          <div class="challenge-part">
+            <span class="part-badge badge-challenge">⚠️ Challenge 02</span>
+            <div class="challenge-title-text">Missing Character Descriptions</div>
+            <div class="challenge-desc-text">
+              External API profiles often feature blank biographical info, causing inconsistencies.
+            </div>
+          </div>
+          <div class="solution-part">
+            <span class="part-badge badge-solution">✔ Solution Implemented</span>
+            <div class="challenge-title-text" style="color: var(--gold);">Professional Fallback System</div>
+            <div class="challenge-desc-text">
+              Added 10 distinct professional fallback messages based on character hashes to maintain profile styling.
+            </div>
+          </div>
+        </div>
+
+        <!-- Challenge 3 -->
+        <div class="challenge-card-premium">
+          <div class="challenge-part">
+            <span class="part-badge badge-challenge">⚠️ Challenge 03</span>
+            <div class="challenge-title-text">Mobile Responsiveness</div>
+            <div class="challenge-desc-text">
+              Large layout grids and dual-column headers collapse and cause overflow issues on smaller viewports.
+            </div>
+          </div>
+          <div class="solution-part">
+            <span class="part-badge badge-solution">✔ Solution Implemented</span>
+            <div class="challenge-title-text" style="color: var(--gold);">Adaptive Grid Alignment</div>
+            <div class="challenge-desc-text">
+              Created responsive layouts that adapt grids. Swapped layout alignment to vertical on screens under 768px.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- Section 8: Future Enhancements Pipeline -->
+    <section>
+      <h2 class="section-title">Future Enhancements Pipeline</h2>
+      <p class="description">
+        A roadmap of upcoming features to expand user interaction and database cataloging.
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(285px, 1fr)); gap: 24px;">
+        <div class="highlight-panel pipeline-panel">
+          <div class="panel-header">
+            <span class="panel-icon">⭐</span>
+            <span class="panel-title">Favorites System</span>
+          </div>
+          <div class="panel-content">
+            <div class="pipe-text" style="font-size: 13.5px; line-height: 1.8; color: var(--text-muted);">
+              Allow users to save their favorite hero and villain cards.
+            </div>
+          </div>
+        </div>
+
+        <div class="highlight-panel pipeline-panel">
+          <div class="panel-header">
+            <span class="panel-icon">📊</span>
+            <span class="panel-title">Character Comparison</span>
+          </div>
+          <div class="panel-content">
+            <div class="pipe-text" style="font-size: 13.5px; line-height: 1.8; color: var(--text-muted);">
+              Compare combat, speed, and strength scores side by side.
+            </div>
+          </div>
+        </div>
+
+        <div class="highlight-panel pipeline-panel">
+          <div class="panel-header">
+            <span class="panel-icon">🤖</span>
+            <span class="panel-title">Advanced Chatbot</span>
+          </div>
+          <div class="panel-content">
+            <div class="pipe-text" style="font-size: 13.5px; line-height: 1.8; color: var(--text-muted);">
+              Interactive conversational Marvel advanced chatbot guide.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 8: Conclusion -->
+    <section>
+      <h2 class="section-title">Learnings & Conclusion</h2>
+      <p class="description">
+        <strong>Marvel</strong> successfully transforms a complex collection of character data into an engaging, fast,
+        and accessible digital platform. By combining intuitive debounced searches, a responsive grid system, and
+        Wikipedia lookup pipelines, the platform enables users to explore the Marvel universe effortlessly.
+      </p>
+      <p class="description">
+        This platform serves as the ultimate interactive gateway for both lifelong Marvel fans and universe newbies.
+        Longtime fans can dive deep into detailed character dossiers, compare power stats (like durability, energy, and
+        strength), and explore team alliances. Meanwhile, newcomers who feel overwhelmed by the vast Marvel Multiverse
+        can use the platform as a roadmap to easily understand where to start, identify connections between heroes and
+        villains, and untangle the timeline.
+      </p>
+      <p class="description">
+        With the J.A.R.V.I.S. chatbot companion, fans can simply ask questions to receive real-time biographical files,
+        watch order suggestions, and direct links to comprehensive wiki archives. By balancing visual aesthetics (like
+        Stark Industries-style HUD telemetry and hero-themed glowing modals) with high-performance responsive coding,
+        Marvel delivers a web experience that feels like a premium, cinematic extension of the movies themselves.
+      </p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <p>© 2026 Marvel UI/UX Case Study. Created by Frontend Developer.</p>
+    </footer>
+
+  </div>
+
+</body>
+
+</html>
