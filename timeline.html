@@ -45,7 +45,7 @@
       min-height: 100vh;
       cursor: none;
       position: relative;
-      padding-bottom: 120px;
+      padding-bottom: 0;
     }
 
     a, button {
@@ -105,7 +105,7 @@
       z-index: -2;
       background: url('bg.webp') no-repeat center center;
       background-size: cover;
-      opacity: 0.15;
+      opacity: 0.10;
       pointer-events: none;
     }
 
@@ -168,7 +168,7 @@
 
     .title-group h1 {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(28px, 4vw, 42px);
+      font-size: clamp(36px, 5.5vw, 64px);
       letter-spacing: 0.05em;
       color: var(--text);
       text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
@@ -960,10 +960,14 @@
       const allWraps = [...wraps];
       if (surprise) allWraps.push(surprise);
 
-      // Determine computed number of columns from CSS grid
-      const computedStyle = window.getComputedStyle(grid);
-      const gridTemplateColumns = computedStyle.getPropertyValue('grid-template-columns');
-      const cols = gridTemplateColumns.split(' ').length;
+      // Determine computed number of columns based on window width (matching CSS media queries)
+      const w = window.innerWidth;
+      let cols = 6;
+      if (w <= 560) cols = 1;
+      else if (w <= 860) cols = 2;
+      else if (w <= 1110) cols = 3;
+      else if (w <= 1360) cols = 4;
+      else if (w <= 1620) cols = 5;
 
       // Re-assign CSS order dynamically to flow windingly (zigzag)
       allWraps.forEach((wrap, i) => {
