@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marvel Cinematic Multiverse Chronological Watch Tracker</title>
+  <meta name="description"
+    content="Follow and track the Marvel Cinematic Multiverse in exact chronological order with interactive locked watch progression in a vertical winding path.">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@300;400;500;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --red: #E62429;
+      --red-glow: #FF2D35;
+      --gold: #FFD700;
+      --black: #030308;
+      --charcoal: #0e0e16;
+      --glass: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --text: #FFFFFF;
+      --text-muted: rgba(255, 255, 255, 0.6);
+      --text-dim: rgba(255, 255, 255, 0.35);
+    }
+
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: 'Manrope', sans-serif;
+      overflow-x: hidden;
+      overflow-y: auto;
+      min-height: 100vh;
+      cursor: none;
+      position: relative;
+      padding-bottom: 120px;
+    }
+
+    a, button {
+      cursor: none;
+    }
+
+    /* CUSTOM CURSOR */
+    #cursor {
+      position: fixed;
+      width: 12px;
+      height: 12px;
+      background: var(--red);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width .2s, height .2s, background .2s;
+      mix-blend-mode: screen;
+    }
+
+    #cursor-ring {
+      position: fixed;
+      width: 36px;
+      height: 36px;
+      border: 1.5px solid rgba(230, 36, 41, 0.5);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: all .12s ease-out;
+    }
+
+    /* PROGRESS BAR */
+    #progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--red), var(--gold));
+      z-index: 1000;
+      width: 0;
+      transition: width .1s;
+    }
+
+    /* SPACE BACKGROUND CANVAS */
+    #spaceCanvas {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* STICKY BACKGROUND IMAGE */
+    .timeline-bg-image {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background: url('bg.webp') no-repeat center center;
+      background-size: cover;
+      opacity: 0.15;
+      pointer-events: none;
+    }
+
+    /* HEADER (Center Aligned) */
+    header {
+      position: relative;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 75px clamp(20px, 5vw, 60px) 15px; /* Added gap at the top of the header */
+      z-index: 10;
+      max-width: 95%; /* Match timeline container width */
+      margin: 0 auto;
+      gap: 12px;
+    }
+
+    .back-btn {
+      position: absolute;
+      left: clamp(20px, 5vw, 60px);
+      top: 75px; /* Aligned with top padding gap */
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      padding: 10px 22px;
+      border-radius: 8px;
+      color: white;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+
+    .back-btn:hover {
+      background: var(--red);
+      border-color: var(--red-glow);
+      box-shadow: 0 0 25px rgba(230, 36, 41, 0.6);
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding-top: 95px;
+      }
+      .back-btn {
+        left: 50%;
+        transform: translateX(-50%);
+        top: 25px;
+      }
+    }
+
+    .title-group {
+      text-align: center;
+    }
+
+    .title-group h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(28px, 4vw, 42px);
+      letter-spacing: 0.05em;
+      color: var(--text);
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      line-height: 1;
+    }
+
+    .title-group h1 span {
+      color: var(--red);
+      text-shadow: 0 0 20px rgba(230, 36, 41, 0.4);
+    }
+
+    .title-group p {
+      font-size: clamp(10px, 1.2vw, 13px);
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* TIMELINE SCROLL SHOWCASE */
+    .timeline-container {
+      position: relative;
+      z-index: 5;
+      max-width: 95%; /* Stretch layout to full page */
+      margin: 20px auto 0;
+      padding: 0 20px;
+    }
+
+    #timelineGrid {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(6, 220px); /* 6 columns default on widescreen, using wider 220px columns */
+      gap: 80px 40px; /* Horizontal and vertical gaps between bento squared cards */
+      justify-content: center;
+      width: 100%;
+      margin: 30px auto;
+      padding: 30px 0;
+    }
+
+    /* Responsive Grid columns queried for 220px card width */
+    @media (max-width: 1620px) {
+      #timelineGrid {
+        grid-template-columns: repeat(5, 220px);
+        gap: 75px 35px;
+      }
+    }
+    @media (max-width: 1360px) {
+      #timelineGrid {
+        grid-template-columns: repeat(4, 220px);
+        gap: 70px 30px;
+      }
+    }
+    @media (max-width: 1110px) {
+      #timelineGrid {
+        grid-template-columns: repeat(3, 220px);
+        gap: 65px 25px;
+      }
+    }
+    @media (max-width: 860px) {
+      #timelineGrid {
+        grid-template-columns: repeat(2, 220px);
+        gap: 55px 20px;
+      }
+    }
+    @media (max-width: 560px) {
+      #timelineGrid {
+        grid-template-columns: repeat(1, 220px);
+        gap: 45px 0;
+      }
+    }
+
+    #timelineSvg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* MOVIE CARD STYLE (Portrait Layout with Details/CTA in Single Bento Card) */
+    .movie-card-wrap {
+      width: 220px;
+      height: 380px; /* Fixed height bento card */
+      background: #0e0e16; /* Fully opaque bento card background to hide lines behind */
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 0; /* Removed padding to let poster fit edge-to-edge at the top */
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Locked Card State - reduces opacity of elements but keeps the single bento card background fully opaque */
+    .movie-card-wrap.locked .poster-box img.poster {
+      opacity: 0.15;
+      filter: grayscale(1) brightness(0.5);
+    }
+
+    .movie-card-wrap.locked .card-info {
+      opacity: 0.4;
+    }
+
+    .poster-box {
+      width: 100%; /* Spans full width of bento card */
+      height: 260px; /* Restored to perfect portrait ratio to make posters clear */
+      background: #030308;
+      border-radius: 15px 15px 0 0; /* Rounded top corners only to fit card border */
+      overflow: hidden;
+      position: relative;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .poster-box img.poster {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Unlocked elements hover */
+    .movie-card-wrap.unlocked:hover {
+      border-color: var(--red);
+      box-shadow: 0 12px 30px rgba(230, 36, 41, 0.25);
+      transform: translateY(-5px);
+    }
+
+    .movie-card-wrap.unlocked:hover img.poster {
+      transform: scale(1.05);
+    }
+
+    /* Text info below */
+    .card-info {
+      padding: 10px 12px 12px; /* Inner padding for text and button */
+      display: flex;
+      flex-direction: column;
+      height: 120px; /* Ample height (380px - 260px) to prevent cutoffs or overlaps */
+    }
+
+    .card-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      color: var(--text-dim);
+      margin-bottom: 4px; /* Added spacing */
+      line-height: 1;
+    }
+
+    .movie-card-wrap.unlocked .card-num {
+      color: var(--red);
+    }
+
+    .movie-title {
+      font-family: 'Manrope', sans-serif; /* Reduced boldness using Manrope font */
+      font-size: 12.5px;
+      font-weight: 500; /* Regular medium weight instead of heavy Bebas Neue */
+      letter-spacing: 0.01em;
+      line-height: 1.35;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      height: 35px; /* Clean double-line tracking height */
+      transition: color 0.3s ease;
+      text-transform: none; /* No uppercase for natural premium text weight */
+    }
+
+    .movie-card-wrap.unlocked .movie-title {
+      color: var(--text);
+    }
+
+    .movie-phase {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-bottom: 10px; /* Added spacing to align nicely */
+    }
+
+    .movie-card-wrap.unlocked .movie-phase {
+      color: var(--gold);
+    }
+
+    /* Single Watch Toggle Button */
+    .watch-btn {
+      width: 100%;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 11.5px;
+      letter-spacing: 0.08em;
+      padding: 7px 0;
+      border-radius: 6px;
+      border: 1px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text-muted);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      outline: none;
+      margin-top: auto; /* Push buttons to align perfectly at the bottom */
+    }
+
+    .watch-btn:hover:not(:disabled) {
+      border-color: var(--red);
+      color: white;
+      background: rgba(230, 36, 41, 0.08);
+      box-shadow: 0 0 12px rgba(230, 36, 41, 0.25);
+    }
+
+    .watch-btn.watched {
+      background: var(--red);
+      border-color: var(--red);
+      color: white;
+      box-shadow: 0 0 12px rgba(230, 36, 41, 0.4);
+    }
+
+    /* LOCK COVER OVERLAY */
+    .lock-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(3, 3, 8, 0.35); /* semi-transparent to see the poster underneath */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 5;
+      transition: opacity 0.4s ease;
+    }
+
+    .lock-icon-svg {
+      width: 32px;
+      height: 32px;
+      fill: #FFFFFF;
+      filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.6));
+      margin-bottom: 4px;
+    }
+
+    .lock-overlay span {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: #FFFFFF;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    /* UNLOCKED CARD STATE */
+    .movie-card-wrap.unlocked .lock-overlay {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* SURPRISE CARD STYLE (Distinct animation, no lock) */
+    /* SURPRISE CARD STYLE (Distinct animation, no lock in Single Bento Card) */
+    .surprise-card {
+      width: 220px;
+      height: 380px; /* Match movie bento cards */
+      background: radial-gradient(circle at center, rgb(20, 10, 15) 0%, rgb(3, 3, 8) 100%); /* Fully opaque */
+      border: 2px solid var(--red);
+      border-radius: 16px;
+      padding: 0; /* Removed padding to let box fit edge-to-edge at the top */
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 2;
+      animation: floatCard 4s ease-in-out infinite, borderPulse 2.5s ease-in-out infinite;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      transition: all 0.4s ease;
+    }
+
+    .surprise-card.unlocked {
+      border-color: var(--gold);
+      animation: floatCard 4s ease-in-out infinite, borderPulseUnlocked 2s ease-in-out infinite;
+    }
+
+    @keyframes floatCard {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+      100% { transform: translateY(0px); }
+    }
+
+    @keyframes borderPulse {
+      0% { border-color: rgba(230, 36, 41, 0.35); box-shadow: 0 0 8px rgba(230, 36, 41, 0.2); }
+      50% { border-color: rgba(255, 215, 0, 0.85); box-shadow: 0 0 25px rgba(255, 215, 0, 0.6); }
+      100% { border-color: rgba(230, 36, 41, 0.35); box-shadow: 0 0 8px rgba(230, 36, 41, 0.2); }
+    }
+
+    .surprise-box {
+      width: 100%; /* Spans full width of bento card */
+      height: 260px; /* Sized to match poster-box height inside bento card */
+      border-radius: 15px 15px 0 0; /* Rounded top corners only to fit card border */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    @keyframes borderPulseUnlocked {
+      0% { border-color: var(--gold); box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
+      50% { border-color: #FFFFFF; box-shadow: 0 0 30px rgba(255, 255, 255, 0.7); }
+      100% { border-color: var(--gold); box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
+    }
+
+    .surprise-icon-wrap {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(10, 10, 15, 0.9);
+      border: 1.5px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+      position: relative;
+      transition: all 0.4s ease;
+    }
+
+    .surprise-card.unlocked .surprise-icon-wrap {
+      border-color: var(--gold);
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+    }
+
+    .surprise-card.unlocked .surprise-icon-wrap svg {
+      animation: reactorSpin 15s linear infinite;
+    }
+
+    .surprise-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 14px;
+      letter-spacing: 0.05em;
+      color: var(--gold);
+      margin-bottom: 2px;
+      text-transform: uppercase;
+      text-shadow: 0 0 8px rgba(255, 215, 0, 0.2);
+    }
+
+    .surprise-meta {
+      font-size: 10px;
+      color: var(--text-dim);
+      letter-spacing: 0.05em;
+      margin-bottom: 10px; /* Added spacing to align nicely */
+      text-align: center;
+      height: 28px; /* Alignment placeholder height matching movie cards */
+    }
+
+    .surprise-btn {
+      width: 100%;
+      background: var(--red);
+      color: white;
+      border: none;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      padding: 6px 0;
+      border-radius: 5px;
+      box-shadow: 0 4px 12px rgba(230, 36, 41, 0.35);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .surprise-btn:hover {
+      background: var(--red-glow);
+      box-shadow: 0 0 20px rgba(230, 36, 41, 0.6);
+      transform: scale(1.03);
+    }
+
+    /* CELEBRATION MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 3, 8, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-content {
+      background: rgba(14, 14, 22, 0.85);
+      border: 1.5px solid var(--red);
+      border-radius: 24px;
+      max-width: 580px;
+      width: 90%;
+      padding: 40px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 0 60px rgba(230, 36, 41, 0.25);
+      transform: scale(0.85);
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal-overlay.open .modal-content {
+      transform: scale(1);
+    }
+
+    .modal-badge-glow {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 3px double var(--red);
+      background: rgba(10, 10, 15, 0.9);
+      margin: 0 auto 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 35px rgba(230, 36, 41, 0.4);
+      position: relative;
+    }
+
+    .hologram-effect {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: linear-gradient(0deg, rgba(126, 207, 255, 0.2) 0%, transparent 60%);
+      animation: pulseHolo 2s infinite alternate;
+    }
+
+    .modal-badge-glow svg {
+      width: 60px;
+      height: 60px;
+      fill: var(--red);
+    }
+
+    .modal-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 38px;
+      color: var(--red);
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+      text-shadow: 0 0 20px rgba(230, 36, 41, 0.4);
+    }
+
+    .modal-body {
+      font-family: 'Manrope', sans-serif;
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.8;
+      letter-spacing: 0.05em;
+      margin-bottom: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 24px 0;
+    }
+
+    .modal-close-btn {
+      background: var(--red);
+      color: white;
+      border: none;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      letter-spacing: 0.1em;
+      padding: 12px 32px;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(230, 36, 41, 0.35);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal-close-btn:hover {
+      background: var(--red-glow);
+      box-shadow: 0 0 25px rgba(230, 36, 41, 0.6);
+      transform: scale(1.05);
+    }
+
+    /* FIREWORKS CANVAS */
+    #celebrationCanvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    /* ANIMATIONS */
+    @keyframes reactorSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes pulseHolo {
+      from { opacity: 0.5; }
+      to { opacity: 1; }
+    }
+
+    @keyframes cardUnlockFlash {
+      0% {
+        transform: scale(0.95);
+        filter: brightness(1);
+        box-shadow: 0 0 0 rgba(230, 36, 41, 0);
+      }
+      50% {
+        transform: scale(1.05);
+        filter: brightness(1.4);
+        box-shadow: 0 0 25px var(--red);
+      }
+      100% {
+        transform: scale(1);
+        filter: brightness(1);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      }
+    }
+
+    .unlock-anim {
+      animation: cardUnlockFlash 0.8s ease forwards;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- CURSORS -->
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- BG IMAGE -->
+  <div class="timeline-bg-image"></div>
+
+  <!-- BG CANVAS -->
+  <canvas id="spaceCanvas"></canvas>
+
+  <!-- PROGRESS BAR -->
+  <div id="progress"></div>
+
+  <!-- HEADER -->
+  <header>
+    <a href="index.html" class="back-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-top: -2px;">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      BACK TO HOME
+    </a>
+    <div class="title-group">
+      <h1>CHRONOLOGICAL <span>TIMELINE</span></h1>
+      <p>Interactive Marvel Movie watch tracker</p>
+    </div>
+  </header>
+
+  <!-- TIMELINE OUTER CONTAINER (centered) -->
+  <div class="timeline-container">
+    <div id="timelineGrid">
+      <!-- SVG track line snaking through nodes -->
+      <svg id="timelineSvg">
+        <!-- Glow backing line -->
+        <path id="timelinePathGlow" fill="none" stroke="rgba(230, 36, 41, 0.15)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+        <!-- Sharp core line -->
+        <path id="timelinePath" fill="none" stroke="var(--red)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <!-- Generated via JS -->
+    </div>
+  </div>
+
+  <!-- CELEBRATION CANVAS -->
+  <canvas id="celebrationCanvas"></canvas>
+
+  <!-- SURPRISE MODAL -->
+  <div class="modal-overlay" id="surpriseModal">
+    <div class="modal-content">
+      <div class="modal-badge-glow">
+        <div class="hologram-effect"></div>
+        <!-- Arc Reactor SVG -->
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="44" stroke="#e62429" stroke-width="2" fill="none" />
+          <circle cx="50" cy="50" r="36" stroke="#7ecfff" stroke-width="3.5" fill="none" stroke-dasharray="15,6" />
+          <circle cx="50" cy="50" r="24" stroke="#7ecfff" stroke-width="1.5" fill="none" />
+          <circle cx="50" cy="50" r="18" stroke="#e62429" stroke-width="2" fill="none" stroke-dasharray="8,4" />
+          <polygon points="50,33 63,56 37,56" fill="rgba(126, 207, 255, 0.3)" stroke="#7ecfff" stroke-width="2" />
+        </svg>
+      </div>
+      <h2 class="modal-title" id="modalTitle">STARK ARCHIVE SECURED</h2>
+      <div class="modal-body" id="modalBody">
+        <p style="margin-bottom: 12px; font-weight: bold; color: var(--red);">DECLASSIFIED DOSSIER #99281A</p>
+        <p>"Congratulations, Agent. You have successfully traversed the chronological flow of the Marvel Cinematic Multiverse. By tracking all 37 realities, you have fully restored the timeline integrity.</p>
+        <p style="margin-top: 12px; font-style: italic; color: #7ecfff;">Access to core database fully authorized. The Multiverse remains under our protection." — J.A.R.V.I.S.</p>
+      </div>
+      <button class="modal-close-btn" onclick="closeSurpriseModal()">DISMISS ACCESS</button>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script>
+    // Movies Data list in user specified chronological order
+    const MOVIES = [
+      { id: 1, title: "Captain America: The First Avenger", year: "2011", chronologicalYear: "1942", img: "captainamerica1.jpg", phase: 1 },
+      { id: 2, title: "Captain Marvel", year: "2019", chronologicalYear: "1995", img: "captainmarvel1.webp", phase: 3 },
+      { id: 3, title: "Iron Man", year: "2008", chronologicalYear: "2008", img: "Ironman1.jpg", phase: 1 },
+      { id: 4, title: "Iron Man 2", year: "2010", chronologicalYear: "2010", img: "Ironman2.jpg", phase: 1 },
+      { id: 5, title: "The Incredible Hulk", year: "2008", chronologicalYear: "2010", img: "hulkmovie.jpg", phase: 1 },
+      { id: 6, title: "Thor", year: "2011", chronologicalYear: "2010", img: "thor1.jpg", phase: 1 },
+      { id: 7, title: "The Avengers", year: "2012", chronologicalYear: "2012", img: "avengers1.jpg", phase: 1 },
+      { id: 8, title: "Thor: The Dark World", year: "2013", chronologicalYear: "2013", img: "thor2.jpg", phase: 2 },
+      { id: 9, title: "Iron Man 3", year: "2013", chronologicalYear: "2013", img: "Ironman3.jpg", phase: 2 },
+      { id: 10, title: "Captain America: The Winter Soldier", year: "2014", chronologicalYear: "2014", img: "captainamerica2.jpeg", phase: 2 },
+      { id: 11, title: "Guardians of the Galaxy", year: "2014", chronologicalYear: "2014", img: "gog1.jpg", phase: 2 },
+      { id: 12, title: "Guardians of the Galaxy Vol. 2", year: "2017", chronologicalYear: "2014", img: "gog2.jpg", phase: 3 },
+      { id: 13, title: "Avengers: Age of Ultron", year: "2015", chronologicalYear: "2015", img: "avengers2.jpg", phase: 2 },
+      { id: 14, title: "Ant-Man", year: "2015", chronologicalYear: "2015", img: "antman1.jpg", phase: 2 },
+      { id: 15, title: "Captain America: Civil War", year: "2016", chronologicalYear: "2016", img: "captainamerica3.jpg", phase: 3 },
+      { id: 16, title: "Black Widow", year: "2021", chronologicalYear: "2016", img: "blackwidow.jpg", phase: 4 },
+      { id: 17, title: "Spider-Man: Homecoming", year: "2017", chronologicalYear: "2016", img: "homecoming.jpeg", phase: 3 },
+      { id: 18, title: "Black Panther", year: "2018", chronologicalYear: "2016", img: "blackpanther1.webp", phase: 3 },
+      { id: 19, title: "Doctor Strange", year: "2016", chronologicalYear: "2016", img: "strange1.jpg", phase: 3 },
+      { id: 20, title: "Thor: Ragnarok", year: "2017", chronologicalYear: "2017", img: "thor3.jpg", phase: 3 },
+      { id: 21, title: "Ant-Man and the Wasp", year: "2018", chronologicalYear: "2018", img: "antman2.jpg", phase: 3 },
+      { id: 22, title: "Avengers: Infinity War", year: "2018", chronologicalYear: "2018", img: "avengers3.jpg", phase: 3 },
+      { id: 23, title: "Avengers: Endgame", year: "2019", chronologicalYear: "2023", img: "avengers4.jpg", phase: 3 },
+      { id: 24, title: "Spider-Man: Far From Home", year: "2019", chronologicalYear: "2024", img: "farfromhome.jpg", phase: 3 },
+      { id: 25, title: "Shang-Chi and the Legend of the Ten Rings", year: "2021", chronologicalYear: "2024", img: "shangchi.jpg", phase: 4 },
+      { id: 26, title: "Eternals", year: "2021", chronologicalYear: "2024", img: "eternals.jpg", phase: 4 },
+      { id: 27, title: "Spider-Man: No Way Home", year: "2021", chronologicalYear: "2024", img: "nowayhome.jpg", phase: 4 },
+      { id: 28, title: "Doctor Strange in the Multiverse of Madness", year: "2022", chronologicalYear: "2024", img: "strange2.avif", phase: 4 },
+      { id: 29, title: "Thor: Love and Thunder", year: "2022", chronologicalYear: "2025", img: "thor4.jpg", phase: 4 },
+      { id: 30, title: "Black Panther: Wakanda Forever", year: "2022", chronologicalYear: "2025", img: "blackpanther2.jpg", phase: 4 },
+      { id: 31, title: "Ant-Man and the Wasp: Quantumania", year: "2023", chronologicalYear: "2025", img: "antman3.jpg", phase: 5 },
+      { id: 32, title: "Guardians of the Galaxy Vol. 3", year: "2023", chronologicalYear: "2026", img: "gog3.avif", phase: 5 },
+      { id: 33, title: "The Marvels", year: "2023", chronologicalYear: "2026", img: "marvels.jpeg", phase: 5 },
+      { id: 34, title: "Deadpool & Wolverine", year: "2024", chronologicalYear: "2026", img: "deadpool2.jpg", phase: 5 },
+      { id: 35, title: "Captain America: Brave New World", year: "2025", chronologicalYear: "2026-2027", img: "captainamerica4.webp", phase: 5 },
+      { id: 36, title: "The Fantastic Four: First Steps", year: "2025", chronologicalYear: "1964*", img: "news4.webp", phase: 6 },
+      { id: 37, title: "Thunderbolts*", year: "2025", chronologicalYear: "2027", img: "thunderbolts.jpg", phase: 5 }
+    ];
+
+    // Watch Progress state tracker
+    let watchProgress = JSON.parse(localStorage.getItem('mcuWatchProgress')) || {};
+
+    // CURSOR MOVEMENT
+    document.addEventListener('mousemove', e => {
+      const c = document.getElementById('cursor'), r = document.getElementById('cursor-ring');
+      if (c) { c.style.left = e.clientX + 'px'; c.style.top = e.clientY + 'px'; }
+      if (r) { r.style.left = e.clientX + 'px'; r.style.top = e.clientY + 'px'; }
+    });
+
+    // Setup interactive cursor hover triggers
+    function updateCursorTriggers() {
+      document.querySelectorAll('a, button, select, input, label').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          const c = document.getElementById('cursor'), r = document.getElementById('cursor-ring');
+          if (c) c.style.transform = 'translate(-50%, -50%) scale(1.8)';
+          if (r) r.style.transform = 'translate(-50%, -50%) scale(0.6)';
+        });
+        el.addEventListener('mouseleave', () => {
+          const c = document.getElementById('cursor'), r = document.getElementById('cursor-ring');
+          if (c) c.style.transform = 'translate(-50%, -50%) scale(1)';
+          if (r) r.style.transform = 'translate(-50%, -50%) scale(1)';
+        });
+      });
+    }
+
+    // ANIMATED STARS CANVAS
+    function initStars() {
+      const canvas = document.getElementById('spaceCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let W, H, stars = [], nebulae = [];
+
+      const resize = () => {
+        W = canvas.width = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+
+        stars = Array.from({ length: 120 }, () => ({
+          x: Math.random() * W,
+          y: Math.random() * H,
+          r: Math.random() * 1.2 + 0.3,
+          o: Math.random(),
+          v: Math.random() * 0.003 + 0.001,
+          speedX: Math.random() * 0.15 - 0.075,
+          speedY: Math.random() * 0.05 + 0.02
+        }));
+
+        nebulae = [
+          { x: W * 0.2, y: H * 0.4, r: Math.min(W, H) * 0.4, color: 'rgba(230, 36, 41, 0.04)' },
+          { x: W * 0.8, y: H * 0.6, r: Math.min(W, H) * 0.35, color: 'rgba(230, 36, 41, 0.02)' },
+          { x: W * 0.5, y: H * 0.2, r: Math.min(W, H) * 0.3, color: 'rgba(126, 207, 255, 0.02)' }
+        ];
+      };
+
+      let mouseX = 0, mouseY = 0;
+      window.addEventListener('mousemove', (e) => {
+        mouseX = (e.clientX - W / 2) * 0.03;
+        mouseY = (e.clientY - H / 2) * 0.03;
+      });
+
+      const draw = () => {
+        ctx.clearRect(0, 0, W, H);
+
+        nebulae.forEach(n => {
+          const g = ctx.createRadialGradient(n.x + mouseX * 0.5, n.y + mouseY * 0.5, 0, n.x + mouseX * 0.5, n.y + mouseY * 0.5, n.r);
+          g.addColorStop(0, n.color);
+          g.addColorStop(1, 'transparent');
+          ctx.beginPath();
+          ctx.arc(n.x + mouseX * 0.5, n.y + mouseY * 0.5, n.r, 0, Math.PI * 2);
+          ctx.fillStyle = g;
+          ctx.fill();
+        });
+
+        stars.forEach(s => {
+          s.o += s.v;
+          if (s.o > 1 || s.o < 0) s.v = -s.v;
+
+          const x = (s.x + mouseX + W) % W;
+          const y = (s.y + mouseY + H) % H;
+
+          ctx.beginPath();
+          ctx.arc(x, y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0.1, s.o)})`;
+          ctx.fill();
+        });
+
+        requestAnimationFrame(draw);
+      };
+
+      window.addEventListener('resize', resize);
+      resize();
+      draw();
+    }
+
+    // DRAW DYNAMIC WINDING S-CURVE CONNECTION LINE (Poster centers)
+    function drawConnectionLine() {
+      const grid = document.getElementById('timelineGrid');
+      const pathGlow = document.getElementById('timelinePathGlow');
+      const pathCore = document.getElementById('timelinePath');
+      
+      const oldDots = document.querySelectorAll('.timeline-node-dot');
+      oldDots.forEach(d => d.remove());
+
+      const wraps = Array.from(document.querySelectorAll('.movie-card-wrap, .surprise-card'));
+      if (wraps.length === 0 || !grid || !pathCore) return;
+
+      const gridRect = grid.getBoundingClientRect();
+      const coords = [];
+
+      wraps.forEach((wrap, idx) => {
+        // Find the poster box or surprise box inside wrap to get correct alignment centers
+        const box = wrap.querySelector('.poster-box, .surprise-box');
+        if (box) {
+          const rect = box.getBoundingClientRect();
+          const x = rect.left - gridRect.left + rect.width / 2;
+          const y = rect.top - gridRect.top + rect.height / 2;
+          coords.push({ x, y });
+        }
+      });
+
+      if (coords.length > 0) {
+        let pathD = `M ${coords[0].x} ${coords[0].y}`;
+        for (let i = 1; i < coords.length; i++) {
+          pathD += ` L ${coords[i].x} ${coords[i].y}`;
+        }
+        
+        pathCore.setAttribute('d', pathD);
+        if (pathGlow) pathGlow.setAttribute('d', pathD);
+
+        // Draw node circles along the path
+        const svg = document.getElementById('timelineSvg');
+        coords.forEach((c, idx) => {
+          const wrap = wraps[idx];
+          const isUnlocked = wrap.classList.contains('unlocked') || wrap.classList.contains('surprise-card');
+          
+          const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          circle.setAttribute('cx', c.x);
+          circle.setAttribute('cy', c.y);
+          circle.setAttribute('r', '5');
+          circle.setAttribute('class', 'timeline-node-dot');
+          circle.setAttribute('fill', isUnlocked ? 'var(--red)' : 'var(--text-dim)');
+          circle.setAttribute('stroke', 'rgba(3,3,8,0.9)');
+          circle.setAttribute('stroke-width', '1.5');
+          svg.appendChild(circle);
+        });
+      }
+    }
+
+    // LAYOUT ZIGZAG & PATH REDRAW
+    function recalculateLayout() {
+      const grid = document.getElementById('timelineGrid');
+      const wraps = Array.from(document.querySelectorAll('.movie-card-wrap'));
+      const surprise = document.getElementById('surpriseCard');
+      if (!grid || wraps.length === 0) return;
+
+      const allWraps = [...wraps];
+      if (surprise) allWraps.push(surprise);
+
+      // Determine computed number of columns from CSS grid
+      const computedStyle = window.getComputedStyle(grid);
+      const gridTemplateColumns = computedStyle.getPropertyValue('grid-template-columns');
+      const cols = gridTemplateColumns.split(' ').length;
+
+      // Re-assign CSS order dynamically to flow windingly (zigzag)
+      allWraps.forEach((wrap, i) => {
+        const row = Math.floor(i / cols);
+        let col;
+        if (row % 2 === 0) {
+          col = i % cols; // Left to Right
+        } else {
+          col = (cols - 1) - (i % cols); // Right to Left
+        }
+        const cellIndex = row * cols + col;
+        wrap.style.order = cellIndex;
+      });
+
+      // Allow DOM to settle, then draw lines
+      requestAnimationFrame(() => {
+        drawConnectionLine();
+      });
+    }
+
+    // WEB AUDIO API SYNTHESIZER FOR CHIME
+    function playVictoryChime() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const playTone = (freq, start, duration, type = 'sine') => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, start);
+          gain.gain.setValueAtTime(0.12, start);
+          gain.gain.exponentialRampToValueAtTime(0.001, start + duration);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(start);
+          osc.stop(start + duration);
+        };
+        const now = audioCtx.currentTime;
+        playTone(261.63, now, 0.4);
+        playTone(329.63, now + 0.15, 0.4);
+        playTone(392.00, now + 0.3, 0.4);
+        playTone(523.25, now + 0.45, 0.6);
+        playTone(659.25, now + 0.6, 0.8, 'triangle');
+        playTone(783.99, now + 0.8, 1.2, 'sine');
+      } catch (err) {
+        console.warn(err);
+      }
+    }
+
+    // WARNING BUZZER FOR LOCKED SURPRISE CLICK
+    function playWarningBuzzer() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(100, audioCtx.currentTime);
+        osc.frequency.linearRampToValueAtTime(80, audioCtx.currentTime + 0.3);
+        
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+        
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.35);
+      } catch (err) {
+        console.warn(err);
+      }
+    }
+
+    // CELEBRATION SHOWER
+    let celebrationActive = false;
+    let celebrationParticles = [];
+    const celebCanvas = document.getElementById('celebrationCanvas');
+    const celebCtx = celebCanvas.getContext('2d');
+
+    function resizeCelebCanvas() {
+      celebCanvas.width = window.innerWidth;
+      celebCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCelebCanvas);
+    resizeCelebCanvas();
+
+    function launchCelebration() {
+      playVictoryChime();
+      celebrationActive = true;
+      celebrationParticles = [];
+      const colors = ['#e62429', '#ff2d35', '#7ecfff', '#ffffff'];
+      
+      for (let i = 0; i < 150; i++) {
+        celebrationParticles.push({
+          x: 0,
+          y: window.innerHeight,
+          vx: Math.random() * 12 + 6,
+          vy: -(Math.random() * 15 + 10),
+          r: Math.random() * 3 + 2,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          alpha: 1,
+          decay: Math.random() * 0.015 + 0.005,
+          gravity: 0.25
+        });
+        celebrationParticles.push({
+          x: window.innerWidth,
+          y: window.innerHeight,
+          vx: -(Math.random() * 12 + 6),
+          vy: -(Math.random() * 15 + 10),
+          r: Math.random() * 3 + 2,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          alpha: 1,
+          decay: Math.random() * 0.015 + 0.005,
+          gravity: 0.25
+        });
+      }
+      animateCelebration();
+    }
+
+    function animateCelebration() {
+      if (!celebrationActive) return;
+      celebCtx.clearRect(0, 0, celebCanvas.width, celebCanvas.height);
+      let alive = false;
+      celebrationParticles.forEach(p => {
+        if (p.alpha > 0) {
+          alive = true;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += p.gravity;
+          p.vx *= 0.98;
+          p.alpha -= p.decay;
+          celebCtx.beginPath();
+          celebCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          celebCtx.fillStyle = p.color;
+          celebCtx.globalAlpha = p.alpha;
+          celebCtx.fill();
+        }
+      });
+      celebCtx.globalAlpha = 1.0;
+      if (alive) {
+        requestAnimationFrame(animateCelebration);
+      } else {
+        celebrationActive = false;
+        celebCtx.clearRect(0, 0, celebCanvas.width, celebCanvas.height);
+      }
+    }
+
+    // BUILD TIMELINE ITEMS
+    function buildTimeline() {
+      const grid = document.getElementById('timelineGrid');
+      
+      // Keep SVG element, clear wraps
+      const wraps = document.querySelectorAll('.movie-card-wrap, .surprise-card');
+      wraps.forEach(w => w.remove());
+
+      const allWatched = MOVIES.every(m => watchProgress[m.id] === 'watched');
+
+      MOVIES.forEach((m, idx) => {
+        const isUnlocked = idx === 0 || watchProgress[MOVIES[idx - 1].id] === 'watched';
+        const isWatched = watchProgress[m.id] === 'watched';
+
+        const wrap = document.createElement('div');
+        // Unlocked and locked styles are bound here
+        wrap.className = `movie-card-wrap ${isUnlocked ? 'unlocked' : 'locked'}`;
+        wrap.id = `movie-wrap-${m.id}`;
+
+        const numStr = String(idx + 1).padStart(2, '0');
+
+        wrap.innerHTML = `
+          <div class="poster-box">
+            ${!isUnlocked ? `
+            <div class="lock-overlay">
+              <svg class="lock-icon-svg" viewBox="0 0 24 24">
+                <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+              </svg>
+              <span>Locked</span>
+            </div>
+            ` : ''}
+            
+            <img class="poster" src="${m.img}" alt="${m.title}" loading="lazy">
+          </div>
+          
+          <div class="card-info">
+            <div class="card-num">${numStr}</div>
+            <h3 class="movie-title" title="${m.title}">${m.title}</h3>
+            <div class="movie-phase">Phase ${m.phase}</div>
+            <button class="watch-btn ${isWatched ? 'watched' : 'to-watch'}" 
+              onclick="toggleWatch(${m.id})" 
+              ${!isUnlocked ? 'disabled' : ''}>
+              ${isWatched ? '✓ WATCHED' : 'TO WATCH'}
+            </button>
+          </div>
+        `;
+
+        grid.appendChild(wrap);
+      });
+
+      // Render Distinct Pulse surprise card (always unlocked/interactive, warning if timeline incomplete)
+      const surprise = document.createElement('div');
+      surprise.className = `surprise-card ${allWatched ? 'unlocked' : ''}`;
+      surprise.id = 'surpriseCard';
+
+      surprise.innerHTML = `
+        <div class="surprise-box">
+          <div class="reactor-glow"></div>
+          <div class="surprise-icon-wrap">
+            <svg width="32" height="32" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="44" stroke="var(--red)" stroke-width="2" fill="none"/>
+              <circle cx="50" cy="50" r="34" stroke="#7ecfff" stroke-width="4.5" fill="none" stroke-dasharray="15,6"/>
+              <polygon points="50,33 65,58 35,58" fill="rgba(126,207,255,0.15)" stroke="#7ecfff" stroke-width="2"/>
+            </svg>
+          </div>
+        </div>
+        
+        <div class="card-info" style="align-items: center; text-align: center;">
+          <h3 class="surprise-title">${allWatched ? 'STARK UNLOCKED' : 'LOCKED SURPRISE'}</h3>
+          <div class="surprise-meta">
+            ${allWatched 
+              ? 'Access declassified.' 
+              : 'Watch all 37 movies to unlock.'}
+          </div>
+          <button class="surprise-btn" onclick="handleSurpriseClick()">
+            DECLASSIFY
+          </button>
+        </div>
+      `;
+      grid.appendChild(surprise);
+
+      // Arrange order and draw S-line
+      recalculateLayout();
+    }
+
+    // WATCH STATE TOGGLE
+    window.toggleWatch = function(movieId) {
+      const idx = MOVIES.findIndex(m => m.id === movieId);
+      if (idx === -1) return;
+
+      const currentState = watchProgress[movieId];
+      if (currentState === 'watched') {
+        watchProgress[movieId] = 'need';
+        for (let i = idx + 1; i < MOVIES.length; i++) {
+          watchProgress[MOVIES[i].id] = 'need';
+        }
+      } else {
+        watchProgress[movieId] = 'watched';
+      }
+
+      localStorage.setItem('mcuWatchProgress', JSON.stringify(watchProgress));
+      buildTimeline();
+
+      // Micro-scroll to next card on unlock
+      if (watchProgress[movieId] === 'watched' && idx + 1 < MOVIES.length) {
+        const nextId = MOVIES[idx + 1].id;
+        setTimeout(() => {
+          const wrap = document.getElementById(`movie-wrap-${nextId}`);
+          if (wrap) {
+            wrap.classList.add('unlock-anim');
+            wrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }, 80);
+      }
+
+      // Check if all are watched for auto-celebration
+      const allWatched = MOVIES.every(m => watchProgress[m.id] === 'watched');
+      if (allWatched) {
+        setTimeout(() => {
+          launchCelebration();
+          const sc = document.getElementById('surpriseCard');
+          if (sc) sc.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 300);
+      }
+    };
+
+    // HANDLER FOR SURPRISE CLICK
+    window.handleSurpriseClick = function() {
+      const allWatched = MOVIES.every(m => watchProgress[m.id] === 'watched');
+      const modal = document.getElementById('surpriseModal');
+      
+      if (allWatched) {
+        // Unlocked progress -> show Stark congratulate
+        document.getElementById('modalTitle').textContent = "STARK ARCHIVE SECURED";
+        document.getElementById('modalBody').innerHTML = `
+          <p style="margin-bottom: 12px; font-weight: bold; color: var(--red);">DECLASSIFIED DOSSIER #99281A</p>
+          <p>"Congratulations, Agent. You have successfully traversed the chronological flow of the Marvel Cinematic Multiverse. By tracking all 37 realities, you have fully restored the timeline integrity.</p>
+          <p style="margin-top: 12px; font-style: italic; color: #7ecfff;">Access to core database fully authorized. The Multiverse remains under our protection." — J.A.R.V.I.S.</p>
+        `;
+        modal.classList.add('open');
+        launchCelebration();
+      } else {
+        // Locked progress -> show warning
+        playWarningBuzzer();
+        document.getElementById('modalTitle').textContent = "ACCESS RESTRICTED";
+        const watchedCount = MOVIES.filter(m => watchProgress[m.id] === 'watched').length;
+        document.getElementById('modalBody').innerHTML = `
+          <p style="margin-bottom: 12px; font-weight: bold; color: var(--red); text-transform: uppercase;">Timeline Incomplete (${watchedCount}/37 Watched)</p>
+          <p>"Access Denied, Agent. The Stark Secured Archives cannot be declassified while multiverse fluctuations remain active.</p>
+          <p style="margin-top: 12px; font-style: italic; color: #ff2d35;">Restore chronological sequence integrity by marking all 37 movies as watched to authorize access." — J.A.R.V.I.S.</p>
+        `;
+        modal.classList.add('open');
+      }
+    };
+
+    window.closeSurpriseModal = function() {
+      const modal = document.getElementById('surpriseModal');
+      if (modal) {
+        modal.classList.remove('open');
+      }
+    };
+
+    // INITIALIZATION
+    window.addEventListener('load', () => {
+      initStars();
+      buildTimeline();
+    });
+
+    window.addEventListener('resize', recalculateLayout);
+
+    // Scroll progress bar
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      const maxY = document.body.scrollHeight - window.innerHeight;
+      const bar = document.getElementById('progress');
+      if (bar && maxY > 0) bar.style.width = (y / maxY * 100) + '%';
+    });
+  </script>
+</body>
+
+</html>
